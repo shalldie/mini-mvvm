@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        index: [path.join(__dirname, '../src/index.js')]
+        index: [path.join(__dirname, '../src/index.ts')]
     },
 
     output: {
@@ -15,20 +15,21 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: ['ts-loader']
             },
             {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
-            },
-            {
-                test: /\.(png|jpg|gif)$/,
-                use: ['url-loader']
-            },
-            {
-                test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: ['babel-loader']
             }
+        ]
+    },
+
+    resolve: {
+        extensions: [
+            '.ts', '.js'
         ]
     }
 
