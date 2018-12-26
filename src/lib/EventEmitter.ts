@@ -2,8 +2,25 @@
  * 存放回调的字典
  */
 type Subscription = {
-    [key: string]: Function[]
+    [key: string]: Array<{ type: ESubscribeType, listener: Function }>
 };
+
+/**
+ * 订阅类型
+ *
+ * @enum {number}
+ */
+enum ESubscribeType {
+    /**
+     * 常规
+     */
+    normal,
+    /**
+     * 仅执行一次久删除
+     */
+    once
+
+}
 
 /**
  * pub/sub 类
@@ -20,11 +37,26 @@ export default class EventEmitter {
      *
      * @param {string} event 事件名
      * @param {Function} listener 监听器
+     * @param {ESubscribeType} [type=ESubscribeType.normal] 监听类型
      * @memberof EventEmitter
      */
-    on(event: string, listener: Function): void {
+    on(event: string, listener: Function, type: ESubscribeType = ESubscribeType.normal): void {
         this.subscription[event] = this.subscription[event] || [];
-        this.subscription[event].push(listener);
+        this.subscription[event].push({
+            type,
+            listener
+        });
+    }
+
+    /**
+     * 添加事件监听，执行一次就删除
+     *
+     * @param {string} event 事件名
+     * @param {Function} listener 监听器
+     * @memberof EventEmitter
+     */
+    once(event: string, listener: Function): void {
+        this.on(event, listener, ESubscribeType.once);
     }
 
     /**
@@ -35,8 +67,23 @@ export default class EventEmitter {
      * @memberof EventEmitter
      */
     emit(event: string, ...args: any[]): void {
-        const callbacks = this.subscription[event] || [];
-        callbacks.forEach(listener => listener(...args));
+        const subscriptions = this.subscription[event] || [];
+
+        // 不缓存length是因为length会更改
+        for (let i = 0; i < subscriptions.length; i++) {
+            let item = subscriptions[i];
+            item.listener(...args);
+
+            // 常规回调
+            if (item.type === ESubscribeType.normal) {
+                continue;
+            }
+            // 仅执行一次的
+            if (item.type === ESubscribeType.once) {
+                subscriptions.splice(i, 1);
+                i--;
+            }
+        }
     }
 
 }

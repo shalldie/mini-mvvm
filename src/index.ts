@@ -9,6 +9,9 @@ const emitter = new EventEmitter();
 
 emitter.on('hello', name => console.log(name));
 
+emitter.once('hello', name => console.log('once ' + name));
+
 emitter.emit('hello', 'tom');
+emitter.emit('hello', 'lily');
 
 // console.log('hello world');

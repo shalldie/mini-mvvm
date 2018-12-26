@@ -1,4 +1,5 @@
 import EventEmitter from "./EventEmitter";
+import * as _ from '../utils';
 
 /**
  * 观察者类
@@ -9,6 +10,9 @@ import EventEmitter from "./EventEmitter";
 export default class Observer {
 
     // private data: Object;
+    private ob: Observer;
+
+    public emitter: EventEmitter = new EventEmitter();
 
     /**
      * Creates an instance of Observe.
@@ -16,54 +20,20 @@ export default class Observer {
      * @memberof Observe
      */
     constructor(data: Object) {
-        // this.data = data;
-        this.observeData(data);
-    }
+        // 监听data的所有属性
+        let ob: Observer = data['__ob__'];
 
-    /**
-     * 观察某个对象所有属性
-     *
-     * @private
-     * @param {Object} data 被观察的对象
-     * @returns {void}
-     * @memberof Observe
-     */
-    private observeData(data: Object): void {
-        if (!data || typeof data !== 'object') {
-            return;
+        if (ob && ob instanceof Observer) {
+            this.ob = ob;
+        }
+        else {
+            _.observe(data);
+            // 把自身放到data上
+            _.defineReactive(data, '__ob__', this, {
+                enumerable: false
+            });
         }
 
-        Object.keys(data).forEach(key => {
-            this.observeKey(data, key);
-            this.observeData(data[key]);
-        });
-    }
-
-    /**
-     * 观察某对象的某个属性
-     *
-     * @private
-     * @param {Object} data 被观察的对象
-     * @param {string} key 需要监听的key
-     * @returns {void}
-     * @memberof Observe
-     */
-    private observeKey(data: Object, key: string): void {
-        // 当前值
-        let val = data[key];
-
-        Object.defineProperty(data, key, {
-            enumerable: true,    // 可枚举
-            configurable: false, // 不能修改了
-
-            get() {
-                return val;
-            },
-
-            set(newVal) {
-                val = newVal;
-            }
-        });
     }
 
 
