@@ -11,6 +11,30 @@ export function nextTick(fn: () => void): void {
     Promise.resolve().then(fn);
 }
 
+/**
+ * 获取数据类型
+ *
+ * @export
+ * @param {*} sender 要判断的数据
+ * @returns {string}
+ */
+export function getType(sender: any): string {
+    return Object.prototype.toString.call(sender).toLowerCase().match(/\s(\S+?)\]/)[1];
+}
+
+/**
+ * 数据是否可观察
+ *
+ * @export
+ * @param {*} data
+ * @returns {boolean}
+ */
+export function observable(data: any): boolean {
+    return !!~[
+        'object'
+    ].indexOf(getType(data));
+}
+
 
 /**
  * 观察某个对象所有属性
