@@ -86,4 +86,19 @@ export default class EventEmitter {
         }
     }
 
+    listeners(event: string) {
+        return this.subscription[event] || [];
+    }
+
+    /**
+     * 获取所有监听的事件
+     *
+     * @readonly
+     * @type {string[]}
+     * @memberof EventEmitter
+     */
+    get events(): string[] {
+        return Object.keys(this.subscription);
+    }
+
 }

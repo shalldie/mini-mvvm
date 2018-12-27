@@ -2,6 +2,7 @@ import Observer from './Observer';
 import * as _ from '../utils';
 import BaseMVVM from './BaseMVVM';
 import Watcher from './Watcher';
+import Compile from './Compile';
 // import
 
 type MVVMOptions = {
@@ -21,7 +22,7 @@ export default class MVVM extends BaseMVVM {
 
     public $data: Object;
 
-    private $watcher: Watcher = new Watcher();
+    private $watcher: Watcher = new Watcher(this);
 
     constructor(options: MVVMOptions) {
         super();
@@ -30,6 +31,7 @@ export default class MVVM extends BaseMVVM {
     }
 
     private initialize(): void {
+
         this.$el = _.getType(this.$options.el) === 'string' ?
             document.querySelector(<string>this.$options.el) :
             <HTMLElement>this.$options.el;
@@ -52,6 +54,8 @@ export default class MVVM extends BaseMVVM {
 
         // 观察 $data
         new Observer(this.$data, this.$watcher);
+
+        Compile.compileNode(this.$el, this.$watcher);
     }
 
 }

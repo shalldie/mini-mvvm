@@ -1,4 +1,7 @@
 import MVVM from './MVVM';
+import * as _ from '../utils';
+import EventEmitter from './EventEmitter';
+
 /**
  * Watcher 用来 数据更新收集、派发
  *
@@ -6,6 +9,12 @@ import MVVM from './MVVM';
  * @class Watcher
  */
 export default class Watcher {
+
+    private vm: MVVM;
+
+    constructor(vm: MVVM) {
+        this.vm = vm;
+    }
 
 
     /**
@@ -81,7 +90,7 @@ export default class Watcher {
      * @memberof Watcher
      */
     private notifyView() {
-        MVVM.nextTick(() => {
+        _.nextTick(() => {
             if (!this.updateLinks.length) {
                 return;
             }
@@ -90,8 +99,35 @@ export default class Watcher {
             console.log('本次更新了：');
             this.actualLinks.forEach(n => console.log(n));
             console.log('--------------');
+
+
+            for (let link of this.actualLinks) {
+                for (let dep of this.dependEmitter.events) {
+                    const reg = new RegExp(`^${link}(\\.|$)`);
+                    if (reg.test(dep)) {
+                        this.dependEmitter.emit(dep, _.getValueFromKey(this.vm.$data, dep));
+                    }
+                }
+            }
+
             this.updateLinks = [];
 
         });
     }
+
+
+    private dependEmitter: EventEmitter = new EventEmitter();
+
+
+    /**
+     * 监听某个key的变动
+     *
+     * @param {string} event 要监听的key
+     * @param {Function} handler
+     * @memberof Watcher
+     */
+    public on(event: string, handler: Function) {
+        this.dependEmitter.on(event, handler);
+    }
+
 }

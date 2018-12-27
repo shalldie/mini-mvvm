@@ -21,17 +21,10 @@ import MVVM from './lib/MVVM';
 
 
 window['vm'] = new MVVM({
-    el: '#app',
+    el: '#root',
     data() {
         return {
-            a: {
-                b: {
-                    c: 'name'
-                },
-                c: {
-                    k: 'jjj'
-                }
-            }
+            name: 'tom'
         };
     },
     methods: {
