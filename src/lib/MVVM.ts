@@ -1,5 +1,8 @@
 import Observer from './Observer';
 import * as _ from '../utils';
+import BaseMVVM from './BaseMVVM';
+import Watcher from './Watcher';
+// import
 
 type MVVMOptions = {
     el: HTMLElement | string,
@@ -10,7 +13,7 @@ type MVVMOptions = {
 };
 
 
-export default class MVVM {
+export default class MVVM extends BaseMVVM {
 
     public $options: MVVMOptions;
 
@@ -18,7 +21,10 @@ export default class MVVM {
 
     public $data: Object;
 
+    private $watcher: Watcher = new Watcher();
+
     constructor(options: MVVMOptions) {
+        super();
         this.$options = options;
         this.initialize();
     }
@@ -43,6 +49,9 @@ export default class MVVM {
         Object.keys(this.$options.methods || {}).forEach(key => {
             this[key] = this.$options.methods[key].bind(this);
         });
+
+        // 观察 $data
+        new Observer(this.$data, this.$watcher);
     }
 
 }

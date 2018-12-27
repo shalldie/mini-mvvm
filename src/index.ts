@@ -1,7 +1,7 @@
 // https://github.com/DMQ/mvvm
 
 // import './index.scss';
-document.body.innerHTML = '<h2>hello worldd</h2>';
+// document.body.innerHTML = '<h2>hello worldd</h2>';
 
 import EventEmitter from './lib/EventEmitter';
 // import Observer from './lib/Observer';
@@ -24,7 +24,14 @@ window['vm'] = new MVVM({
     el: '#app',
     data() {
         return {
-            name: 'tomdd'
+            a: {
+                b: {
+                    c: 'name'
+                },
+                c: {
+                    k: 'jjj'
+                }
+            }
         };
     },
     methods: {

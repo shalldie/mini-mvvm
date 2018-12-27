@@ -1,4 +1,5 @@
 import EventEmitter from "./EventEmitter";
+import Watcher from './Watcher';
 import * as _ from '../utils';
 
 /**
@@ -13,17 +14,21 @@ export default class Observer {
 
     private data: Object;
 
+    private watcher: Watcher;
+
     public emitter: EventEmitter = new EventEmitter();
 
     /**
      * Creates an instance of Observer.
      * @param {Object} data 需要观察的对象
+     * @param {Watcher} watcher Watcher 对象
      * @param {string[]} [keys=[]] 从root对象到该对象的key的list
      * @memberof Observe
      */
-    constructor(data: Object, keys: string[] = []) {
+    constructor(data: Object, watcher: Watcher, keys: string[] = []) {
 
         this.data = data;
+        this.watcher = watcher;
         this.keys = keys;
 
         if (_.observable(data)) {
@@ -45,7 +50,7 @@ export default class Observer {
 
         Object.keys(data).forEach(key => {
             this.defineReactive(key);
-            new Observer(data[key], [...this.keys, key]);
+            new Observer(data[key], this.watcher, [...this.keys, key]);
         });
     }
 
@@ -66,12 +71,11 @@ export default class Observer {
                     return;
                 }
 
-                console.log(`update:${val}=>${newVal}`);
-                console.log(`update path: ${[...this.keys, key].join('.')}`)
                 val = newVal;
 
+                this.watcher.updateKey([...this.keys, key].join('.'));
                 // set 的时候需要主动再次添加 observer
-                new Observer(val, [...this.keys, key]);
+                new Observer(val, this.watcher, [...this.keys, key]);
             }
         });
     }
