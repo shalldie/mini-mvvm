@@ -1,4 +1,5 @@
 import EventEmitter from '../lib/EventEmitter';
+import MVVM from '../lib/MVVM';
 
 
 /**
@@ -55,4 +56,8 @@ export function getValueFromKey(data: Object, key: string) {
     }
 
     return result;
+}
+
+export function getValueFromVM(vm: MVVM, key: string) {
+    return getValueFromKey(vm.$data, key);
 }

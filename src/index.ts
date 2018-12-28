@@ -24,7 +24,12 @@ window['vm'] = new MVVM({
     el: '#root',
     data() {
         return {
-            name: 'tom'
+            person: {
+                name: 'tom',
+                age: 12
+            },
+            cmStyle: 'color:red;',
+            cmClass: 'cm-class'
         };
     },
     methods: {

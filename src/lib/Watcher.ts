@@ -10,7 +10,7 @@ import EventEmitter from './EventEmitter';
  */
 export default class Watcher {
 
-    private vm: MVVM;
+    public vm: MVVM;
 
     constructor(vm: MVVM) {
         this.vm = vm;

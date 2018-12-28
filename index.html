@@ -8,9 +8,9 @@
 </head>
 <body>
     <div id="root">
-        姓名：{{name}}
-        <ul>
-            <li>hello world</li>
+        <div>His name is {{person.name}},{{person.name}}'s age is {{person.age}}</div>
+        <ul x-bind:class="cmClass" :style="cmStyle ">
+            <li>hello world {{person.name }}</li>
         </ul>
     </div>
     <script src="/dist/index.js"></script>
