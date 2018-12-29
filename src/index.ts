@@ -8,6 +8,8 @@ import EventEmitter from './lib/EventEmitter';
 
 import MVVM from './core/MVVM';
 
+export default MVVM;
+
 // const emitter = new EventEmitter();
 
 // emitter.on('hello', name => console.log(name));
@@ -29,12 +31,13 @@ window['vm'] = new MVVM({
                 age: 12
             },
             cmStyle: 'color:red;',
-            cmClass: 'cm-classxx'
+            cmClass: 'cm-classxx',
+            message: ''
         };
     },
     methods: {
         sayHello() {
-            console.log(`hello~ ${this.name}`);
+            this.message = `当前时间： ${+new Date}`;
         }
     }
 })

@@ -1,4 +1,3 @@
-import EventEmitter from "./EventEmitter";
 import Watcher from './Watcher';
 import * as _ from '../utils';
 
@@ -15,8 +14,6 @@ export default class Observer {
     private data: Object;
 
     private watcher: Watcher;
-
-    public emitter: EventEmitter = new EventEmitter();
 
     /**
      * Creates an instance of Observer.
@@ -79,7 +76,5 @@ export default class Observer {
             }
         });
     }
-
-
 
 }

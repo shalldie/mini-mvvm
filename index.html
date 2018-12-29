@@ -11,8 +11,12 @@
         <div>His name is {{person.name}},{{person.name}}'s age is {{person.age}}</div>
         <ul x-bind:class="cmClass" :style="cmStyle ">
             <li>hello world {{person.name }}</li>
+            <li>{{message}}</li>
         </ul>
+        <div>
+            <button @click="sayHello">sayHello</button>
+        </div>
     </div>
-    <script src="/dist/index.js"></script>
+    <script src="/dist/mvvm.js"></script>
 </body>
 </html>

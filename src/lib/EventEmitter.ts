@@ -60,6 +60,21 @@ export default class EventEmitter {
     }
 
     /**
+     * 解除事件绑定
+     *
+     * @param {string} event 事件名
+     * @param {Function} listener 监听器
+     * @memberof EventEmitter
+     */
+    public off(event: string, listener: Function): void {
+        const subscriptions = this.subscription[event] || [];
+        const index = subscriptions.findIndex(item => item.listener === listener);
+        if (index >= 0) {
+            subscriptions.splice(index, 1);
+        }
+    }
+
+    /**
      * 触发事件
      *
      * @param {string} event 事件名

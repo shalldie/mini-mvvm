@@ -96,11 +96,12 @@ export default class Watcher extends EventEmitter {
                 return;
             }
 
-            console.log('--------------');
-            console.log('本次更新了：');
-            this.actualLinks.forEach(n => console.log(n));
-            console.log('--------------');
-
+            if (process.env.NODE_ENV === 'development') {
+                console.log('--------------');
+                console.log('本次更新了：');
+                this.actualLinks.forEach(n => console.log(n));
+                console.log('--------------');
+            }
 
             for (let link of this.actualLinks) {
                 for (let dep of this.events) {

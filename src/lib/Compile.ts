@@ -24,6 +24,8 @@ export default class Compile {
             if (child.nodeType === 1) {
                 // attributes
                 Compile.compileAttributes(<HTMLElement>child, watcher);
+                // events
+                Compile.compileNodeEvents(<HTMLElement>child, watcher);
                 // 递归
                 Compile.compileNode(<HTMLElement>child, watcher);
             }
@@ -76,24 +78,38 @@ export default class Compile {
     public static compileNodeEvents(node: HTMLElement, watcher: Watcher) {
         const attributes: Attr[] = [].slice.call(node.attributes);
 
-        const eventMap: Map<string, {}> = new Map();
+        const eventMap: Map<string, { event: string, handler: Function }> = new Map();
 
-        const reg = /(x-on:|@)(\S+?)/;
+        console.log(node);
+        // if (node.tagName === 'BUTTON') {
+        //     debugger;
+        // }
 
-        // let match: RegExpExecArray;
+        // 解析事件，并绑定
+        const reg = /(x-on:|@)(\S+)/;
 
+        // 解析
         for (let attr of attributes) {
             let match = attr.name.match(reg);
             if (!match) {
                 continue;
             }
 
+            console.log(attr.name);
+            node.removeAttribute(attr.name);
+
             eventMap.set(
                 match[2],
                 {
-                    type: ''
+                    event: match[2],
+                    handler: watcher.vm[attr.value.trim()]
                 }
             );
+        }
+
+        // 绑定
+        for (let [event, { handler }] of eventMap) {
+            node.addEventListener(event, <EventListenerOrEventListenerObject>handler);
         }
 
     }

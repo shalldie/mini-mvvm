@@ -9,4 +9,4 @@ A lib to achieve mvvm,for study.
 -   [x] attribute 数据绑定
 -   [ ] 常用指令
 -   [ ] 双向绑定
--   [ ] 事件绑定
+-   [x] 事件绑定

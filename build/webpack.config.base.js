@@ -1,13 +1,13 @@
 const path = require('path');
 
-const ifProduction = process.env.NODE_ENV === 'production';
+const ifProduction = () => process.env.NODE_ENV === 'production';
 
 module.exports = {
     entry: {
-        index: path.join(
+        mvvm: path.join(
             __dirname,
-            ifProduction ?
-                '../src/lib/MVVM.ts' :
+            ifProduction() ?
+                '../src/core/MVVM.ts' :
                 '../src/index.ts'
         )
     },
