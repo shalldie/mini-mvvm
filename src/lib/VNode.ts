@@ -1,12 +1,55 @@
 import MVVM from '../core/MVVM';
 import Watcher from './Watcher';
 
-
 export default class VNode {
+    /**
+     * 父节点
+     *
+     * @type {VNode}
+     * @memberof VNode
+     */
+    public parent: VNode;
 
-    constructor(watcher: Watcher) {
+    /**
+     * 子节点
+     *
+     * @type {VNode[]}
+     * @memberof VNode
+     */
+    public children: VNode[] = [];
+
+
+    /**
+     * 节点名称
+     *
+     * @type {string}
+     * @memberof VNode
+     */
+    public tagName: string;
+
+    /**
+     * 原始 attributes
+     *
+     * @type {Map<string, string>}
+     * @memberof VNode
+     */
+    public attributes: Map<string, string> = new Map();
+}
+
+/**
+ * dom 节点相关信息
+ *
+ * @export
+ * @class NodeStore
+ */
+export class NodeStore {
+
+    public vnode: VNode;
+
+    constructor(vm: MVVM, watcher: Watcher) {
+
+        this.vm = vm;
         this.watcher = watcher;
-        this.vm = watcher.vm;
     }
 
     /**
@@ -25,13 +68,7 @@ export default class VNode {
      */
     public vm: MVVM;
 
-    /**
-     * 原始html，在重置节点的时候会用到
-     *
-     * @type {string}
-     * @memberof Cache
-     */
-    public innerHTML: string = '';
+
 
     /**
      * attribute 缓存
@@ -57,4 +94,6 @@ export default class VNode {
      * @memberof Cache
      */
     public watcherEventMap: Map<string, { event: string, handler: Function }> = new Map();
+
+
 }
