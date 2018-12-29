@@ -6,7 +6,7 @@
 import EventEmitter from './lib/EventEmitter';
 // import Observer from './lib/Observer';
 
-import MVVM from './lib/MVVM';
+import MVVM from './core/MVVM';
 
 // const emitter = new EventEmitter();
 
@@ -29,7 +29,7 @@ window['vm'] = new MVVM({
                 age: 12
             },
             cmStyle: 'color:red;',
-            cmClass: 'cm-class'
+            cmClass: 'cm-classxx'
         };
     },
     methods: {

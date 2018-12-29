@@ -2,8 +2,22 @@ import Watcher from './Watcher';
 import * as _ from '../utils';
 
 
+/**
+ * Compile，用于编译模板
+ *
+ * @export
+ * @class Compile
+ */
 export default class Compile {
 
+    /**
+     * 处理节点
+     *
+     * @static
+     * @param {HTMLElement} node
+     * @param {Watcher} watcher
+     * @memberof Compile
+     */
     public static compileNode(node: HTMLElement, watcher: Watcher) {
         const children: Node[] = [].slice.call(node.childNodes);
         children.forEach(child => {
@@ -19,12 +33,20 @@ export default class Compile {
         });
     }
 
+    /**
+     * 处理节点上的属性
+     *
+     * @static
+     * @param {HTMLElement} node
+     * @param {Watcher} watcher
+     * @memberof Compile
+     */
     public static compileAttributes(node: HTMLElement, watcher: Watcher) {
         const attributes: Attr[] = [].slice.call(node.attributes);
 
         // Map<依赖,属性>
-        const attrMap: Map<string, { origin: string, actual: string }> = new Map();
-        // debugger;
+        const attrMap: Map<string, { originAttr: string, actualAttr: string }> = new Map();
+
         for (let attr of attributes) {
             const reg = /(x-bind)?:(\S+)/;
             let match = attr.name.match(reg);
@@ -33,20 +55,57 @@ export default class Compile {
                 attrMap.set(
                     attr.value.trim(),      // key，依赖
                     {
-                        origin: attr.name,  // 原始attribute的name
-                        actual: match[2]    // 实际attribute的name
+                        originAttr: attr.name,  // 原始attribute的name
+                        actualAttr: match[2]   // 实际attribute的name
                     });
             }
         }
 
-        // 更新attribute为当前默认值
-        for (let [key, { origin, actual }] of attrMap) {
-            node.removeAttribute(origin);
-            console.log(key);
-            node.setAttribute(actual, _.getValueFromVM(watcher.vm, key));
+        // 更新attribute为当前默认值，监听更新
+        for (let [key, { originAttr, actualAttr }] of attrMap) {
+            node.removeAttribute(originAttr);
+            node.setAttribute(actualAttr, _.getValueFromVM(watcher.vm, key));
+
+            watcher.on(key, (newVal: any) => {
+                node.setAttribute(actualAttr, newVal);
+            });
         }
+
     }
 
+    public static compileNodeEvents(node: HTMLElement, watcher: Watcher) {
+        const attributes: Attr[] = [].slice.call(node.attributes);
+
+        const eventMap: Map<string, {}> = new Map();
+
+        const reg = /(x-on:|@)(\S+?)/;
+
+        // let match: RegExpExecArray;
+
+        for (let attr of attributes) {
+            let match = attr.name.match(reg);
+            if (!match) {
+                continue;
+            }
+
+            eventMap.set(
+                match[2],
+                {
+                    type: ''
+                }
+            );
+        }
+
+    }
+
+    /**
+     * 处理文本节点
+     *
+     * @static
+     * @param {Text} node
+     * @param {Watcher} watcher
+     * @memberof Compile
+     */
     public static compileTextNode(node: Text, watcher: Watcher) {
         const content = node.textContent;
         const reg = /\{\{\s*?(\S+?)\s*?\}\}/g;

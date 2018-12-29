@@ -1,5 +1,5 @@
 import EventEmitter from '../lib/EventEmitter';
-import MVVM from '../lib/MVVM';
+import MVVM from '../core/MVVM';
 
 
 /**
@@ -58,6 +58,14 @@ export function getValueFromKey(data: Object, key: string) {
     return result;
 }
 
-export function getValueFromVM(vm: MVVM, key: string) {
+/**
+ * 根据key，从vm上获取数据
+ *
+ * @export
+ * @param {MVVM} vm
+ * @param {string} key
+ * @returns
+ */
+export function getValueFromVM(vm: MVVM, key: string): any {
     return getValueFromKey(vm.$data, key);
 }

@@ -1,8 +1,8 @@
-import Observer from './Observer';
+import Observer from '../lib/Observer';
 import * as _ from '../utils';
 import BaseMVVM from './BaseMVVM';
-import Watcher from './Watcher';
-import Compile from './Compile';
+import Watcher from '../lib/Watcher';
+import Compile from '../lib/Compile';
 // import
 
 type MVVMOptions = {

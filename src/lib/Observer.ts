@@ -3,7 +3,7 @@ import Watcher from './Watcher';
 import * as _ from '../utils';
 
 /**
- * 观察者类
+ * 观察者类，用于观察数据变动
  *
  * @export
  * @class Observer

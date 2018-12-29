@@ -1,18 +1,19 @@
-import MVVM from './MVVM';
+import MVVM from '../core/MVVM';
 import * as _ from '../utils';
 import EventEmitter from './EventEmitter';
 
 /**
- * Watcher 用来 数据更新收集、派发
+ * Watcher 用来 数据更新收集、派发事件通知
  *
  * @export
  * @class Watcher
  */
-export default class Watcher {
+export default class Watcher extends EventEmitter {
 
     public vm: MVVM;
 
     constructor(vm: MVVM) {
+        super();
         this.vm = vm;
     }
 
@@ -102,10 +103,10 @@ export default class Watcher {
 
 
             for (let link of this.actualLinks) {
-                for (let dep of this.dependEmitter.events) {
+                for (let dep of this.events) {
                     const reg = new RegExp(`^${link}(\\.|$)`);
                     if (reg.test(dep)) {
-                        this.dependEmitter.emit(dep, _.getValueFromKey(this.vm.$data, dep));
+                        this.emit(dep, _.getValueFromVM(this.vm, dep));
                     }
                 }
             }
@@ -115,19 +116,18 @@ export default class Watcher {
         });
     }
 
-
-    private dependEmitter: EventEmitter = new EventEmitter();
-
-
     /**
      * 监听某个key的变动
+     *
+     * @description
+     * 这里重写只是为了修改注释 >_<#@!
      *
      * @param {string} event 要监听的key
      * @param {Function} handler
      * @memberof Watcher
      */
     public on(event: string, handler: Function) {
-        this.dependEmitter.on(event, handler);
+        super.on(event, handler);
     }
 
 }

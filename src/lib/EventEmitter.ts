@@ -40,7 +40,7 @@ export default class EventEmitter {
      * @param {ESubscribeType} [type=ESubscribeType.normal] 监听类型
      * @memberof EventEmitter
      */
-    on(event: string, listener: Function, type: ESubscribeType = ESubscribeType.normal): void {
+    public on(event: string, listener: Function, type: ESubscribeType = ESubscribeType.normal): void {
         this.subscription[event] = this.subscription[event] || [];
         this.subscription[event].push({
             type,
@@ -55,7 +55,7 @@ export default class EventEmitter {
      * @param {Function} listener 监听器
      * @memberof EventEmitter
      */
-    once(event: string, listener: Function): void {
+    public once(event: string, listener: Function): void {
         this.on(event, listener, ESubscribeType.once);
     }
 
@@ -66,7 +66,7 @@ export default class EventEmitter {
      * @param {...any[]} args 参数
      * @memberof EventEmitter
      */
-    emit(event: string, ...args: any[]): void {
+    public emit(event: string, ...args: any[]): void {
         const subscriptions = this.subscription[event] || [];
 
         // 不缓存length是因为length会更改
@@ -86,7 +86,7 @@ export default class EventEmitter {
         }
     }
 
-    listeners(event: string) {
+    public listeners(event: string) {
         return this.subscription[event] || [];
     }
 
@@ -97,7 +97,7 @@ export default class EventEmitter {
      * @type {string[]}
      * @memberof EventEmitter
      */
-    get events(): string[] {
+    public get events(): string[] {
         return Object.keys(this.subscription);
     }
 
