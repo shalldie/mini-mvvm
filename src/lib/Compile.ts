@@ -1,5 +1,12 @@
+import VNode from './VNode';
 import Watcher from './Watcher';
+
 import * as _ from '../utils';
+
+/**
+ * 缓存的key
+ */
+const VNODE_KEY = '__MVVM__';;
 
 
 /**
@@ -9,6 +16,13 @@ import * as _ from '../utils';
  * @class Compile
  */
 export default class Compile {
+
+    public static disposeNode(node: HTMLElement) {
+        // 文本节点
+        if (node.nodeType === 3) {
+            return;
+        }
+    }
 
     /**
      * 处理节点
@@ -21,6 +35,8 @@ export default class Compile {
     public static compileNode(node: HTMLElement, watcher: Watcher) {
         const children: Node[] = [].slice.call(node.childNodes);
         children.forEach(child => {
+            child[VNODE_KEY] = new VNode(watcher);
+
             if (child.nodeType === 1) {
                 // attributes
                 Compile.compileAttributes(<HTMLElement>child, watcher);
@@ -46,8 +62,8 @@ export default class Compile {
     public static compileAttributes(node: HTMLElement, watcher: Watcher) {
         const attributes: Attr[] = [].slice.call(node.attributes);
 
-        // Map<依赖,属性>
-        const attrMap: Map<string, { originAttr: string, actualAttr: string }> = new Map();
+        // Map<属性 ,any>
+        const attrMap: Map<string, { originAttr: string, actualAttr: string, dep: string }> = new Map();
 
         for (let attr of attributes) {
             const reg = /(x-bind)?:(\S+)/;
@@ -55,20 +71,21 @@ export default class Compile {
 
             if (match) {
                 attrMap.set(
-                    attr.value.trim(),      // key，依赖
+                    match[2],      // key，依赖
                     {
                         originAttr: attr.name,  // 原始attribute的name
-                        actualAttr: match[2]   // 实际attribute的name
+                        actualAttr: match[2],   // 实际attribute的name
+                        dep: attr.value.trim()
                     });
             }
         }
 
         // 更新attribute为当前默认值，监听更新
-        for (let [key, { originAttr, actualAttr }] of attrMap) {
+        for (let { originAttr, actualAttr, dep } of attrMap.values()) {
             node.removeAttribute(originAttr);
-            node.setAttribute(actualAttr, _.getValueFromVM(watcher.vm, key));
+            node.setAttribute(actualAttr, _.getValueFromVM(watcher.vm, dep));
 
-            watcher.on(key, (newVal: any) => {
+            watcher.on(dep, (newVal: any) => {
                 node.setAttribute(actualAttr, newVal);
             });
         }
@@ -80,11 +97,6 @@ export default class Compile {
 
         const eventMap: Map<string, { event: string, handler: Function }> = new Map();
 
-        console.log(node);
-        // if (node.tagName === 'BUTTON') {
-        //     debugger;
-        // }
-
         // 解析事件，并绑定
         const reg = /(x-on:|@)(\S+)/;
 
@@ -95,7 +107,6 @@ export default class Compile {
                 continue;
             }
 
-            console.log(attr.name);
             node.removeAttribute(attr.name);
 
             eventMap.set(
@@ -123,6 +134,11 @@ export default class Compile {
      * @memberof Compile
      */
     public static compileTextNode(node: Text, watcher: Watcher) {
+
+        const cache: VNode = node[VNODE_KEY];
+
+        const watcherEventMap: Map<string, { event: string, handler: Function }> = cache.watcherEventMap;
+
         const content = node.textContent;
         const reg = /\{\{\s*?(\S+?)\s*?\}\}/g;
 
