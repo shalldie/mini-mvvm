@@ -1,4 +1,5 @@
-import VNode, { ENodeType, NodeStore } from '../models/VNode';
+import VNode, { ENodeType } from '../models/VNode';
+import NodeStore from '../models/NodeStore';
 import Watcher from './Watcher';
 
 import * as _ from '../utils';
@@ -80,6 +81,15 @@ export default class Compiler {
 
     //#region ElementNode
 
+
+    /**
+     * 构建一个dom节点，并处理自身和子节点所有的绑定信息
+     *
+     * @private
+     * @param {VNode} vnode
+     * @returns
+     * @memberof Compiler
+     */
     private buildElementNode(vnode: VNode) {
         const node = vnode.isRoot ? this.el
             : document.createElement(vnode.tagName.toLowerCase());
@@ -109,7 +119,6 @@ export default class Compiler {
 
         return node;
     }
-
 
     /**
      * 处理节点的属性监听、绑定
@@ -153,6 +162,14 @@ export default class Compiler {
         }
     }
 
+    /**
+     * 处理节点上绑定的事件
+     *
+     * @private
+     * @param {HTMLElement} node
+     * @param {NodeStore} nodeStore
+     * @memberof Compiler
+     */
     private buildEvents(node: HTMLElement, nodeStore: NodeStore) {
 
         for (let [name, value] of nodeStore.vnode.attributes) {
@@ -184,6 +201,16 @@ export default class Compiler {
     //#endregion
 
     //#region TextNode
+
+
+    /**
+     * 处理文本节点，依赖绑定
+     *
+     * @private
+     * @param {VNode} vnode
+     * @returns
+     * @memberof Compiler
+     */
     private buildTextNode(vnode: VNode) {
         const node = document.createTextNode(vnode.textContent);
         const nodeStore: NodeStore = new NodeStore(vnode, this.vm, this.watcher);
@@ -239,6 +266,5 @@ export default class Compiler {
         return node;
     }
     //#endregion
-
 
 }
