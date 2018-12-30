@@ -1,6 +1,4 @@
-import EventEmitter from '../lib/EventEmitter';
 import MVVM from '../core/MVVM';
-
 
 /**
  * microTask 要做的事情
@@ -68,4 +66,18 @@ export function getValueFromKey(data: Object, key: string) {
  */
 export function getValueFromVM(vm: MVVM, key: string): any {
     return getValueFromKey(vm.$data, key);
+}
+
+export function serializeDependences(fn: Function): string[] {
+    const content = fn.toString();
+    const reg = /this\.([a-zA-Z\d\.]+)/g;
+
+    const deps: string[] = [];
+
+    let match: RegExpExecArray;
+    while (match = reg.exec(content)) {
+        deps.push(match[1]);
+    }
+
+    return deps;
 }

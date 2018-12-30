@@ -1,5 +1,5 @@
 import MVVM from '../core/MVVM';
-import Watcher from './Watcher';
+import Watcher from '../lib/Watcher';
 
 /**
  * 节点类型

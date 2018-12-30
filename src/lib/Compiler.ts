@@ -1,4 +1,4 @@
-import VNode, { ENodeType, NodeStore } from './VNode';
+import VNode, { ENodeType, NodeStore } from '../models/VNode';
 import Watcher from './Watcher';
 
 import * as _ from '../utils';

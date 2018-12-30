@@ -6,6 +6,7 @@ A lib to achieve mvvm,for study.
 
 -   [x] VNode
 -   [x] 数据监听
+-   [x] 计算属性
 -   [x] 文本节点数据绑定
 -   [x] attribute 数据绑定
 -   [ ] 常用指令
