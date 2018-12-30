@@ -2,7 +2,7 @@ import Observer from '../lib/Observer';
 import * as _ from '../utils';
 import BaseMVVM from './BaseMVVM';
 import Watcher from '../lib/Watcher';
-import Compile from '../lib/Compile';
+import Compiler from '../lib/Compiler';
 // import
 
 type MVVMOptions = {
@@ -23,6 +23,8 @@ export default class MVVM extends BaseMVVM {
     public $data: Object;
 
     private $watcher: Watcher = new Watcher(this);
+
+    private $compiler: Compiler;
 
     constructor(options: MVVMOptions) {
         super();
@@ -55,7 +57,10 @@ export default class MVVM extends BaseMVVM {
         // 观察 $data
         new Observer(this.$data, this.$watcher);
 
-        Compile.compileNode(this.$el, this.$watcher);
+        // 编译模板
+        this.$compiler = new Compiler(this.$el, this, this.$watcher);
+
+        // Compile.compileNode(this.$el, this.$watcher);
     }
 
 }
