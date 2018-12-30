@@ -1,40 +1,29 @@
 import MVVM from './core/MVVM';
 
-export default MVVM;
-
 window['vm'] = new MVVM({
     el: '#root',
     data() {
         return {
             person: {
-                name: 'tom',
-                age: 12
-            },
-            cmStyle: 'color:red;',
-            cmClass: 'cm-classxx'
+                name: '凯瑟琳',
+                age: 16
+            }
         };
     },
     computed: {
-        message() {
-            return `the person's name is ${this.person.name},
-            and his age is ${this.person.age}`;
+        showAge() {
+            if (this.person.age > 30) {
+                return '秘密 >_<#@!';
+            }
+            return this.person.age;
         },
-        info() {
-            return `${this.person.name}'s age is ${this.person.age}`;
-        },
-        info2() {
-            return 'the info is: ' + this.info;
+        doubleAge() {
+            return this.person.age * 2;
         }
     },
     methods: {
-        sayHello() {
-            const name = Array.apply(null, Array(4)).map(() => {
-                return String.fromCharCode(~~(Math.random() * 25 + 65));
-            }).join('');
-            this.person = {
-                name,
-                age: ~~(Math.random() * 50)
-            };
+        reset() {
+            Object.assign(this.$data, this.$options.data());
         }
     }
 });

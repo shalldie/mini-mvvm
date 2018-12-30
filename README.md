@@ -1,8 +1,10 @@
 # mvvm
 
-A lib to achieve mvvm,for study.
+A lib to achieve mvvm.
 
-# todos
+自己写的一个 `mvvm` 库，主要是想自己造一遍轮子，不要用于生产环境 >\_<#@!
+
+## 特性
 
 -   [x] VNode
 -   [x] 数据监听
@@ -10,5 +12,5 @@ A lib to achieve mvvm,for study.
 -   [x] 文本节点数据绑定
 -   [x] attribute 数据绑定
 -   [ ] 常用指令
--   [ ] 双向绑定
+-   [x] 双向绑定
 -   [x] 事件绑定

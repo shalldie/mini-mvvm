@@ -5,19 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        #root {
+            margin: 50px auto;
+            width: 500px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+        ul>li{
+            margin-bottom: 20px;
+            list-style: none;
+        }
+        input {
+            outline: none;
+            width: 300px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        input:focus{
+            border-color: #2ad;
+            box-shadow: 0 0 10px #2ad;
+        }
+
+        button {
+            outline: none;
+            width: 120px;
+            height: 30px;
+            border: 1px solid #2ad;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div :style="cmStyle " id="root">
-        <div>His name is {{person.name}},{{person.name}}'s age is {{person.age}}</div>
-        <ul x-bind:class="cmClass" :style="cmStyle ">
-            <li>hello world {{person.name }}</li>
-            <li>info: {{info}}</li>
-            <li>{{info2}}</li>
-            <li>{{message}}</li>
+    <div id="root">
+        <ul>
+            <li>
+                <label>姓名：<input type="text" x-model="person.name"></label>
+            </li>
+            <li>
+                <label>年龄：<input type="number" x-model="person.age"></label>
+            </li>
+            <li>双绑：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{person.name}} 的年龄是： {{showAge}}</li>
+            <li>计算属性：{{person.name}} 年龄的2倍是： {{doubleAge}}</li>
+            <li>
+                <button @click="reset">重置</button>
+            </li>
         </ul>
-        <div>
-            <button @click="sayHello">sayHello</button>
-        </div>
     </div>
     <script src="/dist/mvvm.js"></script>
 </body>

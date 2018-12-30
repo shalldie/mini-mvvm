@@ -1,14 +1,14 @@
 import VNode, { ENodeType } from '../models/VNode';
 import NodeStore from '../models/NodeStore';
 import Watcher from './Watcher';
-
 import * as _ from '../utils';
-import MVVM from '..';
+import MVVM from '../core/MVVM';
+import XModel from './directives/XModel';
 
 /**
  * 缓存的key
  */
-const VNODE_KEY = '__MVVM__';;
+const NODE_STORE = '__NODE_STORE__';;
 
 export default class Compiler {
 
@@ -95,12 +95,16 @@ export default class Compiler {
             : document.createElement(vnode.tagName.toLowerCase());
 
         const nodeStore = new NodeStore(vnode, this.vm, this.watcher);
+        node[NODE_STORE] = nodeStore;
 
         // 处理属性
         this.buildAttributes(node, nodeStore);
 
         // 处理事件
         this.buildEvents(node, nodeStore);
+
+        // 处理双绑
+        XModel.bind(node, nodeStore);
 
         // 递归
         vnode.children.forEach(vchild => {
@@ -132,6 +136,13 @@ export default class Compiler {
         // debugger;
         for (let [name, value] of nodeStore.vnode.attributes) {
 
+            try {
+                node.setAttribute(name, value);
+            }
+            catch (ex) {
+
+            }
+
             const reg = /^(x-bind)?:(\S+)$/;
             const match = name.match(reg);
 
@@ -139,9 +150,8 @@ export default class Compiler {
                 continue;
             }
 
-            if (nodeStore.vnode.isRoot) {
-                node.removeAttribute(name);
-            }
+            // 如果符合就去掉声明
+            node.removeAttribute(name);
 
             const attrName = match[2];
 
@@ -214,6 +224,7 @@ export default class Compiler {
     private buildTextNode(vnode: VNode) {
         const node = document.createTextNode(vnode.textContent);
         const nodeStore: NodeStore = new NodeStore(vnode, this.vm, this.watcher);
+        node[NODE_STORE] = nodeStore;
 
         const content = vnode.textContent;
         const reg = /\{\{\s*?(\S+?)\s*?\}\}/g;

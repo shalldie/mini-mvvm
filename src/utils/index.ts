@@ -68,6 +68,25 @@ export function getValueFromVM(vm: MVVM, key: string): any {
     return getValueFromKey(vm.$data, key);
 }
 
+/**
+ * 根据key设置vm的值
+ *
+ * @export
+ * @param {MVVM} vm
+ * @param {string} key
+ * @param {*} value
+ */
+export function setValueOfVM(vm: MVVM, key: string, value: any) {
+    let keys = key.split('.');
+    let target = vm;
+
+    while (keys.length > 1) {
+        target = target[keys.shift()];
+    }
+
+    target[keys.shift()] = value;
+}
+
 export function serializeDependences(fn: Function): string[] {
     const content = fn.toString();
     const reg = /this\.([a-zA-Z\d\.]+)/g;

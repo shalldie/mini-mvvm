@@ -1,7 +1,7 @@
 {
   "name": "mvvm",
   "version": "1.0.0",
-  "description": "A lib to achieve  mvvm,for study.",
+  "description": "A lib to achieve  mvvm.",
   "main": "index.js",
   "devDependencies": {
     "@types/node": "^10.12.18",

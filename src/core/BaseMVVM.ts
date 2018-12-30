@@ -10,6 +10,8 @@ import EventEmitter from '../lib/EventEmitter';
  */
 export default class BaseMVVM extends EventEmitter {
 
+    [x: string]: any;
+
     public static nextTick = _.nextTick;
 
     public $nextTick = _.nextTick;
