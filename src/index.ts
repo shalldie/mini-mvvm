@@ -19,6 +19,9 @@ window['vm'] = new MVVM({
         },
         doubleAge() {
             return this.person.age * 2;
+        },
+        over30() {
+            return this.person.age > 30;
         }
     },
     methods: {

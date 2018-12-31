@@ -27,9 +27,9 @@ export default class MVVM extends BaseMVVM {
 
     public $computed: Object = {};
 
-    private $watcher: Watcher = new Watcher(this);
+    public $watcher: Watcher = new Watcher(this);
 
-    private $compiler: Compiler;
+    public $compiler: Compiler;
 
     constructor(options: MVVMOptions) {
         super();

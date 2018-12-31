@@ -4,11 +4,9 @@ import Watcher from './Watcher';
 import * as _ from '../utils';
 import MVVM from '../core/MVVM';
 import XModel from './directives/XModel';
+import { NODE_STORE } from '../utils/constants';
+import XIf from './directives/XIf';
 
-/**
- * 缓存的key
- */
-const NODE_STORE = '__NODE_STORE__';;
 
 export default class Compiler {
 
@@ -85,12 +83,11 @@ export default class Compiler {
     /**
      * 构建一个dom节点，并处理自身和子节点所有的绑定信息
      *
-     * @private
      * @param {VNode} vnode
      * @returns
      * @memberof Compiler
      */
-    private buildElementNode(vnode: VNode) {
+    public buildElementNode(vnode: VNode) {
         const node = vnode.isRoot ? this.el
             : document.createElement(vnode.tagName.toLowerCase());
 
@@ -106,12 +103,18 @@ export default class Compiler {
         // 处理双绑
         XModel.bind(node, nodeStore);
 
+        // 处理 x-if
+        if (!XIf.bind(node, nodeStore)) {
+            return null;
+        }
+
         // 递归
         vnode.children.forEach(vchild => {
 
             // 添加 element 节点
             if (vchild.nodeType === ENodeType.ELEMENT_NODE) {
-                node.appendChild(this.buildElementNode(vchild));
+                const child = this.buildElementNode(vchild);
+                child && node.appendChild(child);
             }
 
             // 添加 text 节点

@@ -17,7 +17,7 @@
             margin-bottom: 20px;
             list-style: none;
         }
-        input {
+        input.textbox {
             outline: none;
             width: 300px;
             padding: 6px;
@@ -26,9 +26,14 @@
             border-radius: 3px;
         }
 
-        input:focus{
+        input.textbox:focus{
             border-color: #2ad;
             box-shadow: 0 0 10px #2ad;
+        }
+
+        .label {
+            display: inline-block;
+            width: 120px;
         }
 
         button {
@@ -39,6 +44,15 @@
             color: #666;
             font-size: 16px;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover{
+            background-color: #eee;
+        }
+
+        button:active{
+            background-color: #ddd;
         }
     </style>
 </head>
@@ -46,13 +60,23 @@
     <div id="root">
         <ul>
             <li>
-                <label>姓名：<input type="text" x-model="person.name"></label>
+                <label>姓名：<input class="textbox" type="text" x-model="person.name"></label>
             </li>
             <li>
-                <label>年龄：<input type="number" x-model="person.age"></label>
+                <label>年龄：<input class="textbox" type="number" x-model="person.age"></label>
             </li>
-            <li>双绑：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{person.name}} 的年龄是： {{showAge}}</li>
-            <li>计算属性：{{person.name}} 年龄的2倍是： {{doubleAge}}</li>
+            <li>
+                <span class="label">双绑：</span>
+                {{person.name}} 的年龄是： {{showAge}}
+            </li>
+            <li x-if="over30">
+                <span class="label">条件显示(x-if)：</span>
+                当年龄大于30就会出现
+            </li>
+            <li>
+                <span class="label">计算属性：</span>
+                {{person.name}} 年龄的2倍是： {{doubleAge}}
+            </li>
             <li>
                 <button @click="reset">重置</button>
             </li>

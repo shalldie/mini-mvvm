@@ -1,4 +1,7 @@
 import MVVM from '../core/MVVM';
+import { NODE_STORE } from './constants';
+import NodeStore from '../models/NodeStore';
+import { ENodeType } from '../models/VNode';
 
 /**
  * microTask 要做的事情
@@ -99,4 +102,35 @@ export function serializeDependences(fn: Function): string[] {
     }
 
     return deps;
+}
+
+/**
+ * 卸载 dom 节点上所有的事件监听
+ *
+ * @export
+ * @param {HTMLElement} node
+ * @returns
+ */
+export function disposeElement(node: HTMLElement) {
+    const nodeStore: NodeStore = node[NODE_STORE];
+
+    if (!nodeStore) {
+        return;
+    }
+
+    // 卸载 dom 事件
+    for (let { event, handler } of nodeStore.domEventMap.values()) {
+        node.removeEventListener(event, <any>handler);
+    }
+
+    // 卸载依赖监听事件
+    for (let { event, handler } of nodeStore.watcherEventMap.values()) {
+        nodeStore.watcher.off(event, handler);
+    }
+
+    // 如果是 Element 节点，递归
+    if (nodeStore.vnode.nodeType === ENodeType.ELEMENT_NODE) {
+        node.childNodes.forEach(child => disposeElement(<HTMLElement>child));
+    }
+
 }

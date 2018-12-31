@@ -22,7 +22,7 @@ export default class NodeStore {
      * Watcher 用来 数据更新收集、派发事件通知
      *
      * @type {Watcher}
-     * @memberof Cache
+     * @memberof NodeStore
      */
     public watcher: Watcher;
 
@@ -30,7 +30,7 @@ export default class NodeStore {
      * MVVM 实例
      *
      * @type {MVVM}
-     * @memberof Cache
+     * @memberof NodeStore
      */
     public vm: MVVM;
 
@@ -38,7 +38,7 @@ export default class NodeStore {
      * attribute 缓存
      *
      * @type {Map<string, { originAttr: string, actualAttr: string, dep: string }>}
-     * @memberof Cache
+     * @memberof NodeStore
      */
     public attrMap: Map<string, { originAttr: string, actualAttr: string, dep: string }> = new Map();
 
@@ -46,7 +46,7 @@ export default class NodeStore {
      * dom 事件缓存
      *
      * @type {Map<string, { event: string, handler: Function }>}
-     * @memberof Cache
+     * @memberof NodeStore
      */
     public domEventMap: Map<string, { event: string, handler: Function }> = new Map();
 
@@ -54,7 +54,7 @@ export default class NodeStore {
      * watcher 事件缓存
      *
      * @type {Map<string, { event: string, handler: Function, temp?: any  }>}
-     * @memberof Cache
+     * @memberof NodeStore
      */
     public watcherEventMap: Map<string, { event: string, handler: Function, temp?: any }> = new Map();
 

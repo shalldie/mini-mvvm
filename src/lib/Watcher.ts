@@ -32,7 +32,7 @@ export default class Watcher extends EventEmitter {
      *
      * @description
      * 没有使用 virtual dom
-     * 为最大节约性能，每次只更新要更新的数据的最小共同节点数据对应的tpl
+     * 为最大节约性能，每次只更新要更新的数据的最小共同节点数据对应的key
      * 所有数据修改后，在 nextTick 中去一起更新
      *
      * @readonly
