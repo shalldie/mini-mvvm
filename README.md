@@ -12,9 +12,8 @@ A lib to achieve mvvm.
 -   [x] 文本节点数据绑定
 -   [x] attribute 数据绑定
 -   [ ] 常用指令
-    -   [x] x-if
-    -   [ ] x-for
--   [x] 双向绑定
-    -   [x] x-model
+    -   [x] x-model 双向绑定
+    -   [x] x-if 条件渲染
+    -   [ ] x-for 循环
 -   [x] 事件绑定
     -   [x] @click | @mousedown | ...
