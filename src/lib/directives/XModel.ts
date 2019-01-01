@@ -51,8 +51,7 @@ export default class XModel {
 
         const watcherHandler = (newVal: any) => {
             if (newVal !== inputNode.value) {
-                // 有些类型的标签，比如select，需要先生成option才能赋值
-                _.nextTick(() => inputNode.value = newVal);
+                inputNode.value = newVal;
             }
         };
 
@@ -68,7 +67,8 @@ export default class XModel {
         });
 
         // 初始化
-        watcherHandler(_.getValueFromVM(nodeStore.vm, key));
+        // 有些类型的标签，比如select，需要先生成option才能赋值
+        _.nextTick(() => watcherHandler(nodeStore.context.get(key)));
 
     }
 }

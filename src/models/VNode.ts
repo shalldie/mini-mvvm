@@ -12,17 +12,22 @@ export enum ENodeType {
     /**
      * 元素节点
      */
-    ELEMENT_NODE = 1,
+    Element = 1,
 
     /**
      * 文本节点
      */
-    TEXT_NODE = 3,
+    Text = 3,
 
     /**
      * 注释节点
      */
-    COMMENT = 8
+    Comment = 8,
+
+    /**
+     * fragment 容器
+     */
+    DocumentFragment = 11
 }
 
 /**
@@ -64,7 +69,7 @@ export default class VNode {
      * @type {number}
      * @memberof VNode
      */
-    public nodeType: ENodeType = ENodeType.ELEMENT_NODE;
+    public nodeType: ENodeType = ENodeType.Element;
 
     /**
      * 节点名称
@@ -89,5 +94,26 @@ export default class VNode {
      * @memberof VNode
      */
     public textContent: string = '';
+
+
+    /**
+     * clone 一个新的vnode
+     *
+     * @returns {VNode}
+     * @memberof VNode
+     */
+    public clone(): VNode {
+        const vnode = new VNode();
+        Object.assign(vnode, this);
+
+        vnode.children = vnode.children.map(n => n.clone());
+
+        vnode.attributes = new Map();
+        for (let [key, value] of this.attributes) {
+            vnode.attributes.set(key, value);
+        }
+
+        return vnode;
+    }
 
 }

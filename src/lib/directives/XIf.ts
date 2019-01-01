@@ -69,7 +69,7 @@ export default class XIf {
         });
 
         // 初始化
-        const visible = !!_.getValueFromVM(nodeStore.vm, key);
+        const visible = !!nodeStore.context.get(key);
 
         // 如果不渲染
         if (!visible) {

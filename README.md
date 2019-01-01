@@ -14,6 +14,6 @@ A lib to achieve mvvm.
 -   [ ] 常用指令
     -   [x] x-model 双向绑定
     -   [x] x-if 条件渲染
-    -   [ ] x-for 循环
+    -   [ ] x-for 循环   // todo: 在数据改变时，重新渲染
 -   [x] 事件绑定
     -   [x] @click | @mousedown | ...

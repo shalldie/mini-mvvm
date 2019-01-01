@@ -9,7 +9,11 @@ window['vm'] = new MVVM({
                 name: '凯瑟琳',
                 age: 16,
                 sex: '女'
-            }
+            },
+            infos: [
+                { name: 'tom', age: 12 },
+                { name: 'lily', age: 23 }
+            ]
         };
     },
     computed: {

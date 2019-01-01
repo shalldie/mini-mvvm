@@ -6,6 +6,7 @@ import MVVM from '../core/MVVM';
 import XModel from './directives/XModel';
 import { NODE_STORE_KEY } from '../utils/constants';
 import XIf from './directives/XIf';
+import XFor from './directives/XFor';
 
 
 export default class Compiler {
@@ -44,7 +45,7 @@ export default class Compiler {
         vnode.nodeType = node.nodeType;
 
         // 如果是元素节点
-        if (vnode.nodeType === ENodeType.ELEMENT_NODE) {
+        if (vnode.nodeType === ENodeType.Element) {
             // tagName
             vnode.tagName = node.tagName;
             // attributes
@@ -62,7 +63,7 @@ export default class Compiler {
             return vnode;
         }
         // 如果是文本节点
-        else if (vnode.nodeType === ENodeType.TEXT_NODE) {
+        else if (vnode.nodeType === ENodeType.Text) {
             vnode.textContent = node.textContent;
             return vnode;
         }
@@ -84,14 +85,16 @@ export default class Compiler {
      * 构建一个dom节点，并处理自身和子节点所有的绑定信息
      *
      * @param {VNode} vnode
+     * @param {Object} [contextData]
      * @returns
      * @memberof Compiler
      */
-    public buildElementNode(vnode: VNode) {
+    public buildElementNode(vnode: VNode, contextData: Object = {}) {
         let node = vnode.isRoot ? this.el
             : document.createElement(vnode.tagName.toLowerCase());
 
         const nodeStore = new NodeStore(vnode, this.vm, this.watcher);
+        nodeStore.context.extend(contextData);
         node[NODE_STORE_KEY] = nodeStore;
 
         // 处理属性
@@ -106,25 +109,39 @@ export default class Compiler {
         // 处理 x-if
         node = XIf.bind(node, nodeStore);
 
-        if (node.nodeType !== ENodeType.ELEMENT_NODE) {
+        // 处理 x-for
+        node = XFor.bind(node, nodeStore, this);
+
+        // 文本节点直接返回
+        if (node.nodeType === ENodeType.Text) {
             return node;
         }
 
-        // 递归
-        vnode.children.forEach(vchild => {
+        // element 节点，递归
+        else if (node.nodeType === ENodeType.Element) {
+            // 递归
+            vnode.children.forEach(vchild => {
 
-            // 添加 element 节点
-            if (vchild.nodeType === ENodeType.ELEMENT_NODE) {
-                node.appendChild(this.buildElementNode(vchild));
-            }
+                // 添加 element 节点
+                if (vchild.nodeType === ENodeType.Element) {
+                    node.appendChild(this.buildElementNode(vchild, contextData));
+                }
 
-            // 添加 text 节点
-            else if (vchild.nodeType === ENodeType.TEXT_NODE) {
-                node.appendChild(this.buildTextNode(vchild));
-            }
+                // 添加 text 节点
+                else if (vchild.nodeType === ENodeType.Text) {
+                    node.appendChild(this.buildTextNode(vchild, contextData));
+                }
 
-        });
+            });
+        }
 
+        // fragment 节点，直接添加
+        // fragment 节点内element，会调用 buildElementNode 生成，已经处理过相关事件
+        else if (node.nodeType === ENodeType.DocumentFragment) {
+            return node;
+        }
+
+        // 还有其他的么？先放着，以后再加 >_<#@!
         return node;
     }
 
@@ -144,7 +161,7 @@ export default class Compiler {
                 node.setAttribute(name, value);
             }
             catch (ex) {
-
+                // 这里待完善
             }
 
             const reg = /^(x-bind)?:(\S+)$/;
@@ -160,7 +177,7 @@ export default class Compiler {
             const attrName = match[2];
 
             // 设置默认值
-            node.setAttribute(attrName, _.getValueFromVM(nodeStore.vm, value));
+            node.setAttribute(attrName, nodeStore.context.get(value));
 
             // 监听依赖项
             const handler = (newVal: any) => {
@@ -222,12 +239,20 @@ export default class Compiler {
      *
      * @private
      * @param {VNode} vnode
+     * @param {Object} contextData
      * @returns
      * @memberof Compiler
      */
-    private buildTextNode(vnode: VNode) {
+    private buildTextNode(vnode: VNode, contextData: Object) {
+        // if (vnode.textContent.indexOf('item')) {
+        //     debugger;
+        // }
+        // if (contextData['name']) {
+        //     debugger;
+        // }
         const node = document.createTextNode(vnode.textContent);
         const nodeStore: NodeStore = new NodeStore(vnode, this.vm, this.watcher);
+        nodeStore.context.extend(contextData);
         node[NODE_STORE_KEY] = nodeStore;
 
         const content = vnode.textContent;
@@ -264,7 +289,7 @@ export default class Compiler {
             // 添加初始值
             nodeStore.watcherEventMap.set(key, {
                 ...item,
-                temp: _.getValueFromVM(this.vm, key)
+                temp: nodeStore.context.get(key)
             });
             // 添加依赖监听
             this.watcher.on(key, (newVal: any) => {

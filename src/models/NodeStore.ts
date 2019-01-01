@@ -1,6 +1,7 @@
 import VNode from './VNode';
 import MVVM from '../core/MVVM';
 import Watcher from '../lib/Watcher';
+import Context from './Context';
 
 let uuid = 1;
 /**
@@ -19,7 +20,16 @@ export default class NodeStore {
         this.vnode = vnode;
         this.vm = vm;
         this.watcher = watcher;
+        this.context = new Context(vm);
     }
+
+    /**
+     * 获取数据的上下文
+     *
+     * @type {Context}
+     * @memberof NodeStore
+     */
+    public context: Context;
 
     /**
      * Watcher 用来 数据更新收集、派发事件通知

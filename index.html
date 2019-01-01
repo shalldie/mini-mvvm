@@ -10,8 +10,13 @@
     <div id="root">
         <h2>MVVM</h2>
         <ul>
+            <li x-for="item in infos">
+                {{item.name}} 的年龄是 {{item.age}}
+            </li>
+        </ul>
+        <ul>
             <li>
-                <span class="label">姓名：</span>
+                <span :data-name="person.name" class="label">姓名：</span>
                 <input class="textbox" type="text" x-model="person.name">
             </li>
             <li>

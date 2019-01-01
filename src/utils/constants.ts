@@ -12,3 +12,8 @@ export const MODEL_KEY = 'x-model';
  * x-if 的声明
  */
 export const IF_KEY: string = 'x-if';
+
+/**
+ * x-for 的声明
+ */
+export const FOR_KEY: string = 'x-for';

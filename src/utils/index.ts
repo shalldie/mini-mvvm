@@ -132,7 +132,7 @@ export function disposeElement(node: HTMLElement) {
     nodeStore.watcherEventMap.clear();
 
     // 如果是 Element 节点，递归
-    if (nodeStore.vnode.nodeType === ENodeType.ELEMENT_NODE) {
+    if (nodeStore.vnode.nodeType === ENodeType.Element) {
         node.childNodes.forEach(child => disposeElement(<HTMLElement>child));
     }
 
@@ -152,7 +152,7 @@ export function getCommentByData(node: HTMLElement, data: string): Comment {
     for (let child of node.childNodes) {
 
         // 如果是 element ，递归
-        if (child.nodeType === ENodeType.ELEMENT_NODE) {
+        if (child.nodeType === ENodeType.Element) {
             let item = getCommentByData(<HTMLElement>child, data);
             if (item) {
                 return item;
@@ -160,7 +160,7 @@ export function getCommentByData(node: HTMLElement, data: string): Comment {
         }
 
         // 注释节点
-        if (child.nodeType === ENodeType.COMMENT) {
+        if (child.nodeType === ENodeType.Comment) {
             let comment = <Comment>child;
             if (comment.data === data) {
                 return comment;
