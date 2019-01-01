@@ -1,9 +1,5 @@
 import MVVM from './core/MVVM';
-import * as _ from './utils';
-import EventEmitter from './lib/EventEmitter';
-import { emit } from 'cluster';
-
-window['_'] = _;
+import './index.scss';
 
 window['vm'] = new MVVM({
     el: '#root',

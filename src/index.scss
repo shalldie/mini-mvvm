@@ -1,0 +1,54 @@
+#root {
+    margin: 50px auto;
+    width: 600px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    padding: 10px;
+
+    > h2 {
+        text-align: center;
+    }
+
+    > ul > li {
+        margin-bottom: 20px;
+        list-style: none;
+
+        .textbox {
+            outline: none;
+            width: 300px;
+            padding: 6px;
+            border: 1px solid #ddd;
+            transition: 0.3s;
+            border-radius: 3px;
+
+            &:focus {
+                border-color: #2ad;
+                box-shadow: 0 0 10px #2ad;
+            }
+        }
+
+        .label {
+            display: inline-block;
+            width: 120px;
+        }
+
+        button {
+            outline: none;
+            width: 120px;
+            height: 30px;
+            border: 1px solid #ddd;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+
+            &:hover {
+                background-color: #eee;
+            }
+
+            &:active {
+                background-color: #ddd;
+            }
+        }
+    }
+}

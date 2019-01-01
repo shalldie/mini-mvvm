@@ -4,66 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        #root {
-            margin: 50px auto;
-            width: 500px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            padding: 10px;
-        }
-        ul>li{
-            margin-bottom: 20px;
-            list-style: none;
-        }
-        input.textbox {
-            outline: none;
-            width: 300px;
-            padding: 6px;
-            border: 1px solid #ddd;
-            transition: 0.3s;
-            border-radius: 3px;
-        }
-
-        input.textbox:focus{
-            border-color: #2ad;
-            box-shadow: 0 0 10px #2ad;
-        }
-
-        .label {
-            display: inline-block;
-            width: 120px;
-        }
-
-        button {
-            outline: none;
-            width: 120px;
-            height: 30px;
-            border: 1px solid #ddd;
-            color: #666;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover{
-            background-color: #eee;
-        }
-
-        button:active{
-            background-color: #ddd;
-        }
-    </style>
+    <title>MVVM</title>
 </head>
 <body>
     <div id="root">
+        <h2>MVVM</h2>
         <ul>
             <li>
-                <label>姓名：<input class="textbox" type="text" x-model="person.name"></label>
+                <span class="label">姓名：</span>
+                <input class="textbox" type="text" x-model="person.name">
             </li>
             <li>
-                <label>年龄：<input class="textbox" type="number" x-model="person.age"></label>
+                <span class="label">年龄：</span>
+                <input class="textbox" type="number" x-model="person.age">
             </li>
             <li>
                 <span class="label">双绑：</span>
