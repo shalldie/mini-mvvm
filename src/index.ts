@@ -7,7 +7,8 @@ window['vm'] = new MVVM({
         return {
             person: {
                 name: '凯瑟琳',
-                age: 16
+                age: 16,
+                sex: '女'
             }
         };
     },

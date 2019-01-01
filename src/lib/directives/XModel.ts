@@ -2,17 +2,19 @@ import NodeStore from "../../models/NodeStore";
 import * as _ from '../../utils';
 import { MODEL_KEY } from '../../utils/constants';
 
-/**
- * 支持的 x-model 的所有 tagName
- */
-const SupportTagNames = ['input', 'textarea', 'select'];
+// 支持的标签，以及对应的事件
+const supportMap: Map<string, string> = new Map([
+    ['input', 'input'],
+    ['textarea', 'input'],
+    ['select', 'change']
+]);
 
 export default class XModel {
 
     public static bind(node: HTMLElement, nodeStore: NodeStore) {
 
         // 节点不支持双绑
-        if (!~SupportTagNames.indexOf(node.tagName.toLowerCase())) {
+        if (!supportMap.has(node.tagName.toLowerCase())) {
             return;
         }
 
@@ -25,28 +27,32 @@ export default class XModel {
             return;
         }
 
-        const inputNode = (<HTMLInputElement>node);
-        const key = item[1];
+        node.removeAttribute(MODEL_KEY);
 
-        // input 事件，存放在 domEventMap 中
+        const inputNode = (<HTMLInputElement>node);  // 节点
+        const key = item[1];  // 依赖
+        const event = supportMap.get(node.tagName.toLowerCase()); // 事件名
+
+        // event 事件，存放在 domEventMap 中
 
         const inputHandler = () => {
             const val = inputNode.value;
             _.setValueOfVM(nodeStore.vm, key, val);
         };
 
-        inputNode.addEventListener('input', inputHandler);
+        inputNode.addEventListener(event, inputHandler);
 
-        nodeStore.domEventMap.set('input', {
-            event: 'input',
+        nodeStore.domEventMap.set(event, {
+            event,
             handler: inputHandler
         });
 
         // watcher 监听
 
         const watcherHandler = (newVal: any) => {
-            if (newVal != inputNode.value) {
-                inputNode.value = newVal;
+            if (newVal !== inputNode.value) {
+                // 有些类型的标签，比如select，需要先生成option才能赋值
+                _.nextTick(() => inputNode.value = newVal);
             }
         };
 

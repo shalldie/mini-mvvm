@@ -19,8 +19,15 @@
                 <input class="textbox" type="number" x-model="person.age">
             </li>
             <li>
+                <span class="label">性别：</span>
+                <select id="sel" x-model="person.sex">
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select>
+            </li>
+            <li>
                 <span class="label">双绑：</span>
-                {{person.name}} 的年龄是： {{showAge}}
+                {{person.name}} ({{person.sex}}) 的年龄是： {{showAge}}
             </li>
             <li x-if="over30">
                 <span class="label">条件显示(x-if)：</span>
