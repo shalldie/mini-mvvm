@@ -17,7 +17,12 @@ export enum ENodeType {
     /**
      * 文本节点
      */
-    TEXT_NODE = 3
+    TEXT_NODE = 3,
+
+    /**
+     * 注释节点
+     */
+    COMMENT = 8
 }
 
 /**

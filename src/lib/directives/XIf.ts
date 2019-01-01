@@ -1,48 +1,81 @@
 import NodeStore from "../../models/NodeStore";
 import * as _ from '../../utils';
-import { NODE_STORE } from '../../utils/constants';
+import { NODE_STORE_KEY, IF_KEY } from '../../utils/constants';
+import VNode, { ENodeType } from "../../models/VNode";
 
 
-const IF_KEY: string = 'x-if';
-
-
+/**
+ * x-if 的实现，使用一个 Comment 作为占位代替原有的节点
+ * 在条件成立的时候再 replace 回来
+ *
+ * @export
+ * @class XIf
+ */
 export default class XIf {
 
-    public static bind(node: HTMLElement, nodeStore: NodeStore): boolean {
+    public static bind(node: HTMLElement, nodeStore: NodeStore): HTMLElement {
 
         // 没有这个指令
         if (!nodeStore.vnode.attributes.has(IF_KEY)) {
-            return true;
+            return node;
         }
 
-        // debugger;
-
+        // 依赖的key
         const key = nodeStore.vnode.attributes.get(IF_KEY);
 
-        const handler = () => {
-            // debugger;
-            const parentNode = node.parentNode;
-            if (!parentNode) return;
+        // 去掉attribute上的显示
+        node.removeAttribute(IF_KEY);
 
-            const parentNodeStore: NodeStore = node.parentNode[NODE_STORE];
-            if (!parentNodeStore) return;
+        // 绑定事件
 
+        const comment = document.createComment(`${IF_KEY}${nodeStore.uuid}`);
+        comment[NODE_STORE_KEY] = nodeStore;
 
-            // 重置一下父节点
-            const el = parentNodeStore.vm.$compiler.buildElementNode(nodeStore.vnode);
+        const tupleElements: [HTMLElement, Comment] = [
+            node,
+            comment
+        ];
 
-            if (!el) return;
+        const handler = (visible: any) => {
 
-            _.disposeElement(<HTMLElement>parentNode);
-            parentNode.parentNode.replaceChild(el, parentNode);
+            // 由不可见变为可见
+            if (visible) {
+                // 先dispose，重新生成
+                _.disposeElement(tupleElements[0]);
+                tupleElements[0] = nodeStore.vm.$compiler.buildElementNode(nodeStore.vnode);
+
+                // 再切换
+                tupleElements[1].parentNode.replaceChild(
+                    tupleElements[0],
+                    tupleElements[1]
+                );
+                return;
+            }
+
+            tupleElements[0].parentNode.replaceChild(
+                tupleElements[1],
+                tupleElements[0]
+            );
+
         };
+
+        // console.log('on:' + key);
+
+        // debugger;
         nodeStore.watcher.on(key, handler);
         nodeStore.watcherEventMap.set(key, {
             event: key,
             handler
         });
 
-        // 当前是否显示
-        return !!_.getValueFromVM(nodeStore.vm, key);
+        // 初始化
+        const visible = !!_.getValueFromVM(nodeStore.vm, key);
+
+        // 如果不渲染
+        if (!visible) {
+            return <HTMLElement><any>tupleElements[1];
+        }
+
+        return node;
     }
 }

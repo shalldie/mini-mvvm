@@ -1,5 +1,5 @@
 import MVVM from '../core/MVVM';
-import { NODE_STORE } from './constants';
+import { NODE_STORE_KEY } from './constants';
 import NodeStore from '../models/NodeStore';
 import { ENodeType } from '../models/VNode';
 
@@ -68,7 +68,7 @@ export function getValueFromKey(data: Object, key: string) {
  * @returns
  */
 export function getValueFromVM(vm: MVVM, key: string): any {
-    return getValueFromKey(vm.$data, key);
+    return getValueFromKey(vm, key);
 }
 
 /**
@@ -112,8 +112,9 @@ export function serializeDependences(fn: Function): string[] {
  * @returns
  */
 export function disposeElement(node: HTMLElement) {
-    const nodeStore: NodeStore = node[NODE_STORE];
+    const nodeStore: NodeStore = node[NODE_STORE_KEY];
 
+    // debugger;
     if (!nodeStore) {
         return;
     }
@@ -128,9 +129,44 @@ export function disposeElement(node: HTMLElement) {
         nodeStore.watcher.off(event, handler);
     }
 
+    nodeStore.watcherEventMap.clear();
+
     // 如果是 Element 节点，递归
     if (nodeStore.vnode.nodeType === ENodeType.ELEMENT_NODE) {
         node.childNodes.forEach(child => disposeElement(<HTMLElement>child));
     }
 
+}
+
+/**
+ * 根据data找到comment元素
+ *
+ * @export
+ * @param {HTMLElement} node
+ * @param {string} data
+ * @returns {Comment}
+ */
+export function getCommentByData(node: HTMLElement, data: string): Comment {
+
+    console.log(node);
+    for (let child of node.childNodes) {
+
+        // 如果是 element ，递归
+        if (child.nodeType === ENodeType.ELEMENT_NODE) {
+            let item = getCommentByData(<HTMLElement>child, data);
+            if (item) {
+                return item;
+            }
+        }
+
+        // 注释节点
+        if (child.nodeType === ENodeType.COMMENT) {
+            let comment = <Comment>child;
+            if (comment.data === data) {
+                return comment;
+            }
+        }
+
+    }
+    return null;
 }

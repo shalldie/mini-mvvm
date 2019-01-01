@@ -40,7 +40,7 @@
             outline: none;
             width: 120px;
             height: 30px;
-            border: 1px solid #2ad;
+            border: 1px solid #ddd;
             color: #666;
             font-size: 16px;
             cursor: pointer;
@@ -71,11 +71,11 @@
             </li>
             <li x-if="over30">
                 <span class="label">条件显示(x-if)：</span>
-                当年龄大于30就会出现
+                都30多啦 >_<#@!
             </li>
             <li>
                 <span class="label">计算属性：</span>
-                {{person.name}} 年龄的2倍是： {{doubleAge}}
+                {{person.name}} 距离30岁还有 {{diff30}} 年
             </li>
             <li>
                 <button @click="reset">重置</button>

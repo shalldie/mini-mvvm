@@ -55,31 +55,35 @@ export default class MVVM extends BaseMVVM {
         });
 
         // 代理 computed
-
         Object.keys(this.$options.computed || {})
             .forEach((fnName: string) => {
                 const fn: Function = this.$options.computed[fnName];
                 const depKeys = _.serializeDependences(fn);
 
                 const updateComputedHandler = () => {
+                    if (fnName === 'over30') {
+                        // debugger;
+                    }
+                    const oldVal = this.$computed[fnName];
                     // 在依赖项更新的时候，先更新数据到 $computed
-                    this.$computed[fnName] = fn.call(this);
+                    const newVal = this.$computed[fnName] = fn.call(this);
                     // 再触发 computed 更新
-                    this.$watcher.emit(fnName, this.$computed[fnName]);
+                    if (oldVal !== newVal) {
+                        console.log(`update computed:${fnName}:` + newVal);
+                        this.$watcher.emit(fnName, this.$computed[fnName]);
+                    }
                 };
 
                 // 在某一项依赖更新的时候，同时触发当前 computed 更新
-                for (let dep of depKeys) {
-                    this.$watcher.on(dep, updateComputedHandler);
-                }
-                this.$nextTick(updateComputedHandler);
+                this.$watcher.on(depKeys, updateComputedHandler);
+                updateComputedHandler();
 
                 // 从this上直接拿到computed
                 Object.defineProperty(this, fnName, {
                     enumerable: true,
                     configurable: false,
                     get: () => this.$computed[fnName]
-                })
+                });
 
             });
 
@@ -94,7 +98,6 @@ export default class MVVM extends BaseMVVM {
         // 编译模板
         this.$compiler = new Compiler(this.$el, this, this.$watcher);
 
-        // Compile.compileNode(this.$el, this.$watcher);
     }
 
 }

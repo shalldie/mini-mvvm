@@ -107,6 +107,7 @@ export default class Watcher extends EventEmitter {
                 for (let dep of this.events) {
                     const reg = new RegExp(`^${link}(\\.|$)`);
                     if (reg.test(dep)) {
+                        // console.log('emit:' + dep);
                         this.emit(dep, _.getValueFromVM(this.vm, dep));
                     }
                 }
@@ -118,17 +119,20 @@ export default class Watcher extends EventEmitter {
     }
 
     /**
-     * 监听某个key的变动
+     * 监听某些key的变动
      *
-     * @description
-     * 这里重写只是为了修改注释 >_<#@!
-     *
-     * @param {string} event 要监听的key
+     * @param {string|string[]} event 要监听的key
      * @param {Function} handler
      * @memberof Watcher
      */
-    public on(event: string, handler: Function) {
-        super.on(event, handler);
+    public on(event: string | string[], handler: Function) {
+        if (typeof event === 'string') {
+            super.on(event, handler);
+        }
+        else {
+            event.forEach(key => this.on(key, handler));
+        }
     }
+
 
 }

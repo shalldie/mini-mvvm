@@ -4,7 +4,7 @@ import Watcher from './Watcher';
 import * as _ from '../utils';
 import MVVM from '../core/MVVM';
 import XModel from './directives/XModel';
-import { NODE_STORE } from '../utils/constants';
+import { NODE_STORE_KEY } from '../utils/constants';
 import XIf from './directives/XIf';
 
 
@@ -88,11 +88,11 @@ export default class Compiler {
      * @memberof Compiler
      */
     public buildElementNode(vnode: VNode) {
-        const node = vnode.isRoot ? this.el
+        let node = vnode.isRoot ? this.el
             : document.createElement(vnode.tagName.toLowerCase());
 
         const nodeStore = new NodeStore(vnode, this.vm, this.watcher);
-        node[NODE_STORE] = nodeStore;
+        node[NODE_STORE_KEY] = nodeStore;
 
         // 处理属性
         this.buildAttributes(node, nodeStore);
@@ -104,8 +104,10 @@ export default class Compiler {
         XModel.bind(node, nodeStore);
 
         // 处理 x-if
-        if (!XIf.bind(node, nodeStore)) {
-            return null;
+        node = XIf.bind(node, nodeStore);
+
+        if (node.nodeType !== ENodeType.ELEMENT_NODE) {
+            return node;
         }
 
         // 递归
@@ -113,8 +115,7 @@ export default class Compiler {
 
             // 添加 element 节点
             if (vchild.nodeType === ENodeType.ELEMENT_NODE) {
-                const child = this.buildElementNode(vchild);
-                child && node.appendChild(child);
+                node.appendChild(this.buildElementNode(vchild));
             }
 
             // 添加 text 节点
@@ -227,7 +228,7 @@ export default class Compiler {
     private buildTextNode(vnode: VNode) {
         const node = document.createTextNode(vnode.textContent);
         const nodeStore: NodeStore = new NodeStore(vnode, this.vm, this.watcher);
-        node[NODE_STORE] = nodeStore;
+        node[NODE_STORE_KEY] = nodeStore;
 
         const content = vnode.textContent;
         const reg = /\{\{\s*?(\S+?)\s*?\}\}/g;

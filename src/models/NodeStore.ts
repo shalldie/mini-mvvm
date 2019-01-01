@@ -2,6 +2,7 @@ import VNode from './VNode';
 import MVVM from '../core/MVVM';
 import Watcher from '../lib/Watcher';
 
+let uuid = 1;
 /**
  * dom 节点相关信息
  *
@@ -9,6 +10,8 @@ import Watcher from '../lib/Watcher';
  * @class NodeStore
  */
 export default class NodeStore {
+
+    public uuid: number = uuid++;
 
     public vnode: VNode;
 

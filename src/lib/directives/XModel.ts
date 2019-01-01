@@ -1,7 +1,6 @@
 import NodeStore from "../../models/NodeStore";
 import * as _ from '../../utils';
-
-const MODEL_KEY = 'x-model';
+import { MODEL_KEY } from '../../utils/constants';
 
 /**
  * 支持的 x-model 的所有 tagName
@@ -29,7 +28,7 @@ export default class XModel {
         const inputNode = (<HTMLInputElement>node);
         const key = item[1];
 
-        // input 事件，存放在 demEventMap 中
+        // input 事件，存放在 domEventMap 中
 
         const inputHandler = () => {
             const val = inputNode.value;
