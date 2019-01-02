@@ -1,13 +1,11 @@
 import NodeStore from "../../models/NodeStore";
-import { FOR_KEY } from '../../utils/constants';
+import { FOR_KEY, FOR_KEY_UUID } from '../../utils/constants';
 import Context from "../../models/Context";
 import Compiler from "../Compiler";
+import * as _ from '../../utils';
 
 /**
  * x-for 绑定
- *
- * x-for 的实现比较偷懒，先用一个 comment 占位。
- * 然后在这个comment后面再追加元素
  *
  * @export
  * @class XFor
@@ -51,7 +49,7 @@ export default class XFor {
 
 
         const fragment = document.createDocumentFragment();
-        const comment = document.createComment(`${FOR_KEY}${nodeStore.uuid}`)
+        const comment = document.createComment(`${FOR_KEY}${nodeStore.uuid}`);
         fragment.append(comment);
 
         let list: any[] = nodeStore.context.get(dep);
@@ -67,8 +65,37 @@ export default class XFor {
             const cloneVNode = nodeStore.vnode.clone();
             cloneVNode.attributes.delete(FOR_KEY);
             // debugger;
-            fragment.append(compiler.buildElementNode(cloneVNode, extData))
+
+            const el = compiler.buildElementNode(cloneVNode, extData);
+            el[FOR_KEY_UUID] = nodeStore.uuid;
+            fragment.append(el);
         }
+
+        const handler = () => {
+            // return;
+            console.log(11)
+            // 先删除除了 comment 以外之前for的节点
+            let nextNode: HTMLElement;
+            while (nextNode = <HTMLElement>comment.nextElementSibling) {
+                if (nextNode[FOR_KEY_UUID] !== nodeStore.uuid) {
+                    break;
+                }
+                _.disposeElement(nextNode);
+                nextNode.parentNode.removeChild(nextNode);
+            }
+            // 再替换comment
+            _.disposeElement(<HTMLElement><any>comment);
+            comment.parentNode.replaceChild(
+                compiler.buildElementNode(nodeStore.vnode),
+                comment
+            );
+        };
+
+        nodeStore.watcher.on(dep, handler);
+        nodeStore.watcherEventMap.set(dep, {
+            event: dep,
+            handler
+        });
 
         return <HTMLElement><any>fragment;
     }

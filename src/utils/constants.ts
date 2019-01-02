@@ -17,3 +17,8 @@ export const IF_KEY: string = 'x-if';
  * x-for 的声明
  */
 export const FOR_KEY: string = 'x-for';
+
+/**
+ * x-for 生成元素的uuid标识
+ */
+export const FOR_KEY_UUID: string = FOR_KEY + '-uuid';
