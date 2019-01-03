@@ -13,7 +13,7 @@ A lib to achieve mvvm.
 -   [x] 计算属性
 -   [x] 文本节点数据绑定
 -   [x] attribute 数据绑定
--   [ ] 常用指令
+-   [x] 常用指令
     -   [x] x-model 双向绑定
     -   [x] x-if 条件渲染
     -   [x] x-for 循环
