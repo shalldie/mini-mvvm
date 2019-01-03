@@ -13,7 +13,7 @@ import VNode, { ENodeType } from "../../models/VNode";
  */
 export default class XIf {
 
-    public static bind(node: HTMLElement, nodeStore: NodeStore): HTMLElement {
+    public static bind(node: HTMLElement, nodeStore: NodeStore, contextData: Object): HTMLElement {
 
         // 没有这个指令
         if (!nodeStore.vnode.attributes.has(IF_KEY)) {
@@ -42,7 +42,7 @@ export default class XIf {
             if (visible) {
                 // 先dispose，重新生成
                 _.disposeElement(tupleElements[0]);
-                tupleElements[0] = nodeStore.vm.$compiler.buildElementNode(nodeStore.vnode);
+                tupleElements[0] = nodeStore.vm.$compiler.buildElementNode(nodeStore.vnode, contextData);
 
                 // 再切换
                 tupleElements[1].parentNode.replaceChild(

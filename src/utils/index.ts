@@ -1,7 +1,7 @@
 import MVVM from '../core/MVVM';
 import { NODE_STORE_KEY } from './constants';
 import NodeStore from '../models/NodeStore';
-import { ENodeType } from '../models/VNode';
+import VNode, { ENodeType } from '../models/VNode';
 
 /**
  * microTask 要做的事情
@@ -22,19 +22,6 @@ export function nextTick(fn: () => void): void {
  */
 export function getType(sender: any): string {
     return Object.prototype.toString.call(sender).toLowerCase().match(/\s(\S+?)\]/)[1];
-}
-
-/**
- * 数据是否可观察
- *
- * @export
- * @param {*} data
- * @returns {boolean}
- */
-export function observable(data: any): boolean {
-    return !!~[
-        'object'
-    ].indexOf(getType(data));
 }
 
 /**
@@ -148,7 +135,6 @@ export function disposeElement(node: HTMLElement) {
  */
 export function getCommentByData(node: HTMLElement, data: string): Comment {
 
-    console.log(node);
     for (let child of node.childNodes) {
 
         // 如果是 element ，递归
@@ -168,5 +154,46 @@ export function getCommentByData(node: HTMLElement, data: string): Comment {
         }
 
     }
+    return null;
+}
+
+
+/**
+ * 根据dom节点生成vnode树
+ *
+ * @export
+ * @param {HTMLElement} node
+ * @returns {VNode}
+ */
+export function nodeToVNode(node: HTMLElement): VNode {
+    // debugger;
+    const vnode = new VNode();
+
+    vnode.nodeType = node.nodeType;
+
+    // 如果是元素节点
+    if (vnode.nodeType === ENodeType.Element) {
+        // tagName
+        vnode.tagName = node.tagName;
+        // attributes
+        for (let { name, value } of node.attributes) {
+            vnode.attributes.set(name, value.trim());
+        }
+        // 递归子节点
+        node.childNodes.forEach(child => {
+            const childVNode = this.nodeToVNode(<HTMLElement>child);
+            if (childVNode) {
+                childVNode.parent = vnode;
+                vnode.children.push(childVNode);
+            }
+        });
+        return vnode;
+    }
+    // 如果是文本节点
+    else if (vnode.nodeType === ENodeType.Text) {
+        vnode.textContent = node.textContent;
+        return vnode;
+    }
+
     return null;
 }

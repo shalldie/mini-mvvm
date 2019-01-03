@@ -21,54 +21,13 @@ export default class Compiler {
 
     constructor(el: HTMLElement, vm: MVVM, watcher: Watcher) {
         this.el = el;
-        this.vnode = this.nodeToVNode(el);
+        this.vnode = _.nodeToVNode(el);
         this.vnode.isRoot = true;
         // console.log(this.vnode);
         this.vm = vm;
         this.watcher = watcher;
 
         this.initialize();
-    }
-
-    /**
-     * 根据dom节点生成vnode树
-     *
-     * @private
-     * @param {HTMLElement} node
-     * @returns {VNode}
-     * @memberof Compiler
-     */
-    private nodeToVNode(node: HTMLElement): VNode {
-        // debugger;
-        const vnode = new VNode();
-
-        vnode.nodeType = node.nodeType;
-
-        // 如果是元素节点
-        if (vnode.nodeType === ENodeType.Element) {
-            // tagName
-            vnode.tagName = node.tagName;
-            // attributes
-            for (let { name, value } of node.attributes) {
-                vnode.attributes.set(name, value.trim());
-            }
-            // 递归子节点
-            node.childNodes.forEach(child => {
-                const childVNode = this.nodeToVNode(<HTMLElement>child);
-                if (childVNode) {
-                    childVNode.parent = vnode;
-                    vnode.children.push(childVNode);
-                }
-            });
-            return vnode;
-        }
-        // 如果是文本节点
-        else if (vnode.nodeType === ENodeType.Text) {
-            vnode.textContent = node.textContent;
-            return vnode;
-        }
-
-        return null;
     }
 
     private initialize() {
@@ -86,10 +45,10 @@ export default class Compiler {
      *
      * @param {VNode} vnode
      * @param {Object} [contextData]
-     * @returns
+     * @returns {HTMLElement}
      * @memberof Compiler
      */
-    public buildElementNode(vnode: VNode, contextData: Object = {}) {
+    public buildElementNode(vnode: VNode, contextData: Object = {}): HTMLElement {
         let node = vnode.isRoot ? this.el
             : document.createElement(vnode.tagName.toLowerCase());
 
@@ -107,10 +66,10 @@ export default class Compiler {
         XModel.bind(node, nodeStore);
 
         // 处理 x-if
-        node = XIf.bind(node, nodeStore);
+        node = XIf.bind(node, nodeStore, contextData);
 
         // 处理 x-for
-        node = XFor.bind(node, nodeStore, this);
+        node = XFor.bind(node, nodeStore, this, contextData);
 
         // 文本节点直接返回
         if (node.nodeType === ENodeType.Text) {
