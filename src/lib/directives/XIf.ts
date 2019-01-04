@@ -20,6 +20,15 @@ export default class XIf {
             return node;
         }
 
+        // // x-for 的表达式，需要从里面分析出依赖
+        // const expression = nodeStore.vnode.attributes.get(IF_KEY);
+        // const deps: string[] = [];
+
+        // expression.replace(/\w+/g, (g0: string) => {
+        //     deps.push(g0);
+        //     return nodeStore.context.get(g0);
+        // });
+
         // 依赖的key
         const key = nodeStore.vnode.attributes.get(IF_KEY);
 

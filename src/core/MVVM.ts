@@ -3,7 +3,7 @@ import * as _ from '../utils';
 import BaseMVVM from './BaseMVVM';
 import Watcher from '../lib/Watcher';
 import Compiler from '../lib/Compiler';
-// import
+import Computed from '../models/Computed';
 
 type MVVMOptions = {
     el: HTMLElement | string,
@@ -25,7 +25,7 @@ export default class MVVM extends BaseMVVM {
 
     public $data: Object;
 
-    public $computed: Object = {};
+    public $computed: Computed;
 
     public $watcher: Watcher = new Watcher(this);
 
@@ -45,7 +45,7 @@ export default class MVVM extends BaseMVVM {
         this.$data = this.$options.data();
 
         // 代理 data
-        Object.keys(this.$data).forEach(key => {
+        _.each(this.$data, (val, key) => {
             Object.defineProperty(this, key, {
                 enumerable: true,
                 configurable: false,
@@ -55,40 +55,19 @@ export default class MVVM extends BaseMVVM {
         });
 
         // 代理 computed
-        Object.keys(this.$options.computed || {})
-            .forEach((fnName: string) => {
-                const fn: Function = this.$options.computed[fnName];
-                const depKeys = _.serializeDependences(fn);
+        this.$computed = new Computed(this.$options.computed || {}, this.$watcher, this);
 
-                const updateComputedHandler = () => {
-                    if (fnName === 'over30') {
-                        // debugger;
-                    }
-                    const oldVal = this.$computed[fnName];
-                    // 在依赖项更新的时候，先更新数据到 $computed
-                    const newVal = this.$computed[fnName] = fn.call(this);
-                    // 再触发 computed 更新
-                    if (oldVal !== newVal) {
-                        console.log(`update computed:${fnName}:` + newVal);
-                        this.$watcher.emit(fnName, this.$computed[fnName]);
-                    }
-                };
-
-                // 在某一项依赖更新的时候，同时触发当前 computed 更新
-                this.$watcher.on(depKeys, updateComputedHandler);
-                updateComputedHandler();
-
-                // 从this上直接拿到computed
-                Object.defineProperty(this, fnName, {
-                    enumerable: true,
-                    configurable: false,
-                    get: () => this.$computed[fnName]
-                });
-
+        _.each(this.$options.computed, (val, key) => {
+            // 从this上直接拿到computed
+            Object.defineProperty(this, key, {
+                enumerable: true,
+                configurable: false,
+                get: () => this.$computed.data[key]
             });
+        });
 
         // 代理 methods
-        Object.keys(this.$options.methods || {}).forEach(key => {
+        _.each(this.$options.methods, (val, key) => {
             this[key] = this.$options.methods[key].bind(this);
         });
 

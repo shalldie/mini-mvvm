@@ -58,8 +58,8 @@ export default class Context {
      * @memberof Context
      */
     public extend(data: Object) {
-        Object.keys(data).forEach(key => {
-            this.set(key, data[key]);
+        _.each(data, (value, key) => {
+            this.set(key, value);
         });
     }
 }

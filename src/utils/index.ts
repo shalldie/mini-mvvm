@@ -25,6 +25,19 @@ export function getType(sender: any): string {
 }
 
 /**
+ * each
+ *
+ * @export
+ * @param {Object} [data={}]
+ * @param {(value: any, key: string) => void} fn
+ */
+export function each(data: Object = {}, fn: (value: any, key: string) => void) {
+    for (let key in data) {
+        fn(data[key], key);
+    }
+};
+
+/**
  * 根据 key 从 data 中获取值
  *
  * @example

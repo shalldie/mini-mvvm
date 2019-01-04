@@ -111,12 +111,8 @@ export default class Observer {
                         const list = this.data[key].slice();
                         const result = list[method](...args);
 
-                        // 把新数组赋值给当前key，触发 watcher 的 update
+                        // 把新数组赋值给当前key，触发 watcher 的 update，以及再次 hook
                         this.data[key] = list;
-
-                        // 再把新数组的 method 给 hook 住
-                        console.log
-                        this.appendArrayHooks(key);
 
                         return result;
                     };
