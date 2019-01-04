@@ -2,8 +2,9 @@ import VNode from './VNode';
 import MVVM from '../core/MVVM';
 import Watcher from '../lib/Watcher';
 import Context from './Context';
+import Computed from './Computed';
+import * as _ from '../utils';
 
-let uuid = 1;
 /**
  * dom 节点相关信息
  *
@@ -12,7 +13,7 @@ let uuid = 1;
  */
 export default class NodeStore {
 
-    public uuid: number = uuid++;
+    public uuid: number = _.getUUID();
 
     public vnode: VNode;
 
@@ -46,6 +47,8 @@ export default class NodeStore {
      * @memberof NodeStore
      */
     public vm: MVVM;
+
+    public computed: Computed[] = [];
 
     /**
      * attribute 缓存

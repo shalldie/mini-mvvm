@@ -2,6 +2,7 @@ import NodeStore from "../../models/NodeStore";
 import * as _ from '../../utils';
 import { NODE_STORE_KEY, IF_KEY } from '../../utils/constants';
 import VNode, { ENodeType } from "../../models/VNode";
+import Computed from "../../models/Computed";
 
 
 /**
@@ -19,15 +20,37 @@ export default class XIf {
         if (!nodeStore.vnode.attributes.has(IF_KEY)) {
             return node;
         }
+        // window['store'] = nodeStore;
 
         // // x-for 的表达式，需要从里面分析出依赖
         // const expression = nodeStore.vnode.attributes.get(IF_KEY);
-        // const deps: string[] = [];
-
-        // expression.replace(/\w+/g, (g0: string) => {
-        //     deps.push(g0);
-        //     return nodeStore.context.get(g0);
+        // const deps = expression.match(/[\w\.]*/g).filter(n => n.length);
+        // console.log(deps);
+        // const dict = {};
+        // const fnKey = IF_KEY + _.getUUID();
+        // const fnBody = [
+        //     'with(this) {',
+        //     `return ${expression};`,
+        //     '}'
+        // ].join('');
+        // const fn = new Function(fnBody);
+        // dict[fnKey] = fn;
+        // const invoker = {};
+        // deps.forEach(dep => {
+        //     Object.defineProperty(invoker, dep, {
+        //         enumerable: false,
+        //         configurable: false,
+        //         get() {
+        //             const result = nodeStore.context.get(dep);
+        //             console.log(result);
+        //             return result;
+        //         }
+        //     });
         // });
+
+        // nodeStore.computed.push(new Computed(dict, nodeStore.watcher, invoker));
+
+
 
         // 依赖的key
         const key = nodeStore.vnode.attributes.get(IF_KEY);

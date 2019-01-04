@@ -101,7 +101,7 @@ export function serializeDependences(fn: Function): string[] {
         deps.push(match[1]);
     }
 
-    return deps;
+    return [...new Set(deps)];
 }
 
 /**
@@ -124,12 +124,18 @@ export function disposeElement(node: HTMLElement) {
         node.removeEventListener(event, <any>handler);
     }
 
+    nodeStore.domEventMap.clear();
+
     // 卸载依赖监听事件
     for (let { event, handler } of nodeStore.watcherEventMap.values()) {
         nodeStore.watcher.off(event, handler);
     }
 
     nodeStore.watcherEventMap.clear();
+
+    // computed
+    nodeStore.computed.forEach(computed => computed.dispose());
+    nodeStore.computed = [];
 
     // 如果是 Element 节点，递归
     if (nodeStore.vnode.nodeType === ENodeType.Element) {
@@ -209,4 +215,9 @@ export function nodeToVNode(node: HTMLElement): VNode {
     }
 
     return null;
+}
+
+let uuid = 1;
+export function getUUID() {
+    return uuid++;
 }
