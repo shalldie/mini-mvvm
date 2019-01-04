@@ -53,11 +53,8 @@ export default class Observer {
         const data = this.data;
 
         Object.keys(data).forEach(key => {
-            // 先监听这个属性的变更
+            // 监听这个属性的变更
             this.defineReactive(key);
-
-            // 如果这个属性对应的项是个数组，添加hook
-            this.appendArrayHooks(key);
 
             // 递归
             new Observer(data[key], this.watcher, [...this.keys, key]);
@@ -68,6 +65,7 @@ export default class Observer {
 
         let val = this.data[key];
 
+        // 监听赋值操作
         Object.defineProperty(this.data, key, {
             enumerable: true,
             configurable: true,
@@ -84,10 +82,17 @@ export default class Observer {
                 val = newVal;
 
                 this.watcher.updateKey([...this.keys, key].join('.'));
+
+                // 如果是数组，还需要监听变异方法
+                this.appendArrayHooks(key);
+
                 // set 的时候需要主动再次添加 observer
                 new Observer(val, this.watcher, [...this.keys, key]);
             }
         });
+
+        // 如果是数组，还需要监听变异方法
+        this.appendArrayHooks(key);
     }
 
     private appendArrayHooks(key: string) {
@@ -110,6 +115,7 @@ export default class Observer {
                         this.data[key] = list;
 
                         // 再把新数组的 method 给 hook 住
+                        console.log
                         this.appendArrayHooks(key);
 
                         return result;
