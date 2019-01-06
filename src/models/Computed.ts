@@ -27,7 +27,7 @@ export default class Computed {
 
     constructor(dict: Object, watcher: Watcher, invoker: Object) {
 
-        _.each(dict, (fn, fnName) => {
+        _.each(dict || {}, (fn, fnName) => {
             const depKeys = _.serializeDependences(fn);
 
             const updateComputedHandler = () => {

@@ -93,12 +93,14 @@ export default class XIf {
 
         // console.log('on:' + key);
 
-        // debugger;
-        nodeStore.watcher.on(key, handler);
-        nodeStore.watcherEventMap.set(key, {
-            event: key,
-            handler
-        });
+        // 只有全局的数据才需要监听
+        if (!nodeStore.context.isExtdata(key)) {
+            nodeStore.watcher.on(key, handler);
+            nodeStore.watcherEventMap.set(key, {
+                event: key,
+                handler
+            });
+        }
 
         // 初始化
         const visible = !!nodeStore.context.get(key);

@@ -25,7 +25,7 @@ export default class XFor {
         let match: RegExpMatchArray;
 
         // x-for="item in list"
-        const regNormal = /^\s*?(\S*)\s*in\s*(\S*)\s*$/;
+        const regNormal = /^\s*?([\w]*)\s*in\s*(\S*)\s*$/;
         // x-for="(item,index) in list"
         const regWithIndex = /^\s*?\(\s*(\S+)\s*,\s*(\S+)\s*\)\s*in\s*(\S*)\s*$/;
 
@@ -33,12 +33,15 @@ export default class XFor {
         let indexKey: string = '';
         let dep: string = ''; // 依赖项
 
+        // item in list
         if (match = expression.match(regNormal)) {
             // 依赖
             dep = match[2];
             itemKey = match[1];
         }
+        // (item,index) in list
         else if (match = expression.match(regWithIndex)) {
+            // debugger;
             dep = match[3];
             itemKey = match[1];
             indexKey = match[2];
@@ -93,11 +96,14 @@ export default class XFor {
             );
         };
 
-        nodeStore.watcher.on(dep, handler);
-        nodeStore.watcherEventMap.set(dep, {
-            event: dep,
-            handler
-        });
+        // 只有全局的数据才需要监听
+        if (!nodeStore.context.isExtdata(dep)) {
+            nodeStore.watcher.on(dep, handler);
+            nodeStore.watcherEventMap.set(dep, {
+                event: dep,
+                handler
+            });
+        }
 
         return <HTMLElement><any>fragment;
     }

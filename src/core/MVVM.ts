@@ -55,7 +55,7 @@ export default class MVVM extends BaseMVVM {
         });
 
         // 代理 computed
-        this.$computed = new Computed(this.$options.computed || {}, this.$watcher, this);
+        this.$computed = new Computed(this.$options.computed, this.$watcher, this);
 
         _.each(this.$options.computed, (val, key) => {
             // 从this上直接拿到computed

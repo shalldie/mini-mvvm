@@ -11,7 +11,8 @@
         <h2>MVVM</h2>
         <ul>
             <li>for循环：</li>
-            <li x-for="item in infos" style="border: 1px solid #ddd;">
+            <li x-for="(item,index) in infos" style="border: 1px solid #ddd;">
+                <span>第{{index}}项</span>
                 <span>{{item.name}} 的年龄是 {{item.age}}</span>
                 <div>
                     <span>for循环嵌套，{{item.name}}:</span>

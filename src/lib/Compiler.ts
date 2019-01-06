@@ -203,17 +203,13 @@ export default class Compiler {
      * @memberof Compiler
      */
     private buildTextNode(vnode: VNode, contextData: Object) {
-        // if (vnode.textContent.indexOf('item')) {
-        //     debugger;
-        // }
-        // if (contextData['name']) {
-        //     debugger;
-        // }
+
         const node = document.createTextNode(vnode.textContent);
         const nodeStore: NodeStore = new NodeStore(vnode, this.vm, this.watcher);
         nodeStore.context.extend(contextData);
         node[NODE_STORE_KEY] = nodeStore;
 
+        const valueMap: Map<string, any> = new Map();
         const content = vnode.textContent;
         const reg = /\{\{\s*?(\S+?)\s*?\}\}/g;
 
@@ -223,41 +219,41 @@ export default class Compiler {
         const updateContent = () => {
             let result = content;
 
-            for (let [eventKey, { temp }] of nodeStore.watcherEventMap) {
-                const regKey = eventKey.replace(/\./g, '\\.');
+            for (let [key, value] of valueMap) {
+                const regKey = key.replace(/\./g, '\\.');
                 const reg = new RegExp(`\\{\\{\\\s*?${regKey}\\s*?\}\\}`, 'g');
-                result = result.replace(reg, temp);
+                result = result.replace(reg, value);
             }
 
             node.textContent = result;
         };
 
-        // 获取所有依赖，存下来
+
+        // 获取所有依赖，存下来，初始化
         while (match = reg.exec(content)) {
-            // depMap.set(match[1], '');
-            nodeStore.watcherEventMap.set(match[1], {
-                event: match[1],
-                handler: updateContent,
-                temp: ''
-            });
+            valueMap.set(match[1], nodeStore.context.get(match[1]));
         }
 
-        // 初始化、监听依赖项
-        for (let [key, item] of nodeStore.watcherEventMap) {
+        // 监听依赖项
+        for (let key of valueMap.keys()) {
 
-            // 添加初始值
-            nodeStore.watcherEventMap.set(key, {
-                ...item,
-                temp: nodeStore.context.get(key)
-            });
-            // 添加依赖监听
-            this.watcher.on(key, (newVal: any) => {
-                nodeStore.watcherEventMap.set(key, {
-                    ...item,
-                    temp: newVal
-                });
+            // 如果是局部上下文的内容，不监听
+            if (nodeStore.context.isExtdata(key)) {
+                continue;
+            }
+
+            const handler = (newVal: any) => {
+                valueMap.set(key, newVal);
                 updateContent();
+            };
+
+            // 添加依赖监听
+            nodeStore.watcherEventMap.set(key, {
+                event: key,
+                handler
             });
+
+            nodeStore.watcher.on(key, handler);
         }
 
         updateContent();

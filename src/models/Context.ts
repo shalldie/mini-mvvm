@@ -34,6 +34,18 @@ export default class Context {
     }
 
     /**
+     * 是否是局部上下文中的数据
+     *
+     * @param {string} key
+     * @returns
+     * @memberof Context
+     */
+    public isExtdata(key: string) {
+        const rootKey = key.split('.')[0];
+        return this.map.has(rootKey);
+    }
+
+    /**
      * 从当前上下文获取数据
      *
      * @param {string} key
