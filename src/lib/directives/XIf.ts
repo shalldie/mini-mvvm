@@ -20,37 +20,6 @@ export default class XIf {
         if (!nodeStore.vnode.attributes.has(IF_KEY)) {
             return node;
         }
-        // window['store'] = nodeStore;
-
-        // // x-for 的表达式，需要从里面分析出依赖
-        // const expression = nodeStore.vnode.attributes.get(IF_KEY);
-        // const deps = expression.match(/[\w\.]*/g).filter(n => n.length);
-        // console.log(deps);
-        // const dict = {};
-        // const fnKey = IF_KEY + _.getUUID();
-        // const fnBody = [
-        //     'with(this) {',
-        //     `return ${expression};`,
-        //     '}'
-        // ].join('');
-        // const fn = new Function(fnBody);
-        // dict[fnKey] = fn;
-        // const invoker = {};
-        // deps.forEach(dep => {
-        //     Object.defineProperty(invoker, dep, {
-        //         enumerable: false,
-        //         configurable: false,
-        //         get() {
-        //             const result = nodeStore.context.get(dep);
-        //             console.log(result);
-        //             return result;
-        //         }
-        //     });
-        // });
-
-        // nodeStore.computed.push(new Computed(dict, nodeStore.watcher, invoker));
-
-
 
         // 依赖的key
         const key = nodeStore.vnode.attributes.get(IF_KEY);
@@ -90,8 +59,6 @@ export default class XIf {
             );
 
         };
-
-        // console.log('on:' + key);
 
         // 只有全局的数据才需要监听
         if (!nodeStore.context.isExtdata(key)) {

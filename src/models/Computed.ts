@@ -20,7 +20,7 @@ export default class Computed {
     /**
      * watcher 事件缓存
      *
-     * @type {Map<string, { event: string, handler: Function, temp?: any  }>}
+     * @type {Map<string, { event: string, handler: Function, temp?: any }>}
      * @memberof NodeStore
      */
     public watcherEventMap: Map<string, { event: string, handler: Function, temp?: any }> = new Map();
