@@ -2,7 +2,6 @@ import VNode from './VNode';
 import MVVM from '../core/MVVM';
 import Watcher from '../lib/Watcher';
 import Context from './Context';
-import Computed from './Computed';
 import * as _ from '../utils';
 
 /**
@@ -47,8 +46,6 @@ export default class NodeStore {
      * @memberof NodeStore
      */
     public vm: MVVM;
-
-    public computed: Computed[] = [];
 
     /**
      * attribute 缓存

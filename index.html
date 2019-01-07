@@ -4,52 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MVVM</title>
+    <title>MVVM - Todo List</title>
 </head>
 <body>
     <div id="root">
-        <h2>MVVM</h2>
-        <ul>
-            <li>for循环：</li>
-            <li x-for="(item,index) in infos" style="border: 1px solid #ddd;">
-                <span>第{{index}}项</span>
-                <span>{{item.name}} 的年龄是 {{item.age}}</span>
-                <div>
-                    <span>for循环嵌套，{{item.name}}:</span>
-                    <span style="margin-right:8px;background-color: #ddd;padding: 0 6px;" x-for="k in item.name">{{k}}</span>
-                </div>
-            </li>
-        </ul>
-        <ul>
-            <li>
-                <span :data-name="person.name" class="label">姓名：</span>
-                <input class="textbox" type="text" x-model="person.name">
-            </li>
-            <li>
-                <span class="label">年龄：</span>
-                <input class="textbox" type="number" x-model="person.age">
-            </li>
-            <li>
-                <span class="label">性别：</span>
-                <select id="sel" x-model="person.sex">
-                    <option value="男">男</option>
-                    <option value="女">女</option>
-                </select>
-            </li>
-            <li>
-                <span class="label">双绑：</span>
-                {{person.name}} ({{person.sex}}) 的年龄是： {{showAge}}
-            </li>
-            <li x-if="over30">
-                <span class="label">条件显示(x-if)：</span>
-                都30多啦 >_<#@!
-            </li>
-            <li>
-                <span class="label">计算属性：</span>
-                {{person.name}} 距离30岁还有 {{diff30}} 年
-            </li>
-            <li>
-                <button @click="reset">重置</button>
+        <h2>MVVM - Todo List</h2>
+        <div class="input-box">
+            <input x-model="content" type="text" placeholder="Enter plan to save.">
+            <button @click="addItem" type="button">Add</button>
+        </div>
+        <div class="list-tab">
+            <div
+                @click="changeFilter(index)"
+                x-for="(item,index) in computedFilters"
+                class="tab active"
+            >{{item}}</div>
+        </div>
+        <ul class="item-list">
+            <li x-for="(item,index) in infos">
+                <div @click="toggleDone(item.index)" class="text">{{item.content}}</div>
+                <div @click="deleteItem(item.index)" class="del">Del</div>
             </li>
         </ul>
     </div>

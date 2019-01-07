@@ -12,7 +12,7 @@ type MVVMOptions = {
         [key: string]: () => any
     },
     methods?: {
-        [key: string]: () => any
+        [key: string]: (...args: any) => any
     }
 };
 

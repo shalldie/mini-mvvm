@@ -133,10 +133,6 @@ export function disposeElement(node: HTMLElement) {
 
     nodeStore.watcherEventMap.clear();
 
-    // computed
-    nodeStore.computed.forEach(computed => computed.dispose());
-    nodeStore.computed = [];
-
     // 如果是 Element 节点，递归
     if (nodeStore.vnode.nodeType === ENodeType.Element) {
         node.childNodes.forEach(child => disposeElement(<HTMLElement>child));

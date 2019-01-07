@@ -5,32 +5,70 @@ window['vm'] = new MVVM({
     el: '#root',
     data() {
         return {
-            person: {
-                name: '凯瑟琳',
-                age: 16,
-                sex: '女'
-            },
-            infos: [
-                { name: 'tom', age: 12 },
-                { name: 'lily', age: 23 }
-            ]
+            content: '',
+            list: [
+                { content: '找个女朋友 >_<#@!', done: false },
+                { content: '中彩票 0_o', done: false }
+            ],
+            filters: ['All', 'Todos', 'Dones'],
+            filterIndex: 0
         };
     },
     computed: {
-        showAge() {
-            if (this.over30) {
-                return '秘密 >_<#@!';
+        // 显示的tab
+        computedFilters() {
+            var list = this.filters.slice();
+            list[this.filterIndex] = '*** ' + list[this.filterIndex] + ' ***';
+            return list;
+        },
+        // 当前tab对应的数据
+        infos() {
+            var filterIndex = this.filterIndex;
+            var list = this.list.map(function (item, index) {
+                item.index = index;
+                if (item.done) {
+                    return {
+                        index: index,
+                        content: '--- ' + item.content + ' ---',
+                        done: item.done
+                    };
+                }
+                return item;
+            });
+
+            if (filterIndex === 0) {
+                return list;
             }
-            return this.person.age;
-        },
-        diff30() {
-            return 30 - this.person.age;
-        },
-        over30() {
-            return this.person.age >= 30;
+            else if (filterIndex === 1) {
+                return list.filter(function (item) {
+                    return !item.done;
+                });
+            }
+            else {
+                return list.filter(function (item) {
+                    return item.done;
+                });
+            }
         }
     },
     methods: {
+        changeFilter(index) {
+            this.filterIndex = index;
+        },
+        addItem() {
+            this.list.push({
+                content: this.content,
+                done: false
+            });
+            this.content = '';
+        },
+        toggleDone(index) {
+            this.list[index].done = !this.list[index].done;
+            this.list = this.list.slice();
+        },
+        deleteItem(index) {
+            this.list.splice(index, 1);
+        },
         reset() {
             Object.assign(this.$data, this.$options.data());
         }

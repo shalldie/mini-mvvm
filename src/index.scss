@@ -1,13 +1,140 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font: 14px tahoma, arial, Hiragino Sans GB, \\5b8b\4f53, sans-serif;
+}
+
 #root {
-    margin: 50px auto;
-    width: 600px;
-    border: 1px solid #ddd;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    margin: 60px auto;
+    padding: 20px;
+    width: 500px;
     box-sizing: border-box;
-    padding: 10px;
+    box-shadow: 0 3px 16px 4px #ddd;
 
     > h2 {
+        margin: 0 0 10px;
+        padding: 0 0 12px;
         text-align: center;
+        border-bottom: 1px solid #ddd;
     }
+
+    .input-box {
+        box-sizing: border-box;
+        padding: 6px 0;
+        display: flex;
+
+        input {
+            flex: 1;
+            transition: 0.3s;
+            padding: 0 6px;
+            border-radius: 3px;
+
+            &:focus {
+                border-color: transparent;
+                box-shadow: 0 0 12px #4cae4c;
+            }
+        }
+
+        button {
+            color: #fff;
+            background-color: #5cb85c;
+            border-color: #4cae4c;
+            padding: 6px 12px;
+            border-radius: 3px;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 700;
+
+            &:hover {
+                background-color: #449d44;
+                border-color: #398439;
+            }
+
+            &:active {
+                background-color: #398439;
+                border-color: #255625;
+            }
+        }
+
+        input,
+        button {
+            border: 1px solid #ddd;
+            height: 30px;
+            outline: none;
+            box-sizing: border-box;
+        }
+    }
+
+    .list-tab {
+        display: flex;
+        border-bottom: 1px dashed #ddd;
+        padding-right: 60px;
+
+        .tab {
+            flex: 1;
+            cursor: pointer;
+            color: #999;
+            font-size: 16px;
+            line-height: 36px;
+            padding-left: 6px;
+            text-align: center;
+
+            + .tab {
+                border-left: 1px dashed #ddd;
+            }
+
+            &.active {
+                color: #2ad;
+            }
+        }
+    }
+
+    .item-list {
+        margin: 0;
+        padding: 0;
+        > li {
+            display: flex;
+            margin: 0;
+            .text {
+                margin: 0;
+                padding: 0;
+                height: 40px;
+                line-height: 40px;
+                padding: 0 6px;
+                list-style: none;
+                border-bottom: 1px dashed #ddd;
+                cursor: pointer;
+                flex: 1;
+            }
+            .del {
+                color: #2ad;
+                width: 60px;
+                line-height: 40px;
+                text-align: center;
+                border: 1px dashed #ddd;
+                border-width: 0 0 1px 1px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+#root {
+    // margin: 50px auto;
+    // width: 600px;
+    // border: 1px solid #ddd;
+    // box-sizing: border-box;
+    // padding: 10px;
+    // box-shadow: 2px 2px 8px #ddd;
+
+    // > h2 {
+    //     text-align: center;
+    // }
 
     > ul > li {
         margin-bottom: 20px;
