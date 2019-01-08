@@ -24,5 +24,6 @@ A lib to achieve mvvm.
     -   [x] `x-for` 循环。`(item,index) in array`、`item in array`
 -   [x] 事件绑定
     -   [x] `@click` | `@mousedown` | `...` 。可以使用 `$event` 占位原生事件
+-   [x] `watch` 数据监听
 -   [x] 生命周期
     -   [x] `created` 只有这一个，也够用了。全都初始化完毕后。
