@@ -17,7 +17,7 @@ A lib to achieve mvvm.
 -   [x] 常用指令
     -   [x] `x-model` 双向绑定。 支持 `input`、`textarea`、`select`
     -   [x] `x-if` 条件渲染。条件支持 `data`、`computed`
-    -   [x] `x-for` 循环。 `(item,index) in array`、`item in array`
+    -   [x] `x-for` 循环。`(item,index) in array`、`item in array`
 -   [x] 事件绑定
     -   [x] `@click` | `@mousedown` | `...`
 -   [x] 生命周期
