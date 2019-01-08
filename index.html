@@ -16,14 +16,17 @@
         <div class="list-tab">
             <div
                 @click="changeFilter(index)"
-                x-for="(item,index) in computedFilters"
-                class="tab active"
+                x-for="(item,index) in filters"
+                :class="getTabClass(index,filterIndex)"
             >{{item}}</div>
+            <div class="tab">
+                <button @click="reset" type="button">重置所有</button>
+            </div>
         </div>
         <ul class="item-list">
-            <li x-for="(item,index) in infos">
-                <div @click="toggleDone(item.index)" class="text">{{item.content}}</div>
-                <div @click="deleteItem(item.index)" class="del">Del</div>
+            <li x-for="(item,index) in list" :class="getListItemClass(item)">
+                <div @click="toggleDone(item)" class="text">{{item.content}}</div>
+                <div @click="deleteItem(item)" class="del">Del</div>
             </li>
         </ul>
     </div>

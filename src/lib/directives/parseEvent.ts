@@ -28,22 +28,6 @@ export default function parseEventbind(node: HTMLElement, nodeStore: NodeStore) 
         // 这个正则用来找到方法名，参数。
         // 不能改，眼睛会花的。只能重写 >_<#@!
         const { handler } = serializeEvent(value, nodeStore);
-        // const eventReg = /^([^\()]+)(\((([^,\)]+,)*[^,\)]*)\))?$/;
-        // match = value.match(eventReg);
-        // const methodName = match[1].trim();
-        // const args = match[3] ? match[3].split(',').map(n => n.trim()).filter(n => n.length) : [];
-
-        // const handler = (event: Event) => {
-        //     const runtimeArgs = args.map(name => {
-        //         if (name === '$event') {
-        //             return event;
-        //         }
-        //         return nodeStore.context.get(name);
-        //     });
-        //     nodeStore.vm[methodName](...runtimeArgs);
-        // };
-
-        // const handler = nodeStore.vm[value];
 
         node.addEventListener(eventName, handler);
 

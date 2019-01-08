@@ -1,40 +1,26 @@
 import MVVM from './core/MVVM';
 import './index.scss';
+import { V4MAPPED } from 'dns';
 
 window['vm'] = new MVVM({
     el: '#root',
     data() {
         return {
             content: '',
-            list: [
-                { content: '找个女朋友 >_<#@!', done: false },
-                { content: '中彩票 0_o', done: false }
+            infos: [
+                { content: '中一次双色球，十注的 >_<#@!', done: false },
+                { content: '然后再中一次体彩，还是十注的 0_o', done: false },
+                { content: '我全都要 😂 🌚 🤣 💅 👅 🤠 ', done: false }
             ],
             filters: ['All', 'Todos', 'Dones'],
             filterIndex: 0
         };
     },
     computed: {
-        // 显示的tab
-        computedFilters() {
-            var list = this.filters.slice();
-            list[this.filterIndex] = '*** ' + list[this.filterIndex] + ' ***';
-            return list;
-        },
         // 当前tab对应的数据
-        infos() {
+        list() {
             var filterIndex = this.filterIndex;
-            var list = this.list.map(function (item, index) {
-                item.index = index;
-                if (item.done) {
-                    return {
-                        index: index,
-                        content: '--- ' + item.content + ' ---',
-                        done: item.done
-                    };
-                }
-                return item;
-            });
+            var list = this.infos;
 
             if (filterIndex === 0) {
                 return list;
@@ -51,26 +37,62 @@ window['vm'] = new MVVM({
             }
         }
     },
+    created() {
+        this.restore();
+    },
     methods: {
+        getTabClass(index) {
+            return index === this.filterIndex ? 'tab active' : 'tab';
+        },
+        getListItemClass(item) {
+            return item && item.done ? 'done' : '';
+        },
         changeFilter(index) {
             this.filterIndex = index;
         },
         addItem() {
-            this.list.push({
-                content: this.content,
+            var content = this.content.trim();
+            if (!content.length) {
+                return;
+            }
+            this.infos.push({
+                content: content,
                 done: false
             });
             this.content = '';
         },
-        toggleDone(index) {
-            this.list[index].done = !this.list[index].done;
-            this.list = this.list.slice();
+        toggleDone(item) {
+            item.done = !item.done;
+            this.infos = this.infos.slice();
         },
-        deleteItem(index) {
-            this.list.splice(index, 1);
+        deleteItem(item) {
+            const index = this.infos.indexOf(item);
+            this.infos.splice(index, 1);
         },
         reset() {
             Object.assign(this.$data, this.$options.data());
+        },
+        save() {
+            var content = JSON.stringify(this.infos);
+            localStorage['_cache_'] = content;
+        },
+        restore() {
+            try {
+                var content = localStorage['_cache_'];
+                if (!content.length) {
+                    return;
+                }
+                var infos = JSON.parse(content);
+                this.infos = infos;
+            }
+            catch (ex) {
+                this.reset();
+            }
+        }
+    },
+    watch: {
+        infos() {
+            this.save();
         }
     }
 });

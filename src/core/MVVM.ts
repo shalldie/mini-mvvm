@@ -13,7 +13,9 @@ type MVVMOptions = {
     },
     methods?: {
         [key: string]: (...args: any) => any
-    }
+    },
+    created?: () => void,
+    watch?: Object
 };
 
 
@@ -74,9 +76,15 @@ export default class MVVM extends BaseMVVM {
         // 观察 $data
         new Observer(this.$data, this.$watcher);
 
+        // watch
+        _.each(this.$options.watch, (func: Function, key: string) => {
+            this.$watcher.on(key, func.bind(this));
+        });
+
         // 编译模板
         this.$compiler = new Compiler(this.$el, this, this.$watcher);
 
-    }
+        _.getType(this.$options.created) === 'function' && this.$options.created.call(this);
 
+    }
 }

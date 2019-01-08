@@ -13,9 +13,12 @@ A lib to achieve mvvm.
 -   [x] `computed` 计算属性
 -   [x] `文本节点` 数据绑定
 -   [x] `attribute` 数据绑定
+    -   [x] 支持绑定 data、computed，支持方法（参数不支持字面量）
 -   [x] 常用指令
-    -   [x] `x-model` 双向绑定
-    -   [x] `x-if` 条件渲染
-    -   [x] `x-for` 循环
+    -   [x] `x-model` 双向绑定。 支持 `input`、`textarea`、`select`
+    -   [x] `x-if` 条件渲染。条件支持 `data`、`computed`
+    -   [x] `x-for` 循环。 `(item,index) in array`、`item in array`
 -   [x] 事件绑定
     -   [x] `@click` | `@mousedown` | `...`
+-   [x] 生命周期
+    -   [x] `created` 只有这一个，也够用了。全都初始化完毕后。
