@@ -4,6 +4,10 @@ A lib to achieve mvvm.
 
 自己写的一个 `mvvm` 库，主要是想造一遍轮子，不要用于生产环境 >\_<#@!
 
+## Demo
+
+[MVVM - Todo List](https://shalldie.github.io/demos/mvvm/)
+
 ## 特性
 
 -   [x] VNode
@@ -19,6 +23,6 @@ A lib to achieve mvvm.
     -   [x] `x-if` 条件渲染。条件支持 `data`、`computed`
     -   [x] `x-for` 循环。`(item,index) in array`、`item in array`
 -   [x] 事件绑定
-    -   [x] `@click` | `@mousedown` | `...`
+    -   [x] `@click` | `@mousedown` | `...` 。可以使用 `$event` 占位原生事件
 -   [x] 生命周期
-    -   [x] `created` 只有这一个，也够用了。全都初始化完毕后。
+    -   [x] `created` 只有这一个，也够用了。全都初始化完毕后。
