@@ -1,6 +1,5 @@
 /**
  * 该文件是开发环境入口，打包入口在 `src/core/MVVM.ts`
- * 因为粘贴到demo的html方便，所以用 es5 语法
  *
  * @file index.ts
  * @author https://github.com/shalldie
@@ -11,7 +10,7 @@ import './index.scss';
 
 window['vm'] = new MVVM({
     el: '#root',
-    data: function () {
+    data() {
         return {
             content: '',
             infos: [
@@ -25,43 +24,39 @@ window['vm'] = new MVVM({
     },
     computed: {
         // 当前tab对应的数据
-        list: function () {
-            var filterIndex = this.filterIndex;
-            var list = this.infos;
+        list() {
+            const filterIndex = this.filterIndex;
+            const list = this.infos;
 
             if (filterIndex === 0) {
                 return list;
             }
             else if (filterIndex === 1) {
-                return list.filter(function (item) {
-                    return !item.done;
-                });
+                return list.filter(item => !item.done);
             }
             else {
-                return list.filter(function (item) {
-                    return item.done;
-                });
+                return list.filter(item => item.done);
             }
         }
     },
-    created: function () {
+    created() {
         this.restore();
     },
     methods: {
         // 获取tab的class
-        getTabClass: function (index) {
+        getTabClass(index) {
             return index === this.filterIndex ? 'tab active' : 'tab';
         },
         // 获取listItem的class
-        getListItemClass: function (item) {
+        getListItemClass(item) {
             return item && item.done ? 'done' : '';
         },
         // 改变过滤条件
-        changeFilter: function (index) {
+        changeFilter(index) {
             this.filterIndex = index;
         },
         // 新增一项
-        addItem: function () {
+        addItem() {
             var content = this.content.trim();
             if (!content.length) {
                 return;
@@ -73,21 +68,21 @@ window['vm'] = new MVVM({
             this.content = '';
         },
         // 切换完成状态
-        toggleDone: function (item) {
+        toggleDone(item) {
             item.done = !item.done;
             this.infos = this.infos.slice();
         },
         // 删除一项
-        deleteItem: function (item) {
+        deleteItem(item) {
             var index = this.infos.indexOf(item);
             this.infos.splice(index, 1);
         },
         // 重置数据
-        reset: function () {
+        reset() {
             Object.assign(this.$data, this.$options.data());
         },
         // 从localstorage更新数据
-        restore: function () {
+        restore() {
             try {
                 var content = localStorage['_cache_'];
                 if (!content.length) {
@@ -103,7 +98,7 @@ window['vm'] = new MVVM({
     },
     watch: {
         // 监听infos改变，存入localstorage
-        infos: function () {
+        infos() {
             var content = JSON.stringify(this.infos);
             localStorage['_cache_'] = content;
         }
