@@ -48,15 +48,19 @@ window['vm'] = new MVVM({
         this.restore();
     },
     methods: {
+        // 获取tab的class
         getTabClass: function (index) {
             return index === this.filterIndex ? 'tab active' : 'tab';
         },
+        // 获取listItem的class
         getListItemClass: function (item) {
             return item && item.done ? 'done' : '';
         },
+        // 改变过滤条件
         changeFilter: function (index) {
             this.filterIndex = index;
         },
+        // 新增一项
         addItem: function () {
             var content = this.content.trim();
             if (!content.length) {
@@ -68,17 +72,21 @@ window['vm'] = new MVVM({
             });
             this.content = '';
         },
+        // 切换完成状态
         toggleDone: function (item) {
             item.done = !item.done;
             this.infos = this.infos.slice();
         },
+        // 删除一项
         deleteItem: function (item) {
             var index = this.infos.indexOf(item);
             this.infos.splice(index, 1);
         },
+        // 重置数据
         reset: function () {
             Object.assign(this.$data, this.$options.data());
         },
+        // 从localstorage更新数据
         restore: function () {
             try {
                 var content = localStorage['_cache_'];
@@ -94,6 +102,7 @@ window['vm'] = new MVVM({
         }
     },
     watch: {
+        // 监听infos改变，存入localstorage
         infos: function () {
             var content = JSON.stringify(this.infos);
             localStorage['_cache_'] = content;
