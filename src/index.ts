@@ -1,10 +1,17 @@
+/**
+ * 该文件是开发环境入口，打包入口在 `src/core/MVVM.ts`
+ * 因为粘贴到demo的html方便，所以用 es5 语法
+ *
+ * @file index.ts
+ * @author https://github.com/shalldie
+ */
+
 import MVVM from './core/MVVM';
 import './index.scss';
-import { V4MAPPED } from 'dns';
 
 window['vm'] = new MVVM({
     el: '#root',
-    data() {
+    data: function () {
         return {
             content: '',
             infos: [
@@ -18,7 +25,7 @@ window['vm'] = new MVVM({
     },
     computed: {
         // 当前tab对应的数据
-        list() {
+        list: function () {
             var filterIndex = this.filterIndex;
             var list = this.infos;
 
@@ -37,20 +44,20 @@ window['vm'] = new MVVM({
             }
         }
     },
-    created() {
+    created: function () {
         this.restore();
     },
     methods: {
-        getTabClass(index) {
+        getTabClass: function (index) {
             return index === this.filterIndex ? 'tab active' : 'tab';
         },
-        getListItemClass(item) {
+        getListItemClass: function (item) {
             return item && item.done ? 'done' : '';
         },
-        changeFilter(index) {
+        changeFilter: function (index) {
             this.filterIndex = index;
         },
-        addItem() {
+        addItem: function () {
             var content = this.content.trim();
             if (!content.length) {
                 return;
@@ -61,22 +68,18 @@ window['vm'] = new MVVM({
             });
             this.content = '';
         },
-        toggleDone(item) {
+        toggleDone: function (item) {
             item.done = !item.done;
             this.infos = this.infos.slice();
         },
-        deleteItem(item) {
-            const index = this.infos.indexOf(item);
+        deleteItem: function (item) {
+            var index = this.infos.indexOf(item);
             this.infos.splice(index, 1);
         },
-        reset() {
+        reset: function () {
             Object.assign(this.$data, this.$options.data());
         },
-        save() {
-            var content = JSON.stringify(this.infos);
-            localStorage['_cache_'] = content;
-        },
-        restore() {
+        restore: function () {
             try {
                 var content = localStorage['_cache_'];
                 if (!content.length) {
@@ -91,8 +94,9 @@ window['vm'] = new MVVM({
         }
     },
     watch: {
-        infos() {
-            this.save();
+        infos: function () {
+            var content = JSON.stringify(this.infos);
+            localStorage['_cache_'] = content;
         }
     }
 });

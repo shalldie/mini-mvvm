@@ -8,6 +8,12 @@ A lib to achieve mvvm.
 
 [MVVM - Todo List](https://shalldie.github.io/demos/mvvm/)
 
+## 开发&&生产
+
+    npm run dev 开发调试，入口文件：src/index.ts
+
+    npm run build 构建，入口文件：src/core/MVVM.ts
+
 ## 特性
 
 -   [x] VNode
