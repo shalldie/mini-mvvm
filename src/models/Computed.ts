@@ -7,6 +7,8 @@ import Watcher from "../lib/Watcher";
  */
 export default class Computed {
 
+    private isFirst: boolean = true;
+
     private watcher: Watcher;
 
     /**
@@ -37,7 +39,17 @@ export default class Computed {
                 // 再触发 computed 更新
                 if (oldVal !== newVal) {
                     console.log(`update computed:${fnName}:` + newVal);
-                    watcher.emit(fnName, newVal);
+
+                    if (this.isFirst) {
+                        this.isFirst = false;
+                        watcher.emit(fnName, newVal, oldVal);
+                    }
+                    else {
+                        _.nextTick(() => {
+                            // debugger;
+                            watcher.updateKey(fnName);
+                        });
+                    }
                 }
             };
 

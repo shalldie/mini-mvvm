@@ -3,10 +3,26 @@ import * as _ from '../../utils';
 import { MODEL_KEY } from '../../utils/constants';
 
 // 支持的标签，以及对应的事件
-const supportMap: Map<string, string> = new Map([
-    ['input', 'input'],
-    ['textarea', 'input'],
-    ['select', 'change']
+const supportMap: Map<string, { event: string, value: string }> = new Map([
+    ['input', {
+        event: 'input',
+        value: 'value'
+    }],
+    ['textarea', {
+        event: 'input',
+        value: 'value'
+    }],
+    ['select', {
+        event: 'change',
+        value: 'value'
+    }]
+]);
+// input 中的变种
+const inputMap: Map<string, { event: string, value: string }> = new Map([
+    ['checkbox', {
+        event: 'change',
+        value: 'checked'
+    }]
 ]);
 
 /**
@@ -18,9 +34,9 @@ const supportMap: Map<string, string> = new Map([
  * @returns
  */
 export default function parseModel(node: HTMLElement, nodeStore: NodeStore) {
-
+    const tagName = node.tagName.toLowerCase();
     // 节点不支持双绑
-    if (!supportMap.has(node.tagName.toLowerCase())) {
+    if (!supportMap.has(tagName)) {
         return;
     }
 
@@ -35,18 +51,25 @@ export default function parseModel(node: HTMLElement, nodeStore: NodeStore) {
 
     node.removeAttribute(MODEL_KEY);
 
-    const inputNode = (<HTMLInputElement>node);  // 节点
+    // 支持的事件、节点的值属性
+    let supportItem = supportMap.get(tagName);
+    if (tagName === 'input' && inputMap.has((<HTMLInputElement>node).type)) {
+        supportItem = inputMap.get((<HTMLInputElement>node).type);
+    }
+
+    const eleNode = (<HTMLInputElement>node);  // 节点
     const key = item[1];  // 依赖
-    const event = supportMap.get(node.tagName.toLowerCase()); // 事件名
+
+    // const event = supportMap.get(node.tagName.toLowerCase()); // 事件名
+    const event = supportItem.event;
 
     // event 事件，存放在 domEventMap 中
-
     const inputHandler = () => {
-        const val = inputNode.value;
+        const val = eleNode[supportItem.value];
         _.setValueOfVM(nodeStore.vm, key, val);
     };
 
-    inputNode.addEventListener(event, inputHandler);
+    eleNode.addEventListener(event, inputHandler);
 
     nodeStore.domEventMap.set(event, {
         event,
@@ -56,16 +79,12 @@ export default function parseModel(node: HTMLElement, nodeStore: NodeStore) {
     // watcher 监听
 
     const watcherHandler = (newVal: any) => {
-        if (newVal !== inputNode.value) {
-            inputNode.value = newVal;
+        if (newVal !== eleNode[supportItem.value]) {
+            eleNode[supportItem.value] = newVal;
         }
     };
 
-    nodeStore.watcher.on(key, (newVal: any) => {
-        if (newVal != inputNode.value) {
-            inputNode.value = newVal;
-        }
-    });
+    nodeStore.watcher.on(key, watcherHandler);
 
     nodeStore.watcherEventMap.set(key, {
         event: key,

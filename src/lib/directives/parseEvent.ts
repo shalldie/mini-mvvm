@@ -52,7 +52,7 @@ export function serializeEvent(expression: string, nodeStore: NodeStore) {
     const reg = /^([^\()]+)(\((([^,\)]+,)*[^,\)]*)\))?$/;
     const match = expression.match(reg);
     const methodName = match[1].trim();
-    const args = match[3] ? match[3].split(',').map(n => n.trim()).filter(n => n.length) : [];
+    const args = match[3] ? match[3].split(',').map(n => n.trim()).filter(n => n.length) : ['$event'];
 
     const handler = (event?: Event) => {
         const runtimeArgs = args.map(name => {

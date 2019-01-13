@@ -8,7 +8,10 @@
 </head>
 <body>
     <div id="root">
-        <h2>MVVM - Todo List</h2>
+        <h2>
+            <a href="https://github.com/shalldie/mvvm" target="_blank">MVVM</a>
+            <span>- Todo List</span>
+        </h2>
         <div class="input-box">
             <input x-model="content" type="text" placeholder="Enter plan to save.">
             <button @click="addItem" type="button">Add</button>
@@ -29,6 +32,71 @@
                 <div @click="deleteItem(item)" class="del">Del</div>
             </li>
         </ul>
+    </div>
+    <div id="demo">
+        <h2>功能演示</h2>
+        <div class="list-tab">
+            <div
+                @click="changeTab(index)"
+                x-for="(item,index) in tabList"
+                :class="getTabClass(index,activeIndex)"
+            >{{item}}</div>
+        </div>
+        <div class="tab-page">
+            <div x-if="visible.0" class="page-item">
+                <h4>双向绑定（x-model）：</h4>
+                <ul class="list">
+                    <li class="list-item">
+                        <span class="label">姓名：</span>
+                        <input x-model="person.name" type="text">
+                    </li>
+                    <li class="list-item">
+                        <span class="label">年龄：</span>
+                        <input x-model="person.age" type="number">
+                    </li>
+                    <li class="list-item">
+                        <span class="label">性别：</span>
+                        <select x-model="person.sex">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </li>
+                    <li class="list-item">
+                        <p>姓名：{{person.name}}，年龄：{{person.age}}，性别：{{person.sex}}</p>
+                    </li>
+                </ul>
+            </div>
+            <div x-if="visible.1" class="page-item">
+                <h4>计算属性（computed）：</h4>
+                <ul class="list">
+                    <li class="list-item">
+                        <p>{{bindDescription}}</p>
+                    </li>
+                </ul>
+            </div>
+            <div x-if="visible.2" class="page-item">
+                <h4>条件渲染</h4>
+                <ul class="list">
+                    <li class="list-item">
+                        <label>
+                            <input x-model="showText" type="checkbox">
+                            <span>点我 >_<#@! 显示下文：</span>
+                        </label>
+                    </li>
+                    <li x-if="showText" class="list-item">
+                        噼里啪啦噼里啪啦噼里啪啦噼里啪啦噼里啪啦
+                    </li>
+                </ul>
+            </div>
+            <div x-if="visible.3" class="page-item">
+                <h4>for循环，嵌套for循环，99乘法表（尝试点击）：</h4>
+                <div class="for-table">
+                    <div x-for="row in forTable">
+                        <span @click="showText(item)" x-for="item in row">{{item}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="/dist/mvvm.js"></script>
 </body>

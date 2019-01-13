@@ -35,7 +35,14 @@ export default function parseIf(node: HTMLElement, nodeStore: NodeStore, context
         comment
     ];
 
+    // 初始化值
+    let baseVisible = !!nodeStore.context.get(key);
+
     const handler = (visible: any) => {
+        if (baseVisible === !!visible) {
+            return;
+        }
+        baseVisible = !!visible;
 
         // 由不可见变为可见
         if (visible) {
@@ -67,11 +74,8 @@ export default function parseIf(node: HTMLElement, nodeStore: NodeStore, context
         });
     }
 
-    // 初始化
-    const visible = !!nodeStore.context.get(key);
-
     // 如果不渲染
-    if (!visible) {
+    if (!baseVisible) {
         return <HTMLElement><any>tupleElements[1];
     }
 

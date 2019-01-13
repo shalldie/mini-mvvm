@@ -5,7 +5,8 @@ body {
     font: 14px tahoma, arial, Hiragino Sans GB, \\5b8b\4f53, sans-serif;
 }
 
-#root {
+#root,
+#demo {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -20,6 +21,10 @@ body {
         padding: 0 0 12px;
         text-align: center;
         border-bottom: 1px solid #ddd;
+
+        a {
+            color: #2ad;
+        }
     }
 
     button {
@@ -126,6 +131,71 @@ body {
                 .text {
                     text-decoration: line-through;
                     color: #f00;
+                }
+            }
+        }
+    }
+}
+
+#demo {
+    width: 680px;
+    .list {
+        margin: 0;
+        padding: 0;
+        .list-item {
+            margin-bottom: 10px;
+            list-style-type: none;
+            padding: 0 60px;
+
+            .label {
+                display: inline-block;
+                width: 60px;
+                height: 30px;
+                line-height: 30px;
+            }
+
+            input[type='text'],
+            input[type='number'] {
+                flex: 1;
+                transition: 0.3s;
+                padding: 0 6px;
+                border-radius: 3px;
+                border: 1px solid #ddd;
+                height: 30px;
+                outline: none;
+                box-sizing: border-box;
+
+                &:focus {
+                    border-color: transparent;
+                    box-shadow: 0 0 6px 1px #4cae4c;
+                }
+            }
+        }
+    }
+
+    .for-table {
+        > div {
+            height: 20px;
+            & + div {
+                margin-top: -1px;
+            }
+            > span {
+                cursor: pointer;
+                display: inline-block;
+                width: 72px;
+                height: 20px;
+                line-height: 20px;
+                box-sizing: border-box;
+                border: 1px solid #2ad;
+                vertical-align: middle;
+                text-align: center;
+                &:hover {
+                    background: #2ad;
+                    color: #fff;
+                }
+
+                & + span {
+                    margin-left: -1px;
                 }
             }
         }
