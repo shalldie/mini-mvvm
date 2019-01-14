@@ -18,7 +18,7 @@ A lib to achieve mvvm.
 
 -   [x] VNode
 -   [x] 数据监听
-    -   [x] `data` 变动监听
+    -   [x] `data`、`computed` 变动监听
     -   [x] 数组方法监听 `push` | `pop` | `shift` | `unshift` | `splice` | `sort` | `reverse`
 -   [x] `computed` 计算属性
 -   [x] `文本节点` 数据绑定
