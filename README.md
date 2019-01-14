@@ -6,7 +6,7 @@ A lib to achieve mvvm.
 
 ## Demo
 
-[MVVM - Todo List](https://shalldie.github.io/demos/mvvm/)
+[MVVM - 功能演示](https://shalldie.github.io/demos/mvvm/)
 
 ## 开发&&生产
 
@@ -33,3 +33,5 @@ A lib to achieve mvvm.
 -   [x] `watch` 数据监听
 -   [x] 生命周期
     -   [x] `created` 只有这一个，也够用了。全都初始化完毕后。
+
+## Enjoy it! :D

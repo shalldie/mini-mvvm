@@ -33,6 +33,8 @@ export default class MVVM extends BaseMVVM {
 
     public $compiler: Compiler;
 
+    public created: Function = () => { };
+
     constructor(options: MVVMOptions) {
         super();
         this.$options = options;
@@ -84,7 +86,11 @@ export default class MVVM extends BaseMVVM {
         // 编译模板
         this.$compiler = new Compiler(this.$el, this, this.$watcher);
 
-        _.getType(this.$options.created) === 'function' && this.$options.created.call(this);
+
+        if (_.getType(this.$options.created) === 'function') {
+            this.created = this.$options.created;
+        }
+        this.created();
 
     }
 }

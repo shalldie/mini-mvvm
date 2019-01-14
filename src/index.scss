@@ -5,8 +5,7 @@ body {
     font: 14px tahoma, arial, Hiragino Sans GB, \\5b8b\4f53, sans-serif;
 }
 
-#root,
-#demo {
+#root {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -137,7 +136,7 @@ body {
     }
 }
 
-#demo {
+#root {
     width: 680px;
     .list {
         margin: 0;
@@ -174,29 +173,29 @@ body {
     }
 
     .for-table {
-        > div {
-            height: 20px;
-            & + div {
-                margin-top: -1px;
-            }
-            > span {
-                cursor: pointer;
-                display: inline-block;
-                width: 72px;
-                height: 20px;
-                line-height: 20px;
-                box-sizing: border-box;
-                border: 1px solid #2ad;
-                vertical-align: middle;
-                text-align: center;
-                &:hover {
-                    background: #2ad;
-                    color: #fff;
-                }
+        border-collapse: collapse;
 
-                & + span {
-                    margin-left: -1px;
-                }
+        td {
+            border: 1px solid #2ad;
+            cursor: pointer;
+            padding: 2px;
+            &:hover {
+                background: #2ad;
+                color: #fff;
+            }
+        }
+    }
+}
+
+#root {
+    .tab-page {
+        .page-item {
+            &.todo-list {
+                width: 400px;
+                margin: 20px auto 0;
+                border: 1px solid #ddd;
+                padding: 20px;
+                border-width: 0 1px;
             }
         }
     }

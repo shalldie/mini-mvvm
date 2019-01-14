@@ -4,37 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MVVM - Todo List</title>
+    <title>MVVM - 功能演示</title>
 </head>
 <body>
     <div id="root">
         <h2>
             <a href="https://github.com/shalldie/mvvm" target="_blank">MVVM</a>
-            <span>- Todo List</span>
+            <span>- 功能演示</span>
+            <button @click="reset">重置所有</button>
         </h2>
-        <div class="input-box">
-            <input x-model="content" type="text" placeholder="Enter plan to save.">
-            <button @click="addItem" type="button">Add</button>
-        </div>
-        <div class="list-tab">
-            <div
-                @click="changeFilter(index)"
-                x-for="(item,index) in filters"
-                :class="getTabClass(index,filterIndex)"
-            >{{item}}</div>
-            <div class="tab">
-                <button @click="reset" type="button">重置所有</button>
-            </div>
-        </div>
-        <ul class="item-list">
-            <li x-for="(item,index) in list" :class="getListItemClass(item)">
-                <div @click="toggleDone(item)" class="text">{{item.content}}</div>
-                <div @click="deleteItem(item)" class="del">Del</div>
-            </li>
-        </ul>
-    </div>
-    <div id="demo">
-        <h2>功能演示</h2>
         <div class="list-tab">
             <div
                 @click="changeTab(index)"
@@ -75,12 +53,12 @@
                 </ul>
             </div>
             <div x-if="visible.2" class="page-item">
-                <h4>条件渲染</h4>
+                <h4>条件渲染（x-if）</h4>
                 <ul class="list">
                     <li class="list-item">
                         <label>
                             <input x-model="showText" type="checkbox">
-                            <span>点我 >_<#@! 显示下文：</span>
+                            <span>点我 &gt;_&lt;#@! 显示下文：</span>
                         </label>
                     </li>
                     <li x-if="showText" class="list-item">
@@ -89,12 +67,35 @@
                 </ul>
             </div>
             <div x-if="visible.3" class="page-item">
-                <h4>for循环，嵌套for循环，99乘法表（尝试点击）：</h4>
-                <div class="for-table">
-                    <div x-for="row in forTable">
-                        <span @click="showText(item)" x-for="item in row">{{item}}</span>
-                    </div>
+                <h4>循环（x-for），嵌套for循环，99乘法表（尝试点击）：</h4>
+                <table class="for-table">
+                    <tbody>
+                        <tr x-for="row in forTable">
+                            <td @click="alertText(item)" x-for="item in row">{{item}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div x-if="visible.4" class="page-item todo-list">
+                <h2>Todo List</h2>
+                <p>watch了list，任何操作都会保存在localstorage</p>
+                <div class="input-box">
+                    <input x-model="content" type="text" placeholder="Enter plan to save.">
+                    <button @click="addItem" type="button">Add</button>
                 </div>
+                <div class="list-tab">
+                    <div
+                        @click="changeFilter(index)"
+                        x-for="(item,index) in filters"
+                        :class="getTodoListTabClass(index,filterIndex)"
+                    >{{item}}</div>
+                </div>
+                <ul class="item-list">
+                    <li x-for="(item,index) in list" :class="getListItemClass(item)">
+                        <div @click="toggleDone(item)" class="text">{{item.content}}</div>
+                        <div @click="deleteItem(item)" class="del">Del</div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

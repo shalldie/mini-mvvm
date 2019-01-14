@@ -8,11 +8,32 @@
 import MVVM from './core/MVVM';
 import './index.scss';
 
-// todolist
-new MVVM({
+window['vm'] = new MVVM({
     el: '#root',
     data() {
         return {
+            activeIndex: 0,
+            tabList: [
+                '双向绑定',
+                '计算属性',
+                '条件渲染',
+                '循环/事件',
+                'Todo List'
+            ],
+            // 双绑
+            person: {
+                name: '花泽香菜',
+                age: 12,
+                sex: '女'
+            },
+
+            // x-if
+            showText: false,
+
+            // x-for
+            forTable: [],
+
+            // todoList
             content: '',
             infos: [
                 { content: '中一次双色球，十注的 >_<#@!', done: false },
@@ -24,6 +45,14 @@ new MVVM({
         };
     },
     computed: {
+        visible() {
+            const list = {};
+            list[this.activeIndex] = 1;
+            return list;
+        },
+        bindDescription() {
+            return `${this.person.name}的年龄是${this.person.age},然后是个${this.person.sex}的`;
+        },
         // 当前tab对应的数据
         list() {
             const filterIndex = this.filterIndex;
@@ -41,11 +70,44 @@ new MVVM({
         }
     },
     created() {
+        this.init99();
+
+        // todolist
         this.restore();
     },
     methods: {
+        // 切换tab
+        changeTab(index) {
+            this.activeIndex = index;
+        },
         // 获取tab的class
-        getTabClass(index) {
+        getTabClass(index, activeIndex) {
+            return index === activeIndex ? 'tab active' : 'tab';
+        },
+        // alert
+        alertText(text) {
+            if (!text) return;
+            alert(text);
+        },
+
+        // 99 乘法表初始化
+        init99() {
+            // 构建99乘法表
+            let result = [];
+            for (let y = 1; y <= 9; y++) {
+                let list = [];
+                for (let x = 1; x <= 9; x++) {
+                    if (x > y) list.push('');
+                    else list.push(`${x} * ${y} = ${x * y}`);
+                }
+                result.push(list);
+            }
+            this.forTable = result;
+        },
+
+        //todolist 相关
+        // 获取tab的class
+        getTodoListTabClass(index) {
             return index === this.filterIndex ? 'tab active' : 'tab';
         },
         // 获取listItem的class
@@ -81,6 +143,7 @@ new MVVM({
         // 重置数据
         reset() {
             Object.assign(this.$data, this.$options.data());
+            this.init99();
         },
         // 从localstorage更新数据
         restore() {
@@ -102,71 +165,6 @@ new MVVM({
         infos() {
             var content = JSON.stringify(this.infos);
             localStorage['_cache_'] = content;
-        }
-    }
-});
-
-window['vm'] = new MVVM({
-    el: '#demo',
-    data() {
-        return {
-            activeIndex: 0,
-            tabList: [
-                '双向绑定',
-                '计算属性',
-                '条件渲染',
-                '循环/事件'
-            ],
-            // 双绑
-            person: {
-                name: '花泽香菜',
-                age: 12,
-                sex: '男'
-            },
-
-            // x-if
-            showText: false,
-
-            // x-for
-            forTable: []
-        };
-    },
-    computed: {
-        visible() {
-            const list = {};
-            list[this.activeIndex] = 1;
-            return list;
-        },
-        bindDescription() {
-            return `${this.person.name}的年龄是${this.person.age},然后是个${this.person.sex}的`;
-        }
-    },
-    created() {
-        // 构建99乘法表
-        let result = [];
-        for (let y = 1; y <= 9; y++) {
-            let list = [];
-            for (let x = 1; x <= 9; x++) {
-                if (x > y) list.push('');
-                else list.push(`${x} * ${y} = ${x * y}`);
-            }
-            result.push(list);
-        }
-        this.forTable = result;
-    },
-    methods: {
-        // 切换tab
-        changeTab(index) {
-            this.activeIndex = index;
-        },
-        // 获取tab的class
-        getTabClass(index, activeIndex) {
-            return index === activeIndex ? 'tab active' : 'tab';
-        },
-        // alert
-        showText(text) {
-            if (!text) return;
-            alert(text);
         }
     }
 });
