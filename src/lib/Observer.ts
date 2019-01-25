@@ -1,5 +1,6 @@
 import Watcher from './Watcher';
 import * as _ from '../utils';
+import Computed from '../models/Computed';
 
 /**
  * 需要重写的方法，用于观察数组
@@ -71,6 +72,9 @@ export default class Observer {
             configurable: true,
 
             get() {
+                if (Computed.target) {
+                    Computed.target.deps.add([...this.keys, key].join('.'));
+                }
                 return val;
             },
 
