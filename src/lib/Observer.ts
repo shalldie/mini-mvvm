@@ -1,5 +1,6 @@
 import Watcher from './Watcher';
 import * as _ from '../utils';
+import { ComputedItem } from '../models/Computed';
 
 /**
  * 需要重写的方法，用于观察数组
@@ -70,7 +71,10 @@ export default class Observer {
             enumerable: true,
             configurable: true,
 
-            get() {
+            get: () => {
+                if (ComputedItem.target) {
+                    ComputedItem.target.deps.add([...this.keys, key].join('.'));
+                }
                 return val;
             },
 

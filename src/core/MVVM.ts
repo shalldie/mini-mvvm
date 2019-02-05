@@ -58,6 +58,10 @@ export default class MVVM extends BaseMVVM {
             });
         });
 
+
+        // 观察 $data
+        new Observer(this.$data, this.$watcher);
+
         // 代理 computed
         this.$computed = new Computed(this.$options.computed, this.$watcher, this);
 
@@ -75,8 +79,6 @@ export default class MVVM extends BaseMVVM {
             this[key] = this.$options.methods[key].bind(this);
         });
 
-        // 观察 $data
-        new Observer(this.$data, this.$watcher);
 
         // watch
         _.each(this.$options.watch, (func: Function, key: string) => {
@@ -91,6 +93,5 @@ export default class MVVM extends BaseMVVM {
             this.created = this.$options.created;
         }
         this.created();
-
     }
 }

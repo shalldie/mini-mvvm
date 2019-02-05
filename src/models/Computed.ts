@@ -1,4 +1,3 @@
-import MVVM from "../core/MVVM";
 import * as _ from '../utils';
 import Watcher from "../lib/Watcher";
 
@@ -6,10 +5,6 @@ import Watcher from "../lib/Watcher";
  * 对 computed 的处理
  */
 export default class Computed {
-
-    private isFirst: boolean = true;
-
-    private watcher: Watcher;
 
     /**
      * 缓存的值
@@ -19,6 +14,40 @@ export default class Computed {
      */
     public data: Object = {};
 
+    public computedItems: ComputedItem[] = [];
+
+    constructor(dict: Object, watcher: Watcher, invoker: Object) {
+
+        _.each(dict || {}, (fn, fnName) => {
+            // debugger;
+            const computedItem = new ComputedItem(fn, fnName, invoker, watcher);
+            Object.defineProperty(this.data, fnName, {
+                enumerable: true,
+                configurable: true,
+                get: () => computedItem.value
+            });
+            this.computedItems.push(computedItem);
+        });
+
+    }
+}
+
+export class ComputedItem {
+
+    public watcher: Watcher;
+
+    public fn: Function;
+
+    public fnName: string;
+
+    public invoker: object;
+
+    public static target: ComputedItem = null;
+
+    public deps: Set<string> = new Set();
+
+    public value: any;
+
     /**
      * watcher 事件缓存
      *
@@ -27,49 +56,68 @@ export default class Computed {
      */
     public watcherEventMap: Map<string, { event: string, handler: Function, temp?: any }> = new Map();
 
-    constructor(dict: Object, watcher: Watcher, invoker: Object) {
+    constructor(fn: Function, fnName: string, invoker: object, watcher: Watcher) {
+        this.fn = fn;
+        this.fnName = fnName;
+        this.invoker = invoker;
+        this.watcher = watcher;
 
-        _.each(dict || {}, (fn, fnName) => {
-            const depKeys = _.serializeDependences(fn);
-
-            const updateComputedHandler = () => {
-                const oldVal = this.data[fnName];
-                // 在依赖项更新的时候，先更新数据到 this.data
-                const newVal = this.data[fnName] = fn.call(invoker);
-                // 再触发 computed 更新
-                if (oldVal !== newVal) {
-                    console.log(`update computed:${fnName}:` + newVal);
-
-                    if (this.isFirst) {
-                        this.isFirst = false;
-                        watcher.emit(fnName, newVal, oldVal);
-                    }
-                    else {
-                        _.nextTick(() => {
-                            // debugger;
-                            watcher.updateKey(fnName);
-                        });
-                    }
-                }
-            };
-
-            // 在某一项依赖更新的时候，同时触发当前 computed 更新
-            depKeys.forEach(key => {
-                watcher.on(key, updateComputedHandler);
-                this.watcherEventMap.set(key, {
-                    event: key,
-                    handler: updateComputedHandler
-                });
-            });
-            updateComputedHandler();
-        });
-
+        this.updateDepsAndValue();
     }
 
-    dispose() {
+    public dispose() {
+        this.deps.clear();
         for (let { event, handler } of this.watcherEventMap.values()) {
             this.watcher.off(event, handler);
         }
         this.watcherEventMap.clear();
     }
+
+    /**
+     * 更新某一项的值和依赖
+     *
+     * @private
+     * @memberof ComputedItem
+     */
+    private updateDepsAndValue() {
+        this.dispose();
+        ComputedItem.target = this;
+        this.value = this.fn.call(this.invoker);
+        ComputedItem.target = null;
+        this.bindDepListeners();
+    }
+
+    /**
+     * 监听所有依赖项
+     *
+     * @private
+     * @memberof ComputedItem
+     */
+    private bindDepListeners() {
+
+        const updateComputedHandler = () => {
+            const oldVal = this.value;
+            // 在依赖项更新的时候，先更新数据到 this.value
+            this.updateDepsAndValue();
+            // 再触发 computed 更新
+            if (oldVal !== this.value) {
+                console.log(`update computed:${this.fnName}:` + this.value);
+
+                _.nextTick(() => {
+                    // debugger;
+                    this.watcher.updateKey(this.fnName);
+                });
+            }
+        };
+
+        this.deps.forEach(key => {
+            this.watcher.on(key, updateComputedHandler);
+            this.watcherEventMap.set(key, {
+                event: key,
+                handler: updateComputedHandler
+            });
+        });
+        // updateComputedHandler();
+    }
+
 }
