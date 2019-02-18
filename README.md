@@ -14,6 +14,42 @@ A lib to achieve mvvm.
 
     npm run build 构建，入口文件：src/core/MVVM.ts
 
+## Example
+
+```html
+<div id="root">
+    <h2 x-if="content">{{content}}</h2>
+    <input x-model="content">
+    <button @click="someMethod">Click Me</button>
+    ...
+</div>
+```
+
+```js
+new MVVM({
+    // html中模板节点的选择器
+    el: '#root',
+    // data
+    data() {
+        return {
+            content: ''
+        };
+    },
+    computed: {
+        // ...计算属性
+    },
+    created() {
+        // ...hook
+    },
+    methods: {
+        // ...方法
+    },
+    watch: {
+        // ...数据监听
+    }
+});
+```
+
 ## 特性
 
 -   [x] VNode
