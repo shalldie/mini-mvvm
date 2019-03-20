@@ -141,39 +141,6 @@ export function disposeElement(node: HTMLElement) {
 }
 
 /**
- * 根据data找到comment元素
- *
- * @export
- * @param {HTMLElement} node
- * @param {string} data
- * @returns {Comment}
- */
-export function getCommentByData(node: HTMLElement, data: string): Comment {
-
-    for (let child of node.childNodes) {
-
-        // 如果是 element ，递归
-        if (child.nodeType === ENodeType.Element) {
-            let item = getCommentByData(<HTMLElement>child, data);
-            if (item) {
-                return item;
-            }
-        }
-
-        // 注释节点
-        if (child.nodeType === ENodeType.Comment) {
-            let comment = <Comment>child;
-            if (comment.data === data) {
-                return comment;
-            }
-        }
-
-    }
-    return null;
-}
-
-
-/**
  * 根据dom节点生成vnode树
  *
  * @export

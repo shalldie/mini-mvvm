@@ -19,7 +19,6 @@ enum ESubscribeType {
      * 仅执行一次久删除
      */
     once
-
 }
 
 /**

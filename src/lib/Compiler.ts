@@ -32,7 +32,7 @@ export default class Compiler {
     }
 
     private initialize() {
-        // 清空跟节点内容
+        // 清空根节点内容
         this.el.innerHTML = '';
         // 编译根节点
         this.buildElementNode(this.vnode);

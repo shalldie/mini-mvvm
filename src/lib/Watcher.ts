@@ -134,5 +134,4 @@ export default class Watcher extends EventEmitter {
         }
     }
 
-
 }

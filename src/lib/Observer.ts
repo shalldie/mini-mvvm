@@ -48,8 +48,6 @@ export default class Observer {
         }
     }
 
-
-
     private observe(): void {
         const data = this.data;
 
