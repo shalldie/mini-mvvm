@@ -121,7 +121,7 @@ export function disposeElement(node: HTMLElement) {
 
     // 卸载 dom 事件
     for (let { event, handler } of nodeStore.domEventMap.values()) {
-        node.removeEventListener(event, <any>handler);
+        node.removeEventListener(event, handler as any);
     }
 
     nodeStore.domEventMap.clear();
@@ -135,7 +135,7 @@ export function disposeElement(node: HTMLElement) {
 
     // 如果是 Element 节点，递归
     if (nodeStore.vnode.nodeType === ENodeType.Element) {
-        node.childNodes.forEach(child => disposeElement(<HTMLElement>child));
+        node.childNodes.forEach(child => disposeElement(child as HTMLElement));
     }
 
 }
@@ -163,7 +163,7 @@ export function nodeToVNode(node: HTMLElement): VNode {
         }
         // 递归子节点
         node.childNodes.forEach(child => {
-            const childVNode = this.nodeToVNode(<HTMLElement>child);
+            const childVNode = nodeToVNode(child as HTMLElement);
             if (childVNode) {
                 childVNode.parent = vnode;
                 vnode.children.push(childVNode);

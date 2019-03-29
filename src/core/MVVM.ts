@@ -43,9 +43,9 @@ export default class MVVM extends BaseMVVM {
 
     private initialize(): void {
 
-        this.$el = _.getType(this.$options.el) === 'string' ?
-            document.querySelector(<string>this.$options.el) :
-            <HTMLElement>this.$options.el;
+        this.$el = _.getType(this.$options.el) === 'string'
+            ? document.querySelector(this.$options.el as string)
+            : this.$options.el as HTMLElement;
         this.$data = this.$options.data();
 
         // 代理 data
@@ -57,7 +57,6 @@ export default class MVVM extends BaseMVVM {
                 set: newVal => this.$data[key] = newVal
             });
         });
-
 
         // 观察 $data
         new Observer(this.$data, this.$watcher);
@@ -79,7 +78,6 @@ export default class MVVM extends BaseMVVM {
             this[key] = this.$options.methods[key].bind(this);
         });
 
-
         // watch
         _.each(this.$options.watch, (func: Function, key: string) => {
             this.$watcher.on(key, func.bind(this));
@@ -87,7 +85,6 @@ export default class MVVM extends BaseMVVM {
 
         // 编译模板
         this.$compiler = new Compiler(this.$el, this, this.$watcher);
-
 
         if (_.getType(this.$options.created) === 'function') {
             this.created = this.$options.created;

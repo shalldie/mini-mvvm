@@ -81,7 +81,7 @@ export default function parseFor(node: HTMLElement, nodeStore: NodeStore, compil
     const handler = () => {
         // 先删除除了 comment 以外之前for的节点
         let nextNode: HTMLElement;
-        while (nextNode = <HTMLElement>comment.nextElementSibling) {
+        while (nextNode = comment.nextElementSibling as HTMLElement) {
             if (nextNode[FOR_KEY_UUID] !== nodeStore.uuid) {
                 break;
             }
@@ -89,7 +89,7 @@ export default function parseFor(node: HTMLElement, nodeStore: NodeStore, compil
             nextNode.parentNode.removeChild(nextNode);
         }
         // 再替换comment
-        _.disposeElement(<HTMLElement><any>comment);
+        _.disposeElement(comment as any as HTMLElement);
         comment.parentNode.replaceChild(
             compiler.buildElementNode(nodeStore.vnode),
             comment
@@ -105,5 +105,5 @@ export default function parseFor(node: HTMLElement, nodeStore: NodeStore, compil
         });
     }
 
-    return <HTMLElement><any>fragment;
+    return fragment as any as HTMLElement;
 }
