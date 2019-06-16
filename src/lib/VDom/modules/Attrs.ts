@@ -3,6 +3,7 @@
  */
 
 import VNode from "../VNode";
+import { IModuleHook } from "../hooks";
 
 /**
  * attribute 包装
@@ -51,3 +52,9 @@ export function updateAttrs(oldVnode: VNode, vnode: VNode): void {
     }
 }
 
+export const attrsModule: IModuleHook = {
+    create: updateAttrs,
+    update: updateAttrs
+};
+
+export default attrsModule;

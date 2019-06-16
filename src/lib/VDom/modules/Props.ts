@@ -1,4 +1,5 @@
 import VNode from "../VNode";
+import { IModuleHook } from "../hooks";
 
 /**
  * attribute 包装
@@ -29,3 +30,9 @@ export function updateProp(oldVnode: VNode, vnode: VNode): void {
     }
 }
 
+export const propsModule: IModuleHook = {
+    create: updateProp,
+    update: updateProp
+};
+
+export default propsModule;

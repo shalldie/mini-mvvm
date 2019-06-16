@@ -1,6 +1,16 @@
 import VNode from "./VNode";
+import attrsModule from './modules/Attrs';
+import propsModule from './modules/Props';
+import { hooks, IModuleHook, TModuleHookFunc } from './hooks';
 
-function inIt() {
+const emptyVnode = new VNode('');
+
+function inIt(modules: IModuleHook[]) {
+
+    // 所有的钩子
+    const cbs: Record<keyof IModuleHook, TModuleHookFunc[]> = {
+        create: [], update: [], destroy: [], remove: []
+    };
 
     function createElm(vnode: VNode) {
         // 注释节点
@@ -19,6 +29,9 @@ function inIt() {
         else {
             vnode.elm = document.createTextNode(vnode.text) as any as Element;
         }
+
+        // create 钩子
+        cbs.create.forEach(hook => hook(emptyVnode, vnode));
         return vnode.elm;
     }
 
@@ -41,7 +54,7 @@ function inIt() {
             );
         }
         // 同步 elm
-        vnode.elm = oldVnode.elm;
+        // vnode.elm = oldVnode.elm;
 
         // 比较2个vnode是否是同一个vnode
         if (VNode.isSameVNode(oldVnode, vnode)) {
@@ -49,11 +62,16 @@ function inIt() {
         }
         // 如果不是同一个vnode
         else {
-
+            let elm = oldVnode.elm as Element;
+            createElm(vnode);
+            elm.parentNode.insertBefore(vnode.elm, elm);
+            elm.parentNode.removeChild(elm);
         }
 
         return vnode;
     }
 }
 
-export default inIt();
+export default inIt([
+    attrsModule, propsModule
+]);
