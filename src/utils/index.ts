@@ -35,3 +35,14 @@ export function each(data: Object = {}, fn: (value: any, key: string) => void) {
         fn(data[key], key);
     }
 };
+
+/**
+ * 获取唯一 number key
+ *
+ * @export
+ * @returns {number}
+ */
+export const nextIndex = (function () {
+    let baseIndex = 0x5942b;
+    return () => baseIndex++;
+})();

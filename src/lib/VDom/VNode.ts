@@ -8,6 +8,8 @@ import { IListener } from "./modules/Events";
 
 export interface IVNodeData {
 
+    key?: string;
+
     props?: IProps;
 
     attrs?: IAttrs;
@@ -42,6 +44,8 @@ export default class VNode {
         this.children = children;
         this.text = text;
         this.elm = elm;
+
+        this.key = data.key;
     }
 
     /**
@@ -58,6 +62,7 @@ export default class VNode {
 
     /**
      * 是否是相同的 VNode 对象
+     * 判断依据是 key 跟 tagname 是否相同，既 对于相同类型dom元素尽可能复用
      *
      * @static
      * @param {VNode} oldVnode
