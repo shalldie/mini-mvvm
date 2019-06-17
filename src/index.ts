@@ -1,5 +1,4 @@
-import h from "./lib/VDom/h";
-import patch from "./lib/VDom";
+import { patch, h } from "./lib/vdom";
 
 const node = h('ul', [
     h('li', {
@@ -39,5 +38,15 @@ patch(
     document.getElementById('app'),
     node
 );
+
+const newNode = h('div', {
+    attrs: {
+        style: 'color:#2ad'
+    }
+}, 'this is new node');
+
+setTimeout(() => {
+    patch(node, newNode);
+}, 3000);
 
 console.log(node.elm);
