@@ -4,12 +4,15 @@
 
 import { IProps } from "./modules/Props";
 import { IAttrs } from "./modules/Attrs";
+import { IListener } from "./modules/Events";
 
 export interface IVNodeData {
 
     props?: IProps;
 
     attrs?: IAttrs;
+
+    on?: IListener;
 }
 
 
@@ -19,7 +22,7 @@ export default class VNode {
 
     public type: string;
 
-    public data?: IVNodeData;
+    public data: IVNodeData;
 
     public children?: VNode[];
 
@@ -29,7 +32,7 @@ export default class VNode {
 
     constructor(
         type: string,
-        data?: IVNodeData,
+        data: IVNodeData = {},
         children?: VNode[],
         text?: string,
         elm?: Element

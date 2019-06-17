@@ -1,16 +1,21 @@
 import VNode from "./VNode";
 import attrsModule from './modules/Attrs';
 import propsModule from './modules/Props';
+import eventModule from './modules/Events';
 import { hooks, IModuleHook, TModuleHookFunc } from './hooks';
 
 const emptyVnode = new VNode('');
 
-function inIt(modules: IModuleHook[]) {
+function inIt(modules: IModuleHook[] = []) {
 
     // 所有的钩子
     const cbs: Record<keyof IModuleHook, TModuleHookFunc[]> = {
         create: [], update: [], destroy: [], remove: []
     };
+
+    for (let item of modules) {
+        hooks.forEach(hookKey => item[hookKey] && cbs[hookKey].push(item[hookKey]));
+    }
 
     function createElm(vnode: VNode) {
         // 注释节点
@@ -73,5 +78,5 @@ function inIt(modules: IModuleHook[]) {
 }
 
 export default inIt([
-    attrsModule, propsModule
+    attrsModule, propsModule, eventModule
 ]);

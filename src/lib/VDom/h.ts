@@ -1,5 +1,5 @@
 /**
- * render function
+ * 用于生成 vnode 的工厂函数
  */
 
 import VNode, { IVNodeData } from "./VNode";
@@ -35,5 +35,5 @@ export default function h(type: string, b?: any, c?: any): VNode {
         text = b;
     }
 
-    return new VNode(type, b, children, text);
+    return new VNode(type, data, children, text);
 }

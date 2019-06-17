@@ -1,5 +1,6 @@
 /**
- * attributes 封装
+ * attributes 模块
+ * 用于处理 id、class、style、dataset、自定义属性等
  */
 
 import VNode from "../VNode";
