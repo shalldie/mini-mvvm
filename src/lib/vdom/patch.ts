@@ -52,8 +52,8 @@ function patchFactory(modules: IModuleHook[] = []) {
         parentElm: Node,
         before: Node,
         vnodes: VNode[],
-        startIndex: number,
-        endIndex: number
+        startIndex: number = 0,
+        endIndex: number = vnodes.length - 1
     ) {
         for (; startIndex <= endIndex; startIndex++) {
             parentElm.insertBefore(
@@ -66,13 +66,64 @@ function patchFactory(modules: IModuleHook[] = []) {
     function removeVnodes(
         parentElm: Node,
         vnodes: VNode[],
-        startIndex: number,
-        endIndex: number
+        startIndex: number = 0,
+        endIndex: number = vnodes.length - 1
     ) {
         for (; startIndex <= endIndex; startIndex++) {
-            parentElm.removeChild(vnodes[startIndex].elm);
+            parentElm && parentElm.removeChild(vnodes[startIndex].elm);
             cbs.destroy.forEach(hook => hook(vnodes[startIndex], emptyVnode));
         }
+    }
+
+    function updateChildren(parentElm: Element, oldChildren: VNode[], children: VNode[]) {
+
+        const oldMirror = oldChildren.slice();  // 用来表示哪些oldchildren被用过，位置信息等
+
+        const allM = oldChildren.every(n => n.elm.parentNode === parentElm);
+
+        // 如果想无脑点可以直接这样，不复用dom，直接把所有children都更新
+        // removeVnodes(parentElm, oldChildren, 0, oldChildren.length - 1);
+        // addVnodes(parentElm, null, children, 0, children.length - 1);
+        // return;
+
+        for (let i = 0; i < children.length; i++) {
+            // 当前vnode
+            const vnode = children[i];
+            // 可以被复用的vnode的索引
+            let oldVnodeIndex = oldMirror.findIndex(node => {
+                return node && VNode.isSameVNode(node, vnode);
+            });
+            // 如果有vnode可以复用
+            if (~oldVnodeIndex) {
+                // console.log(oldVnodeIndex);
+                const oldVnode = oldMirror[oldVnodeIndex];
+
+                // 把之前的置空，表示已经用过。之后仍然存留的要被删除
+                oldMirror[oldVnodeIndex] = undefined;
+                // 调整顺序
+                parentElm.insertBefore(oldVnode.elm, parentElm.children[i + 1]);
+                // 比较数据,进行更新
+                patchVNode(oldVnode, vnode);
+            }
+            // 不能复用就创建新的
+            else {
+                addVnodes(
+                    parentElm,
+                    parentElm.children[i + 1],
+                    [vnode]
+                );
+            }
+
+        }
+
+        // 删除oldchildren中未被复用的部分
+        const rmVnodes = oldMirror.filter(n => !!n);
+
+        rmVnodes.length && removeVnodes(
+            parentElm,
+            rmVnodes
+        );
+
     }
 
     /**
@@ -82,6 +133,7 @@ function patchFactory(modules: IModuleHook[] = []) {
      * @param {VNode} vnode 新的vnode
      */
     function patchVNode(oldVnode: VNode, vnode: VNode) {
+        // console.log('patch vnode');
         const elm = vnode.elm = oldVnode.elm;
         const oldChildren = oldVnode.children;
         const children = vnode.children;
@@ -103,23 +155,32 @@ function patchFactory(modules: IModuleHook[] = []) {
         if (oldChildren && children) {
             if (oldChildren !== children) {
                 // todo: 添加新老children对比
+                // console.log('all children');
+                updateChildren(elm, oldChildren, children);
             }
         }
         // 只有新的有children，则以前的是text节点
         else if (children) {
+            // console.log('only new children');
             // 先去掉可能存在的textcontent
             oldVnode.text && (elm.textContent = '');
-            addVnodes(elm.parentNode, null, children, 0, children.length - 1);
+            addVnodes(elm, null, children);
         }
         // 只有旧的有children，则现在的是text节点
         else if (oldChildren) {
-            removeVnodes(elm.parentNode, oldChildren, 0, oldChildren.length - 1);
+
+            // console.log('only old children');
+            removeVnodes(elm, oldChildren);
             vnode.text && (elm.textContent = vnode.text);
         }
         // 都没有children，则只改变了textContent
         else if (oldVnode.text !== vnode.text) {
+
+            // console.log('no children');
             elm.textContent = vnode.text;
         }
+
+        cbs.update.forEach(hook => hook(oldVnode, vnode));
 
     }
 
@@ -142,21 +203,23 @@ function patchFactory(modules: IModuleHook[] = []) {
                 oldVnode
             );
         }
-        // 同步 elm
-        // vnode.elm = oldVnode.elm;
 
         // 比较2个vnode是否是同一个vnode，如果相同，就patch
         // 是否是相同的 VNode 对象 判断依据是 key 跟 tagname 是否相同，既 对于相同类型dom元素尽可能复用
         if (VNode.isSameVNode(oldVnode, vnode)) {
+            // console.log('same node');
             patchVNode(oldVnode, vnode);
         }
         // 如果不是同一个vnode，把旧的删了创建新的
         else {
             const elm = oldVnode.elm as Element;
-            createElm(vnode);
-            elm.parentNode.insertBefore(vnode.elm, elm);
+            addVnodes(
+                elm.parentNode,
+                elm,
+                [vnode]
+            );
 
-            removeVnodes(elm.parentNode, [oldVnode], 0, 0);
+            removeVnodes(elm.parentNode, [oldVnode]);
 
             // insert hook
             cbs.insert.forEach(hook => hook(oldVnode, vnode));

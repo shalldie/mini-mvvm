@@ -35,5 +35,12 @@ export default function h(type: string, b?: any, c?: any): VNode {
         text = b;
     }
 
-    return new VNode(type, data, children, text);
+    const node = new VNode(type, data, children, text);
+
+    // 针对 h('div','content') 的简写形式
+    if (node.type && node.text != null) {
+        node.children = [h('', node.text)];
+        node.text = undefined;
+    }
+    return node;
 }
