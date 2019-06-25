@@ -38,5 +38,8 @@
   "bugs": {
     "url": "https://github.com/shalldie/mvvm/issues"
   },
-  "homepage": "https://github.com/shalldie/mvvm#readme"
+  "homepage": "https://github.com/shalldie/mvvm#readme",
+  "dependencies": {
+    "mini-vdom": "0.0.5"
+  }
 }
