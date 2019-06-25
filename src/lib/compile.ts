@@ -1,6 +1,7 @@
+import { h, VNode } from "mini-vdom";
 import { IMvvmOptions } from "../core/BaseMVVM";
 import { ENodeType } from "../common/enums";
-import { h, VNode } from "mini-vdom";
+import { toArray } from "../common/utils";
 
 export default function compile(options: IMvvmOptions) {
     let { el, template, render } = options;
@@ -33,7 +34,7 @@ function parseNode(el: Element) {
     if (el.nodeType === ENodeType.Element) {
         // sel = el.tagName.toLowerCase();
         vnode = h(el.tagName.toLowerCase());
-        const children: Element[] = [].slice.call(el.children);
+        const children = toArray<Element>(el.children);
         vnode.children = children.map(n => parseNode(n)).filter(n => !!n);
     }
     else if (el.nodeType === ENodeType.Text) {

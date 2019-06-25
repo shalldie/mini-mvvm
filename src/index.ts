@@ -1,3 +1,4 @@
+import './index.scss';
 import MVVM from './core/MVVM';
 
 new MVVM({

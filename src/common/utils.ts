@@ -19,7 +19,7 @@ export function nextTick(fn: () => void): void {
  * @param {*} sender 要判断的数据
  * @returns {string}
  */
-export function type(sender: any): string {
+export function getType(sender: any): string {
     return Object.prototype.toString.call(sender).toLowerCase().match(/\s(\S+?)\]/)[1];
 }
 
@@ -46,3 +46,15 @@ export const nextIndex = (function () {
     let baseIndex = 0x5942b;
     return () => baseIndex++;
 })();
+
+/**
+ * 转化成数组
+ *
+ * @export
+ * @template T
+ * @param {*} arrayLike
+ * @returns {T[]}
+ */
+export function toArray<T>(arrayLike: any): T[] {
+    return [].slice.call(arrayLike);
+}
