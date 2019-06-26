@@ -1,0 +1,56 @@
+{
+  "name": "mini-vdom",
+  "version": "0.0.5",
+  "description": "A mini virtual dom lib. 一个轻量级的虚拟dom库。",
+  "keywords": [
+    "virtual",
+    "dom",
+    "vdom",
+    "vnode"
+  ],
+  "author": "shalldie <hi.xieshuang@gmail.com>",
+  "homepage": "https://github.com/shalldie/mvvm",
+  "license": "ISC",
+  "main": "dist/mini-vdom.js",
+  "types": "dist/index.d.ts",
+  "directories": {
+    "test": "__tests__"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shalldie/mvvm.git"
+  },
+  "scripts": {
+    "test": "jest",
+    "dev": "cross-env NODE_ENV=development node ./build/server.js",
+    "build": "cross-env NODE_ENV=production node ./build/build.js"
+  },
+  "bugs": {
+    "url": "https://github.com/shalldie/mvvm/issues"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@types/jest": "^24.0.15",
+    "@types/node": "^12.0.10",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^5.2.0",
+    "css-loader": "^3.0.0",
+    "jest": "^24.8.0",
+    "node-sass": "^4.12.0",
+    "open": "^6.3.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "ts-jest": "^24.0.2",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.2",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  }
+}

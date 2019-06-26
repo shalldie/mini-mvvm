@@ -4,18 +4,18 @@ const ifProduction = () => process.env.NODE_ENV === 'production';
 
 module.exports = {
     entry: {
-        mvvm: path.join(
+        'mini-vdom': path.join(
             __dirname,
             ifProduction() ?
-                '../src/core/MVVM.ts' :
-                '../src/index.ts'
+                '../src/index.ts' :
+                '../src/dev.ts'
         )
     },
 
     output: {
         path: path.join(__dirname, '../dist'),
         filename: '[name].js',
-        library: 'MVVM',
+        library: 'MiniVdom',
         libraryExport: 'default',
         libraryTarget: ifProduction ? 'umd' : undefined,
         publicPath: '/dist/'
