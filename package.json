@@ -3,10 +3,10 @@
   "private": true,
   "scripts": {
     "clean": "lerna clean",
-    "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
-    "test": "lerna run test --stream",
-    "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm",
-    "dev:mini-vdom": "lerna run dev --scope=mini-vdom",
+    "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap --hoist",
+    "test": "lerna exec npm run test",
+    "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm --stream",
+    "dev:mini-vdom": "lerna run dev --scope=mini-vdom --stream",
     "build": "lerna run build",
     "lp": "lerna publish"
   },

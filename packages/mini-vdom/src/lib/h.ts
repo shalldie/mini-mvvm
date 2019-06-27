@@ -116,7 +116,7 @@ export default function h(type: string, b?: any, c?: any): VNode {
             });
         }
 
-        type = type.replace(/(#|\.|\[)\S*/g, '').toLowerCase();
+        type = type.replace(/(#|\.|\[)\S*/g, '').toLowerCase().trim();
 
     }
 
