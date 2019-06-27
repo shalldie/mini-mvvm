@@ -55,6 +55,6 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "mini-vdom": "^0.0.5"
+    "mini-vdom": "^0.0.6"
   }
 }
