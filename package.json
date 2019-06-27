@@ -2,7 +2,12 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "test": "lerna run test"
+    "clean": "lerna clean",
+    "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
+    "test": "lerna run test --stream",
+    "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm",
+    "dev:mini-vdom": "lerna run dev --scope=mini-vdom",
+    "build": "lerna run build"
   },
   "devDependencies": {
     "lerna": "^3.15.0"

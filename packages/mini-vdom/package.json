@@ -28,7 +28,8 @@
   "scripts": {
     "test": "jest",
     "dev": "cross-env NODE_ENV=development node ./build/server.js",
-    "build": "cross-env NODE_ENV=production node ./build/build.js"
+    "build": "cross-env NODE_ENV=production node ./build/build.js",
+    "prepublish": "npm run build"
   },
   "bugs": {
     "url": "https://github.com/shalldie/mvvm/issues"
