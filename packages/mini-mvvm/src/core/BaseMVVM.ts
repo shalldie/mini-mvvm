@@ -11,7 +11,7 @@ export interface IMvvmOptions {
      * @type {string}
      * @memberof IMvvmOptions
      */
-    el: string;
+    el?: string;
 
     /**
      * 模板
