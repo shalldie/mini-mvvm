@@ -29,14 +29,62 @@ export interface IMvvmOptions {
      * @memberof IMvvmOptions
      */
     render?: (createElement: typeof h) => void;
+
+    /**
+     * 当前组件的数据
+     *
+     * @memberof IMvvmOptions
+     */
+    data?: () => Object;
 }
 
-export default abstract class MVVM extends EventEmitter {
+export default abstract class BaseMVVM extends EventEmitter {
+
+    /**
+     * 当前 data
+     *
+     * @protected
+     * @memberof BaseMVVM
+     */
+    protected _data = {};
+
+    /**
+     * 当前组件的 computed
+     *
+     * @protected
+     * @memberof BaseMVVM
+     */
+    protected _computed = {};
+
+    protected lastVnode: any;
+
+    /**
+     * 组件对应的 vnode
+     *
+     * @protected
+     * @type {VNode}
+     * @memberof BaseMVVM
+     */
+    protected vnode: VNode;
+
+    /**
+     * 初始化配置参数信息
+     *
+     * @type {IMvvmOptions}
+     * @memberof BaseMVVM
+     */
+    public $options: IMvvmOptions;
+
+    /**
+     * 当前组件挂载的dom
+     *
+     * @type {HTMLElement}
+     * @memberof BaseMVVM
+     */
+    public el: HTMLElement;
 
     public static nextTick = nextTick;
 
     public $nextTick = nextTick;
-
-    public vnode: VNode;
 
 }

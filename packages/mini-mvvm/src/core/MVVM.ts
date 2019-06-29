@@ -4,14 +4,6 @@ import compile from "../lib/compile";
 
 export default class MVVM extends BaseMVVM {
 
-    private lastVnode: any;
-
-    private currentVnode: VNode;
-
-    public $options: IMvvmOptions;
-
-    public el: HTMLElement;
-
     constructor(options: IMvvmOptions) {
         super();
         this.$options = options;
@@ -26,13 +18,14 @@ export default class MVVM extends BaseMVVM {
      * @memberof MVVM
      */
     private init() {
+
+        // 初始化数据
+        this.initData();
+
         // 编译
         this.compile();
 
         // patch
-        if (!this.$options.el) {
-            return;
-        }
         this.patch();
     }
 
@@ -50,7 +43,18 @@ export default class MVVM extends BaseMVVM {
                 || document.querySelector(el).outerHTML
             ) as any;
         }
+    }
 
+    /**
+     * 初始化 data
+     *
+     * @private
+     * @memberof MVVM
+     */
+    private initData() {
+        if (this.$options.data) {
+            this._data = this.$options.data();
+        }
     }
 
     /**
@@ -60,14 +64,17 @@ export default class MVVM extends BaseMVVM {
      * @memberof MVVM
      */
     private patch() {
+        if (!this.$options.el) {
+            return;
+        }
         if (!this.el) {
             this.el = document.querySelector(this.$options.el);
         }
-        this.lastVnode = this.currentVnode || this.el;
-        this.currentVnode = this.$options.render.call(this, h);
+        this.lastVnode = this.vnode || this.el;
+        this.vnode = this.$options.render.call(this, h);
         patch(
             this.lastVnode,
-            this.currentVnode
+            this.vnode
         );
     }
 
@@ -80,7 +87,7 @@ export default class MVVM extends BaseMVVM {
      */
     public $mount(selector: string) {
         this.$options.el = selector;
-        this.init();
+        this.patch();
         return this;
     }
 }
