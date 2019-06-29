@@ -39,7 +39,7 @@ export default class EventEmitter {
      * @param {ESubscribeType} [type=ESubscribeType.normal] 监听类型
      * @memberof EventEmitter
      */
-    public on(event: string, listener: Function, type: ESubscribeType = ESubscribeType.normal): void {
+    public $on(event: string, listener: Function, type: ESubscribeType = ESubscribeType.normal): void {
         this.subscription[event] = this.subscription[event] || [];
         this.subscription[event].push({
             type,
@@ -54,8 +54,8 @@ export default class EventEmitter {
      * @param {Function} listener 监听器
      * @memberof EventEmitter
      */
-    public once(event: string, listener: Function): void {
-        this.on(event, listener, ESubscribeType.once);
+    public $once(event: string, listener: Function): void {
+        this.$on(event, listener, ESubscribeType.once);
     }
 
     /**
@@ -65,7 +65,7 @@ export default class EventEmitter {
      * @param {Function} listener 监听器
      * @memberof EventEmitter
      */
-    public off(event: string, listener: Function): void {
+    public $off(event: string, listener: Function): void {
         const subscriptions = this.subscription[event] || [];
         const index = subscriptions.findIndex(item => item.listener === listener);
         if (index >= 0) {
@@ -80,7 +80,7 @@ export default class EventEmitter {
      * @param {...any[]} args 参数
      * @memberof EventEmitter
      */
-    public emit(event: string, ...args: any[]): void {
+    public $emit(event: string, ...args: any[]): void {
         const subscriptions = this.subscription[event] || [];
 
         // 不缓存length是因为length会更改
@@ -100,18 +100,18 @@ export default class EventEmitter {
         }
     }
 
-    public listeners(event: string) {
+    public $listeners(event: string) {
         return this.subscription[event] || [];
     }
 
     /**
-     * 获取所有监听的事件
+     * 获取所有监听的事件名
      *
      * @readonly
      * @type {string[]}
      * @memberof EventEmitter
      */
-    public get events(): string[] {
+    public get $events(): string[] {
         return Object.keys(this.subscription);
     }
 

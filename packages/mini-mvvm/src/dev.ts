@@ -2,11 +2,11 @@ import './dev.scss';
 import MVVM from './core/MVVM';
 import { h } from 'mini-vdom';
 
-new MVVM({
+const vm = new MVVM({
     // el: '#app'
     template: `
     <div id="app">
-        <span>name:</span>
+        <span>name: {{ name }}</span>
         <span>tom</span>
     </div>
     `,
@@ -18,4 +18,8 @@ new MVVM({
     // }
 
 
-}).$mount('#app');
+});
+
+vm['name'] = 'lilyth';
+
+vm.$mount('#app');
