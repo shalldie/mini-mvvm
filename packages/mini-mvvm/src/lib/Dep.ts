@@ -1,3 +1,4 @@
+// https://segmentfault.com/a/1190000006599500
 
 export default class Dep {
 

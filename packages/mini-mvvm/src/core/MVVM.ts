@@ -1,6 +1,6 @@
 import { VNode, patch, h } from "mini-vdom";
 import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
-import compile from "../lib/compile";
+import Compile from "../lib/Compile";
 
 export default class MVVM extends BaseMVVM {
 
@@ -38,7 +38,7 @@ export default class MVVM extends BaseMVVM {
     private compile() {
         const { el, template } = this.$options;
         if (!this.$options.render) {
-            this.$options.render = compile(
+            this.$options.render = Compile.render(
                 template
                 || document.querySelector(el).outerHTML
             ) as any;
