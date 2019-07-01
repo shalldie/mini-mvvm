@@ -1,6 +1,7 @@
 import { VNode, patch, h } from "mini-vdom";
 import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
 import Compile from "../lib/Compile";
+import Observer, { proxy } from "../lib/Observer";
 
 export default class MVVM extends BaseMVVM {
 
@@ -53,7 +54,9 @@ export default class MVVM extends BaseMVVM {
      */
     private initData() {
         if (this.$options.data) {
-            this._data = this.$options.data();
+            this._data = this.$options.data.call(this);
+            new Observer(this._data);
+            proxy(this._data, this);
         }
     }
 

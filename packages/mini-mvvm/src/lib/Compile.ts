@@ -3,6 +3,11 @@ import { IMvvmOptions } from "../core/BaseMVVM";
 import { ENodeType } from "../common/enums";
 import { toArray } from "../common/utils";
 
+/**
+ * 用来表述模板结构
+ *
+ * @class AST
+ */
 class AST {
 
     tag: string;
@@ -39,6 +44,12 @@ class AST {
     }
 }
 
+/**
+ * Compile ，用来编译模板
+ *
+ * @export
+ * @class Compile
+ */
 export default class Compile {
 
     public static render(template: string) {
@@ -100,65 +111,3 @@ with(this) {
     }
 
 }
-
-
-// /**
-//  * 把字符串编译成render函数
-//  *
-//  * @export
-//  * @param {string} template
-//  * @returns {Function}
-//  */
-// export default function compile(template: string): Function {
-//     const wrap = document.createElement('div');
-//     wrap.innerHTML = template.trim();
-
-//     const node = wrap.children[0];
-//     const ast = AST.parseElement2AST(node);
-//     const renderStr = `
-// with(this) {
-//     return ${ast2Render(ast)};
-// }
-//     `;
-//     console.log(renderStr);
-//     return new Function('h', renderStr);
-// }
-
-// function ast2Render(ast: AST): string {
-//     // console.log(ast.type);
-//     if (ast.type === ENodeType.Text) {
-//         return textAst2Render(ast);
-//     }
-//     if (ast.type === ENodeType.Element) {
-//         return eleAst2Render(ast);
-//     }
-//     // 理论上不会走到这里来，在生成ast的时候就过滤了
-//     return null;
-// }
-
-// function eleAst2Render(ast: AST): string {
-//     const attrs = JSON.stringify(ast.attrs.reduce((map, cur) => {
-//         map[cur.name] = cur.value;
-//         return map;
-//     }, {}));
-//     const children = ast.children.map(ast2Render).filter(n => n).join(',');
-
-//     return `h('${ast.tag}', {
-//         attrs: ${attrs}
-//     }, [${children}])`;
-// }
-
-// function textAst2Render(ast: AST) {
-//     // console.log(ast);
-//     const content = `'` + ast.text
-//         .replace(      // 先把文本中的 换行/多个连续空格 替换掉
-//             /[\r\n\s]+/g,
-//             ' '
-//         )
-//         .replace(      // 再处理依赖 {{ field }}
-//             /\{\{(.*?)\}\}/g,
-//             `' + ($1) + '`
-//         ) + `'`;
-
-//     return `h('', ${content})`;
-// }

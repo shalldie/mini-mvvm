@@ -10,6 +10,11 @@ const vm = new MVVM({
         <span>tom</span>
     </div>
     `,
+    data() {
+        return {
+            memeda: 'hhh'
+        };
+    }
     // render(h) {
     //     return h('div#app', [
     //         h('span', 'name:'),
@@ -23,3 +28,5 @@ const vm = new MVVM({
 vm['name'] = 'lilyth';
 
 vm.$mount('#app');
+
+window['vm'] = vm;
