@@ -27,8 +27,6 @@ export default class Dep {
     }
 
     public notify() {
-        for (let item of this.subs) {
-            // item
-        }
+        this.subs.forEach(n => n.update());
     }
 }
