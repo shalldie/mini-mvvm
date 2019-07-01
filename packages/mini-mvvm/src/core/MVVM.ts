@@ -9,7 +9,7 @@ export default class MVVM extends BaseMVVM {
         super();
         this.$options = options;
 
-        this.init();
+        this._init();
     }
 
     /**
@@ -18,16 +18,16 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private init() {
+    private _init() {
 
         // 初始化数据
-        this.initData();
+        this._initData();
 
         // 编译
-        this.compile();
+        this._compile();
 
         // patch
-        this.patch();
+        this._update();
     }
 
     /**
@@ -36,7 +36,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private compile() {
+    private _compile() {
         const { el, template } = this.$options;
         if (!this.$options.render) {
             this.$options.render = Compile.render(
@@ -52,7 +52,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private initData() {
+    private _initData() {
         if (this.$options.data) {
             this._data = this.$options.data.call(this);
             new Observer(this._data);
@@ -66,7 +66,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private patch() {
+    private _update() {
         if (!this.$options.el) {
             return;
         }
@@ -90,7 +90,7 @@ export default class MVVM extends BaseMVVM {
      */
     public $mount(selector: string) {
         this.$options.el = selector;
-        this.patch();
+        this._update();
         return this;
     }
 }
