@@ -43,6 +43,10 @@ export default class Dep {
         }
     }
 
+    public clear() {
+        this.subs = [];
+    }
+
     /**
      * 通过 Dep.target 把 dep 添加到当前到 watcher
      *

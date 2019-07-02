@@ -80,6 +80,7 @@ export default class Observer {
         // 监听赋值操作
         proxy(this.data, key, {
             get: () => {
+                console.log(key);
                 dep.depend();
                 return val;
             },

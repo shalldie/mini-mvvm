@@ -67,7 +67,7 @@ with(this) {
     return ${this.ast2Render(ast)};
 }
         `;
-        console.log(renderStr);
+        // console.log(renderStr);
         return new Function('h', renderStr);
     }
 

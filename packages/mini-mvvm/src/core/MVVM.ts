@@ -4,6 +4,7 @@ import Compile from "../lib/Compile";
 import Observer, { proxy } from "../lib/Observer";
 import Dep from "../lib/Dep";
 import Watcher from "../lib/Watcher";
+import { nextTickQueue } from "../common/utils";
 
 export default class MVVM extends BaseMVVM {
 
@@ -67,24 +68,38 @@ export default class MVVM extends BaseMVVM {
      *
      * @memberof MVVM
      */
-    public _update() {
-        if (!this.$options.el) {
-            return;
-        }
-        console.log('__invoke: _update' + +new Date);
-        if (!this.el) {
-            this.el = document.querySelector(this.$options.el);
-        }
-        this.lastVnode = this.vnode || this.el;
+    public _update = (() => {
+        let needUpdate = false;
+        return () => {
+            needUpdate = true;
+            nextTickQueue(() => {
+                if (!needUpdate) {
+                    return;
+                }
 
-        Dep.target = this._watcher = new Watcher(this);
-        this.vnode = this.$options.render.call(this, h);
-        Dep.target = null;
-        patch(
-            this.lastVnode,
-            this.vnode
-        );
-    }
+                if (!this.$options.el) {
+                    return;
+                }
+                console.log('__invoke: _update' + +new Date);
+                if (!this.el) {
+                    this.el = document.querySelector(this.$options.el);
+                }
+
+                // nextTickQueue(() => {
+                this.lastVnode = this.vnode || this.el;
+
+                this._watcher && this._watcher.dispose();
+                Dep.target = this._watcher = new Watcher(this);
+                this.vnode = this.$options.render.call(this, h);
+                Dep.target = null;
+                patch(
+                    this.lastVnode,
+                    this.vnode
+                );
+                needUpdate = false;
+            });
+        };
+    })();
 
     /**
      * 挂载到 dom

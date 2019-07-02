@@ -14,11 +14,18 @@ export default class Watcher {
     }
 
     public addDep(dep: Dep) {
-        this.deps.push(dep);
-        dep.add(this);
+        if (!~this.deps.indexOf(dep)) {
+            this.deps.push(dep);
+            console.log('current dep:' + this.deps.map(n => n.id).join(','));
+        }
+        // dep.add(this);
     }
 
     public update() {
         this.vm._update();
+    }
+
+    public dispose() {
+        this.deps.forEach(dep => dep.remove(this));
     }
 }

@@ -39,3 +39,6 @@ const vm = new MVVM({
 vm.$mount('#app');
 
 window['vm'] = vm;
+
+vm['person']['name']='lily';
+vm['person']['age']=13;
