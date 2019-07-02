@@ -1,13 +1,28 @@
+/**
+ * 搜集所有依赖
+ */
+
 import Watcher from "./Watcher";
 
 // https://segmentfault.com/a/1190000006599500
+
+let depId = 1;
 
 export default class Dep {
 
     private subs: Watcher[] = [];
 
-    public static target: Watcher = null;
+    public id: number = depId++;
 
+    public static target: Watcher;
+
+    /**
+     * 添加一个 watcher
+     *
+     * @param {Watcher} watcher
+     * @returns
+     * @memberof Dep
+     */
     public add(watcher: Watcher) {
         if (~this.subs.indexOf(watcher)) {
             return;
@@ -15,6 +30,12 @@ export default class Dep {
         this.subs.push(watcher);
     }
 
+    /**
+     * 移除一个 watcher
+     *
+     * @param {Watcher} watcher
+     * @memberof Dep
+     */
     public remove(watcher: Watcher) {
         const index = this.subs.indexOf(watcher);
         if (~index) {
@@ -22,10 +43,25 @@ export default class Dep {
         }
     }
 
+    /**
+     * 通过 Dep.target 把 dep 添加到当前到 watcher
+     *
+     * @memberof Dep
+     */
     public depend() {
-        Dep.target && Dep.target.addDep(this);
+        const target = Dep.target;
+        if (!target) {
+            return;
+        }
+        target.addDep(this);
+        this.add(target);
     }
 
+    /**
+     * 通知所有 watcher 更新
+     *
+     * @memberof Dep
+     */
     public notify() {
         this.subs.forEach(n => n.update());
     }

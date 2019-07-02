@@ -1,6 +1,12 @@
+/**
+ * 声明初始化参数
+ * 导出 MVVM 的基类，把 fields 和 static methods 拆出来
+ */
+
 import { h, VNode } from "mini-vdom";
 import EventEmitter from "../common/EventEmitter";
 import { nextTick } from "../common/utils";
+import Watcher from "../lib/Watcher";
 
 export interface IMvvmOptions {
 
@@ -49,13 +55,30 @@ export default abstract class BaseMVVM extends EventEmitter {
     protected _data = {};
 
     /**
-     * 当前组件的 computed
+     * 当前组件的 computed watchers
      *
      * @protected
+     * @type {Record<string, Watcher>}
      * @memberof BaseMVVM
      */
-    protected _computed = {};
+    protected _computedWatchers: Record<string, Watcher> = {};
 
+    /**
+     * 当前的 component watcher
+     *
+     * @protected
+     * @type {Watcher}
+     * @memberof BaseMVVM
+     */
+    protected _watcher: Watcher;
+
+    /**
+     * 旧的 vnode，可能是dom或者vnode
+     *
+     * @protected
+     * @type {*}
+     * @memberof BaseMVVM
+     */
     protected lastVnode: any;
 
     /**

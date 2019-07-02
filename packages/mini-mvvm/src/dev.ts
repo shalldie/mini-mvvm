@@ -6,13 +6,22 @@ const vm = new MVVM({
     // el: '#app'
     template: `
     <div id="app">
-        <span>name: {{ name }}</span>
-        <span>tom</span>
+        <div class="line">
+            <span>name:</span>
+            <span>{{ person.name }}</span>
+        </div>
+        <div class="line">
+            <span>age:</span>
+            <span>{{ person.age }}</span>
+        </div>
     </div>
     `,
     data() {
         return {
-            memeda: 'hhh'
+            person: {
+                name: 'tom',
+                age: 12
+            }
         };
     }
     // render(h) {
@@ -25,7 +34,7 @@ const vm = new MVVM({
 
 });
 
-vm['name'] = 'lilyth';
+// vm['name'] = 'lilyth';
 
 vm.$mount('#app');
 

@@ -2,6 +2,8 @@ import { VNode, patch, h } from "mini-vdom";
 import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
 import Compile from "../lib/Compile";
 import Observer, { proxy } from "../lib/Observer";
+import Dep from "../lib/Dep";
+import Watcher from "../lib/Watcher";
 
 export default class MVVM extends BaseMVVM {
 
@@ -63,18 +65,21 @@ export default class MVVM extends BaseMVVM {
     /**
      * 更新当前视图
      *
-     * @private
      * @memberof MVVM
      */
-    private _update() {
+    public _update() {
         if (!this.$options.el) {
             return;
         }
+        console.log('__invoke: _update' + +new Date);
         if (!this.el) {
             this.el = document.querySelector(this.$options.el);
         }
         this.lastVnode = this.vnode || this.el;
+
+        Dep.target = this._watcher = new Watcher(this);
         this.vnode = this.$options.render.call(this, h);
+        Dep.target = null;
         patch(
             this.lastVnode,
             this.vnode

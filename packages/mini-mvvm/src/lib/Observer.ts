@@ -1,4 +1,5 @@
 import { getType } from '../common/utils';
+import Dep from './Dep';
 
 /**
  * 需要重写的方法，用于观察数组
@@ -28,11 +29,11 @@ export function proxy(source: Object, target: Object): void;
  * @export
  * @param {Object} data 要观察的数据
  * @param {string} key 要观察的key
- * @param {{ enumerable?: boolean, configurable?: boolean, get?: () => any, set?: (val: any) => void }} [options]
+ * @param {PropertyDescriptor} descriptor
  */
-export function proxy(data: Object, key: string, options?: { enumerable?: boolean, configurable?: boolean, get?: () => any, set?: (val: any) => void }): void;
+export function proxy(data: Object, key: string, descriptor: PropertyDescriptor): void;
 
-export function proxy(data: Object, targetOrkey: Object | string, options?: { enumerable?: boolean, configurable?: boolean, get?: () => any, set?: (val: any) => void }) {
+export function proxy(data: Object, targetOrkey: Object | string, descriptor?: PropertyDescriptor) {
 
     if (getType(targetOrkey) === 'object') {
         for (let key in data) {
@@ -47,7 +48,7 @@ export function proxy(data: Object, targetOrkey: Object | string, options?: { en
     Object.defineProperty(data, targetOrkey as string, {
         enumerable: true,
         configurable: true,
-        ...options
+        ...descriptor
     });
 }
 
@@ -73,12 +74,13 @@ export default class Observer {
 
     private defineReactive(key: string): void {
 
+        const dep = new Dep();
         let val = this.data[key];
 
         // 监听赋值操作
         proxy(this.data, key, {
             get: () => {
-
+                dep.depend();
                 return val;
             },
 
@@ -93,9 +95,14 @@ export default class Observer {
                 this.appendArrayHooks(key);
 
                 // set 的时候需要主动再次添加 observer
-                new Observer(val);
+                getType(val) === 'object' && new Observer(val);
+
+                dep.notify();
             }
         });
+
+        // 虽然不知道这个没啥用，但是先放上去 😂
+        proxy(this.data, '__ob__', { enumerable: false, value: this });
 
         // 如果是数组，还需要监听变异方法
         this.appendArrayHooks(key);

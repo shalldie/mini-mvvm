@@ -12,6 +12,28 @@ export function nextTick(fn: () => void): void {
     Promise.resolve().then(fn);
 }
 
+export const nextTickQueue = (function () {
+    const queue: Function[] = [];
+
+    return function (fn: Function) {
+        queue.push(fn);
+        nextTick(() => {
+            if (!queue.length) {
+                return;
+            }
+            let fn: Function;
+            while (fn = queue.shift()) {
+                fn();
+            }
+        });
+    };
+
+})();
+
+// export function nextTickQueue(fn: Function) {
+
+// }
+
 /**
  * 获取数据类型
  *
