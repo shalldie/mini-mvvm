@@ -80,7 +80,6 @@ export default class Observer {
         // 监听赋值操作
         proxy(this.data, key, {
             get: () => {
-                console.log(key);
                 dep.depend();
                 return val;
             },
@@ -102,7 +101,7 @@ export default class Observer {
             }
         });
 
-        // 虽然不知道这个没啥用，但是先放上去 😂
+        // 虽然这个没啥用，但是先放上去 😂
         proxy(this.data, '__ob__', { enumerable: false, value: this });
 
         // 如果是数组，还需要监听变异方法

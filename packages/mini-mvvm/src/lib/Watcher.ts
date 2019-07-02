@@ -16,7 +16,6 @@ export default class Watcher {
     public addDep(dep: Dep) {
         if (!~this.deps.indexOf(dep)) {
             this.deps.push(dep);
-            console.log('current dep:' + this.deps.map(n => n.id).join(','));
         }
         // dep.add(this);
     }
