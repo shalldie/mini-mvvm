@@ -4,11 +4,11 @@ import Compile from "../lib/Compile";
 import Observer, { proxy } from "../lib/Observer";
 import Dep from "../lib/Dep";
 import Watcher from "../lib/Watcher";
-import { nextTickQueue } from "../common/utils";
+import { nextTick } from "../common/utils";
 
 export default class MVVM extends BaseMVVM {
 
-    constructor(options: IMvvmOptions) {
+    constructor(options: IMvvmOptions = {}) {
         super();
         this.$options = options;
 
@@ -41,7 +41,7 @@ export default class MVVM extends BaseMVVM {
      */
     private _compile() {
         const { el, template } = this.$options;
-        if (!this.$options.render) {
+        if (!this.$options.render && (template || el)) {
             this.$options.render = Compile.render(
                 template
                 || document.querySelector(el).outerHTML
@@ -63,6 +63,10 @@ export default class MVVM extends BaseMVVM {
         }
     }
 
+    private _initComputed() {
+
+    }
+
     /**
      * 更新当前视图
      *
@@ -75,7 +79,7 @@ export default class MVVM extends BaseMVVM {
             if (process.env.NODE_ENV !== 'production') {
                 console.log('数据改变');
             }
-            nextTickQueue(() => {
+            nextTick(() => {
                 if (!needUpdate) {
                     return;
                 }
@@ -93,7 +97,7 @@ export default class MVVM extends BaseMVVM {
                 // nextTickQueue(() => {
                 this.lastVnode = this.vnode || this.el;
 
-                this._watcher && this._watcher.dispose();
+                this._watcher && this._watcher.clear();
                 Dep.target = this._watcher = new Watcher(this);
                 this.vnode = this.$options.render.call(this, h);
                 Dep.target = null;

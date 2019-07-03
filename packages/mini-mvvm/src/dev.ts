@@ -39,3 +39,5 @@ const vm = new MVVM({
 vm.$mount('#app');
 
 window['vm'] = vm;
+
+window['mm'] = new MVVM();

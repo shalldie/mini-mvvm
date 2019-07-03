@@ -42,6 +42,13 @@ export interface IMvvmOptions {
      * @memberof IMvvmOptions
      */
     data?: () => Object;
+
+    /**
+     * 计算属性
+     *
+     * @memberof IMvvmOptions
+     */
+    computed?: Record<string, () => any>;
 }
 
 export default abstract class BaseMVVM extends EventEmitter {

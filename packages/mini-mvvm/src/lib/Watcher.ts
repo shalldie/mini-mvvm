@@ -9,22 +9,41 @@ export default class Watcher {
 
     public deps: Dep[] = [];
 
-    constructor(vm: MVVM) {
+    public getter: () => any;
+
+    constructor(vm: MVVM, getter?: () => any) {
         this.vm = vm;
+        this.getter = getter;
     }
 
     public addDep(dep: Dep) {
         if (!~this.deps.indexOf(dep)) {
             this.deps.push(dep);
         }
-        // dep.add(this);
     }
 
     public update() {
         this.vm._update();
     }
 
-    public dispose() {
+    /**
+     * 清空所有依赖
+     *
+     * @memberof Watcher
+     */
+    public clear() {
         this.deps.forEach(dep => dep.remove(this));
+        this.deps = [];
+    }
+
+    /**
+     * 计算value并重新搜集依赖
+     *
+     * @memberof Watcher
+     */
+    public get() {
+        this.clear();
+        Dep.target = this;
+        this.value = this.getter();
     }
 }
