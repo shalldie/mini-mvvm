@@ -1,6 +1,7 @@
 import Dep from "./Dep";
 import MVVM from "../core/MVVM";
 import { proxy } from "./Observer";
+import { getValByPath } from "../common/utils";
 
 
 /**
@@ -14,7 +15,7 @@ import { proxy } from "./Observer";
 export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}) {
     const computedWatchers: Record<string, Watcher> = {};
     for (let key in computed) {
-        const watcher = new Watcher(vm, computed[key], { lazy: true });
+        const watcher = new Watcher(vm, computed[key], null, { lazy: true });
         proxy(vm, key, {
             get() {
 
@@ -42,6 +43,53 @@ export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}
     return computedWatchers;
 }
 
+type TWatchFn = (val: any, oldVal: any) => void;
+
+export type TWatchDefine = TWatchFn | {
+    immediate: boolean,
+    handler: TWatchFn
+};
+
+
+/**
+ * 给 vm 添加 $watch，并处理 $options.watch
+ *
+ * @export
+ * @param {MVVM} vm
+ * @param {Record<string, TWatchDefine>} watch
+ */
+export function defineWatch(vm: MVVM, watch: Record<string, TWatchDefine>) {
+
+    vm.$watch = function (exp, callback, { immediate } = { immediate: false }) {
+        vm._watchers.push(new Watcher(
+            vm,
+            // 这个是用来借助computed来搜集依赖用
+            () => getValByPath(vm, exp),
+            // 在依赖进行改变的时候，执行回掉
+            callback,
+            // 是否立即执行
+            { immediate }
+        ));
+    };
+
+    for (let exp in watch) {
+        const watchDef = watch[exp];
+        if (typeof watchDef === 'function') {
+            vm.$watch(
+                exp,
+                watchDef as TWatchFn
+            );
+        }
+        else if (typeof watchDef === 'object') {
+            vm.$watch(
+                exp,
+                watchDef.handler,
+                { immediate: watchDef.immediate }
+            );
+        }
+    }
+}
+
 interface IWatcherOpotions {
 
     /**
@@ -59,9 +107,19 @@ interface IWatcherOpotions {
      * @memberof IWatcherOpotions
      */
     dirty?: boolean;
+
+    /**
+     * 是否立即执行
+     *
+     * @type {boolean}
+     * @memberof IWatcherOpotions
+     */
+    immediate?: boolean;
 }
 
 export default class Watcher implements IWatcherOpotions {
+
+    private invoked: boolean = false;
 
     public vm: MVVM;
 
@@ -71,17 +129,29 @@ export default class Watcher implements IWatcherOpotions {
 
     public getter: Function;
 
+    public cb: Function;
+
     public lazy: boolean;
 
     public dirty: boolean;
 
-    constructor(vm: MVVM, getter?: Function, options: IWatcherOpotions = {}) {
+    public immediate: boolean;
+
+    constructor(vm: MVVM, getter?: Function, cb?: Function, options: IWatcherOpotions = {}) {
         this.vm = vm;
         this.getter = getter;
+        this.cb = cb;
+
         // 把 options 传入 this
         Object.assign(this, options);
+
         // 初始化的时候，如果是lazy，就表示是脏数据
         this.dirty = this.lazy;
+
+        // 是 watch 的时候，计算一下当前依赖
+        if (this.cb) {
+            this.get();
+        }
     }
 
     public addDep(dep: Dep) {
@@ -95,6 +165,10 @@ export default class Watcher implements IWatcherOpotions {
         if (this.lazy) {
             console.log('设置了 dirty');
             this.dirty = true;
+        }
+        // cb 表示是 watch
+        else if (this.cb) {
+            this.get();
         }
         // 更新因为是在 nextTick ，所以在 render 的时候，
         // 所有的 computed watchers 都已经标记为 dirty:false 了
@@ -119,11 +193,21 @@ export default class Watcher implements IWatcherOpotions {
      * @memberof Watcher
      */
     public get() {
+        console.log('invoke get');
+
         this.clear();
+        const oldVal = this.value;
         Dep.target = this;
         this.value = this.getter.call(this.vm, this.vm);
         Dep.target = null;
+
+        // 在【立即执行】或者【更新】的时候，进行通知
+        if (this.cb && (this.immediate || this.invoked)) {
+            this.cb.call(this.vm, this.value, oldVal);
+        }
+
         this.dirty = false;
+        this.invoked = true;
         return this.value;
     }
 }

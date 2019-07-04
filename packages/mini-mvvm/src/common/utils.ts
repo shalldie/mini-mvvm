@@ -1,3 +1,5 @@
+import MVVM from "../core/MVVM";
+
 /**
  * 工具库
  */
@@ -57,4 +59,21 @@ export const nextIndex = (function () {
  */
 export function toArray<T>(arrayLike: any): T[] {
     return [].slice.call(arrayLike);
+}
+
+/**
+ * 根据路径从 vm 中获取值
+ *
+ * @export
+ * @param {MVVM} vm
+ * @param {string} path
+ * @returns
+ */
+export function getValByPath(vm: MVVM, path: string) {
+    const pathArr = path.split('.');
+    let val: any = vm;
+    for (let key of pathArr) {
+        val = val[key];
+    }
+    return val;
 }

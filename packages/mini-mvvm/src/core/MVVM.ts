@@ -3,7 +3,7 @@ import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
 import Compile from "../lib/Compile";
 import Observer, { proxy } from "../lib/Observer";
 import Dep from "../lib/Dep";
-import Watcher, { defineComputed } from "../lib/Watcher";
+import Watcher, { defineComputed, defineWatch } from "../lib/Watcher";
 import { nextTick } from "../common/utils";
 import ELifeCycle, { defineLifeCycle } from "../lib/ELifeCycle";
 
@@ -35,6 +35,9 @@ export default class MVVM extends BaseMVVM {
 
         // 初始化computed
         this._initComputed();
+
+        // 初始化watch
+        this._initWatch();
 
         // 准备完毕就调用 created
         this.$emit(ELifeCycle.created);
@@ -96,6 +99,16 @@ export default class MVVM extends BaseMVVM {
         Object.keys(this.$options.methods || {}).forEach(key => {
             this[key] = this.$options.methods[key].bind(this);
         });
+    }
+
+    /**
+     * 初始化 watch
+     *
+     * @private
+     * @memberof MVVM
+     */
+    private _initWatch() {
+        defineWatch(this, this.$options.watch);
     }
 
     /**

@@ -6,7 +6,7 @@
 import { h, VNode } from "mini-vdom";
 import EventEmitter from "../common/EventEmitter";
 import { nextTick } from "../common/utils";
-import Watcher from "../lib/Watcher";
+import Watcher, { TWatchDefine } from "../lib/Watcher";
 import { ILifeCycle } from "../lib/ELifeCycle";
 
 export interface IMvvmOptions extends ILifeCycle {
@@ -58,6 +58,14 @@ export interface IMvvmOptions extends ILifeCycle {
      * @memberof IMvvmOptions
      */
     methods?: Record<string, Function>;
+
+    /**
+     * 数据监听
+     *
+     * @type {Record<string, TWatchDefine>}
+     * @memberof IMvvmOptions
+     */
+    watch?: Record<string, TWatchDefine>;
 }
 
 export default abstract class BaseMVVM extends EventEmitter {
@@ -89,6 +97,14 @@ export default abstract class BaseMVVM extends EventEmitter {
     protected _watcher: Watcher;
 
     /**
+     * 当前的 watch watchers
+     *
+     * @type {Watcher[]}
+     * @memberof BaseMVVM
+     */
+    public _watchers: Watcher[] = [];
+
+    /**
      * 旧的 vnode，可能是dom或者vnode
      *
      * @protected
@@ -113,6 +129,13 @@ export default abstract class BaseMVVM extends EventEmitter {
      * @memberof BaseMVVM
      */
     public $options: IMvvmOptions;
+
+    /**
+     * 监听某个 key 的改变
+     *
+     * @memberof BaseMVVM
+     */
+    public $watch: (exp: string, callback: (val: any, oldVal: any) => void, options?: { immediate: boolean }) => void;
 
     /**
      * 当前组件挂载的dom

@@ -48,27 +48,15 @@ const vm = new MVVM({
         }
     },
 
-    created() {
-        console.log('hook created invoked');
-        console.log(this.person.name);
-    },
-
-    beforeMount() {
-        console.log('hook beforeMounted');
-    },
-
     mounted() {
         console.log('hook mounted invoked');
     },
 
-    beforeUpdate() {
-        console.log('hook before update');
-    },
-
-    updated() {
-        console.log('hook before updated');
+    watch: {
+        'person.name'(name: string, oldName: string) {
+            console.log(`name change:${oldName} => ${name}`);
+        }
     }
-
     // render(h) {
     //     return h('div#app', [
     //         h('span', 'name:'),
