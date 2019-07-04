@@ -14,7 +14,7 @@ describe('function patch', () => {
     }
 
     beforeEach(() => {
-        document.body.innerHTML = '<div id="app"></div>'
+        document.body.innerHTML = '<div id="app"></div>';
         dom = document.getElementById('app');
     });
 

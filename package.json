@@ -5,6 +5,7 @@
     "clean": "lerna clean",
     "i": "npm i --registry=https://registry.npm.taobao.org",
     "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
+    "test:mini-mvvm": "lerna exec npm run test --scope=mini-mvvm",
     "test": "lerna exec npm run test",
     "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm --stream",
     "dev:mini-vdom": "lerna run dev --scope=mini-vdom --stream",

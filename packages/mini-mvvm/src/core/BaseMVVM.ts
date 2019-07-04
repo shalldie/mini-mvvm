@@ -7,8 +7,9 @@ import { h, VNode } from "mini-vdom";
 import EventEmitter from "../common/EventEmitter";
 import { nextTick } from "../common/utils";
 import Watcher from "../lib/Watcher";
+import { ILifeCycle } from "../lib/ELifeCycle";
 
-export interface IMvvmOptions {
+export interface IMvvmOptions extends ILifeCycle {
 
     /**
      * 模板的选择器
@@ -49,6 +50,14 @@ export interface IMvvmOptions {
      * @memberof IMvvmOptions
      */
     computed?: Record<string, () => any>;
+
+    /**
+     * 方法
+     *
+     * @type {Record<string, Function>}
+     * @memberof IMvvmOptions
+     */
+    methods?: Record<string, Function>;
 }
 
 export default abstract class BaseMVVM extends EventEmitter {

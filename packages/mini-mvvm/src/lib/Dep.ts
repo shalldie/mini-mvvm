@@ -4,8 +4,6 @@
 
 import Watcher from "./Watcher";
 
-// https://segmentfault.com/a/1190000006599500
-
 let depId = 1;
 
 export default class Dep {
