@@ -1,48 +1,9 @@
 import { h, VNode } from "mini-vdom";
-import { IMvvmOptions } from "../core/BaseMVVM";
-import { ENodeType } from "../common/enums";
-import { toArray } from "../common/utils";
+import { IMvvmOptions } from "../../core/BaseMVVM";
+import { ENodeType } from "../../common/enums";
+import AST, { parseElement2AST } from "./AST";
 
-/**
- * 用来表述模板结构
- *
- * @class AST
- */
-class AST {
-
-    tag: string;
-    type: ENodeType;
-    attrs?: Array<{ name: string, value: string }>;
-    text?: string;
-    children?: AST[];
-
-    public static parseElement2AST(el: Element): AST {
-        // 文本节点
-        if (el.nodeType === ENodeType.Text) {
-            return {
-                tag: '',
-                type: ENodeType.Text,
-                text: el.textContent
-            };
-        }
-
-        // element节点
-        if (el.nodeType === ENodeType.Element) {
-            const attrs = toArray<Attr>(el.attributes).map(n => ({ name: n.name, value: n.value }));
-            const children = toArray<Element>(el.childNodes).map(AST.parseElement2AST).filter(n => n);
-
-            return {
-                tag: el.tagName.toLowerCase(),
-                type: ENodeType.Element,
-                attrs,
-                children
-            };
-        }
-
-        // 其他节点不考虑
-        return null;
-    }
-}
+const spFn = '__spVnode__';
 
 /**
  * Compile ，用来编译模板
@@ -61,12 +22,26 @@ export default class Compile {
         wrap.innerHTML = template.trim();
 
         const node = wrap.children[0];
-        const ast = AST.parseElement2AST(node);
+        const ast = parseElement2AST(node);
+
         const renderStr = `
+var ${spFn} = function(args){
+    var r = [];
+    args.forEach(function(item){
+        if(Object.prototype.toString.call(item) === '[object Array]'){
+            [].push.apply(r,item);
+        }
+        else{
+            r.push(item);
+        }
+    });
+    return r;
+}
 with(this) {
     return ${this.ast2Render(ast)};
 }
         `;
+        console.log(renderStr);
         // console.log(renderStr);
         return new Function('h', renderStr);
     }
@@ -84,15 +59,28 @@ with(this) {
     }
 
     private eleAst2Render(ast: AST): string {
-        const attrs = JSON.stringify(ast.attrs.reduce((map, cur) => {
-            map[cur.name] = cur.value;
-            return map;
-        }, {}));
+
+        const attrs = JSON.stringify(ast.attrsMap);
         const children = ast.children.map(n => this.ast2Render(n)).filter(n => n).join(',');
 
-        return `h('${ast.tag}', {
-            attrs: ${attrs}
-        }, [${children}])`;
+        const childStr = ''
+            + `h('${ast.tag}',{
+                attrs: ${attrs}
+            },
+            ${spFn}([${children}])
+        )`;
+
+        if (!ast.for) {
+            return childStr;
+        }
+        else {
+            const forIndex = ast.forIndex || 'index_' + Math.random().toString().slice(-5);
+            return `
+                ${ast.for}.map(function (${ast.forItem}, ${forIndex}) {
+                    return ${childStr}
+                });
+            `;
+        }
     }
 
     private textAst2Render(ast: AST) {
