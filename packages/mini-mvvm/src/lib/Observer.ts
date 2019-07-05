@@ -75,6 +75,7 @@ export default class Observer {
     private defineReactive(key: string): void {
 
         const dep = new Dep();
+        dep.key = key;
         let val = this.data[key];
 
         // 监听赋值操作

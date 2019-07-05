@@ -55,6 +55,9 @@ const vm = new MVVM({
     watch: {
         'person.name'(name: string, oldName: string) {
             console.log(`name change:${oldName} => ${name}`);
+        },
+        c3(age, oldAge) {
+            console.log('c3 changed' + `${age} => ${oldAge}`);
         }
     }
     // render(h) {

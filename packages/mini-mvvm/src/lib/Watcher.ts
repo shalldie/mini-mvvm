@@ -1,7 +1,7 @@
 import Dep from "./Dep";
 import MVVM from "../core/MVVM";
 import { proxy } from "./Observer";
-import { getValByPath } from "../common/utils";
+import { getValByPath, nextTick } from "../common/utils";
 
 
 /**
@@ -163,12 +163,23 @@ export default class Watcher implements IWatcherOpotions {
     public update() {
         // lazy 表示是 computed，只有在用到的时候才去更新
         if (this.lazy) {
-            console.log('设置了 dirty');
             this.dirty = true;
         }
         // cb 表示是 watch
         else if (this.cb) {
-            this.get();
+            // debugger;
+
+            // 连续的修改，以最后一次为准
+            // 全都在 nexttick 中处理
+            this.dirty = true;
+
+            nextTick(() => {
+                if (!this.dirty) {
+                    return;
+                }
+
+                this.get();
+            });
         }
         // 更新因为是在 nextTick ，所以在 render 的时候，
         // 所有的 computed watchers 都已经标记为 dirty:false 了
@@ -193,21 +204,29 @@ export default class Watcher implements IWatcherOpotions {
      * @memberof Watcher
      */
     public get() {
-        console.log('invoke get');
 
         this.clear();
         const oldVal = this.value;
         Dep.target = this;
-        this.value = this.getter.call(this.vm, this.vm);
-        Dep.target = null;
 
-        // 在【立即执行】或者【更新】的时候，进行通知
-        if (this.cb && (this.immediate || this.invoked)) {
-            this.cb.call(this.vm, this.value, oldVal);
+        try {
+            this.value = this.getter.call(this.vm, this.vm);
+
+            // 在【立即执行】或者【更新】的时候，进行通知
+            if (this.cb && this.value !== oldVal && (this.immediate || this.invoked)) {
+                this.cb.call(this.vm, this.value, oldVal);
+            }
+        }
+        catch (ex) {
+            console.log('watcher get error');
+            throw ex;
+        }
+        finally {
+            Dep.target = null;
+            this.dirty = false;
+            this.invoked = true;
         }
 
-        this.dirty = false;
-        this.invoked = true;
         return this.value;
     }
 }

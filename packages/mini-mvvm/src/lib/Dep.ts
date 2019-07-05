@@ -12,6 +12,8 @@ export default class Dep {
 
     public id: number = depId++;
 
+    public key: string;
+
     public static target: Watcher;
 
     /**
