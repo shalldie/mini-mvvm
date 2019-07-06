@@ -115,6 +115,9 @@ export function parseElement2AST(el: Element): AST {
             children
         };
 
+        // 先处理 attributes
+        parseAttrs(ast);
+
         // m-for
         parseFor(ast);
 
@@ -159,4 +162,30 @@ function parseFor(ast: AST) {
     // 删除原attr
     ast.attrs.splice(forAttrIndex, 1);
     delete ast.attrsMap[forKey];
+}
+
+/**
+ * 处理 ast 上的 attributes，
+ * :attr="value" 这种动态 attribute，会被处理成 attr:"((value))"
+ * 在之后 compile 的时候去掉双引号
+ *
+ * @param {AST} ast
+ * @returns
+ */
+function parseAttrs(ast: AST) {
+
+    for (let i = 0; i < ast.attrs.length; i++) {
+        const item = ast.attrs[i];
+        const name = item.name;
+        const val = item.value;
+        // 如果是 :attr="value" 这种动态 attribute
+        if (/^:/.test(name)) {
+            const newName = name.slice(1);
+            const newVal = `((${val}))`;
+            item.name = newName;
+            item.value = newVal;
+            delete ast.attrsMap[name];
+            ast.attrsMap[newName] = newVal;
+        }
+    }
 }

@@ -5,46 +5,41 @@ import { h } from 'mini-vdom';
 const vm = new MVVM({
     // el: '#app'
     template: `
-    <div id="app">
-        <div class="line">
-            <span>name:</span>
-            <span>{{ person.name }}</span>
+    <div id="app" class="todo-list">
+        <h2 class="title">Todo List</h2>
+        <div class="input-row">
+            <input type="text" placeholder="输入要做的事情，回车录入">
         </div>
-        <div class="line">
-            <span>age:</span>
-            <span>{{ person.age }}</span>
+        <br>
+        <div class="input-row">
+            <input type="text" disabled placeholder="输入要做的事情，回车录入">
         </div>
-        <div class="line">
-            {{ cc }}
+        <div class="tab-list">
+            <div 
+                m-for="(item,index) in tabList" 
+                :class=" 'tab-item'+ (activeIndex===index?' active':'') "
+                >
+                {{ item }}
+            </div>
         </div>
-        <div class="line">
-            {{ ccc }}
-        </div>
+        <ul class="list-wrap">
+            <li m-for="(item,index) in showList">
+                <span class="content"></span>
+            </li>
+        </ul>
     </div>
     `,
     data() {
         return {
-            person: {
-                name: 'tom',
-                age: 12
-            }
+            activeIndex: 0,
+            tabList: ['All', 'Todo', 'Done'],
+            list: []
         };
     },
     computed: {
-        c1() {
-            return `${this.person.name}'s`;
-        },
-        c3() {
-            return `is ${this.person.age}`;
-        },
-        c2() {
-            return ' age ';
-        },
-        cc() {
-            return this.c1 + this.c2 + this.c3;
-        },
-        ccc() {
-            return `${this.person.name}: | ${this.cc} | ${this.c1}`;
+        showList() {
+            let list = this.list.slice();
+            return list
         }
     },
 
@@ -53,12 +48,6 @@ const vm = new MVVM({
     },
 
     watch: {
-        'person.name'(name: string, oldName: string) {
-            console.log(`name change:${oldName} => ${name}`);
-        },
-        c3(age, oldAge) {
-            console.log('c3 changed' + `${age} => ${oldAge}`);
-        }
     }
     // render(h) {
     //     return h('div#app', [
