@@ -1,6 +1,6 @@
 {
   "name": "mini-mvvm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A mini lib to achieve mvvm. 一个轻量级的mvvm库。",
   "keywords": [
     "mvvm",
