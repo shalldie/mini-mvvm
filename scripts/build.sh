@@ -12,4 +12,6 @@ rm -rf dist
 mkdir dist
 
 cp packages/mini-mvvm/dist/mini-mvvm.js dist/mini-mvvm.js
-cp packages/mini-mvvm/dist/mini-vdom.js dist/mini-vdom.js
+cp packages/mini-vdom/dist/mini-vdom.js dist/mini-vdom.js
+
+echo "--- build 完毕 >_<#@! ---"

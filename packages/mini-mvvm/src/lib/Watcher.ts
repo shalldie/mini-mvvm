@@ -43,10 +43,27 @@ export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}
     return computedWatchers;
 }
 
+/**
+ * watch 处理函数
+ *
+ * @param {any} val 当前数据
+ * @param {any} oldVal 之前的数据
+ * @returns
+ */
 type TWatchFn = (val: any, oldVal: any) => void;
 
 export type TWatchDefine = TWatchFn | {
-    immediate: boolean,
+    /**
+     * 是否立即执行
+     *
+     * @type {boolean}
+     */
+    immediate?: boolean,
+    /**
+     * watch 处理函数
+     *
+     * @type {TWatchFn}
+     */
     handler: TWatchFn
 };
 
