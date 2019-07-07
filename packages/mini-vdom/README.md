@@ -1,6 +1,6 @@
 # mini-vdom
 
-[![npm](https://img.shields.io/npm/v/mini-vdom.svg)](https://www.npmjs.com/package/mini-vdom) [![npm minzip size](https://img.shields.io/bundlephobia/minzip/mini-vdom.svg?label=npm%20minzip%20size)](https://www.npmjs.com/package/mini-vdom) [![Build Status](https://travis-ci.org/shalldie/mini-vdom.svg?branch=master)](https://travis-ci.org/shalldie/mini-vdom)
+[![npm](https://img.shields.io/npm/v/mini-vdom.svg)](https://www.npmjs.com/package/mini-vdom) [![file size](https://img.shields.io/github/size/shalldie/mini-mvvm/dist/mini-vdom.js.svg)](https://www.npmjs.com/package/mini-vdom) [![Build Status](https://travis-ci.org/shalldie/mini-mvvm.svg?branch=master)](https://travis-ci.org/shalldie/mini-mvvm)
 
 A mini virtual dom lib. 一个轻量级的虚拟dom库。
 

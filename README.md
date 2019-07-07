@@ -1,10 +1,10 @@
 # mini-mvvm
 
-[![npm](https://img.shields.io/npm/v/mini-mvvm.svg)](https://www.npmjs.com/package/mini-mvvm) [![npm minzip size](https://img.shields.io/bundlephobia/minzip/mini-mvvm.svg?label=npm%20minzip%20size)](https://www.npmjs.com/package/mini-mvvm) [![Build Status](https://travis-ci.org/shalldie/mini-mvvm.svg?branch=master)](https://travis-ci.org/shalldie/mini-mvvm)
+[![npm](https://img.shields.io/npm/v/mini-mvvm.svg)](https://www.npmjs.com/package/mini-mvvm) [![file size](https://img.shields.io/github/size/shalldie/mini-mvvm/dist/mini-mvvm.js.svg)](https://www.npmjs.com/package/mini-mvvm) [![Build Status](https://travis-ci.org/shalldie/mini-mvvm.svg?branch=master)](https://travis-ci.org/shalldie/mini-mvvm)
 
-A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mvvm/blob/master/packages/mini-vdom/README.md).
+A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom).
 
-基于 [virtual dom - mini-vdom](https://github.com/shalldie/mvvm/blob/master/packages/mini-vdom/README.md) 的轻量级mvvm库 >\_<#@!
+基于 [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom) 的轻量级mvvm库 >\_<#@!
 
 ## Installation
 
@@ -14,7 +14,7 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mvvm/
 
 ## Ability
 
--   [x] VNode 基于虚拟dom： [virtual dom - mini-vdom](https://github.com/shalldie/mvvm/blob/master/packages/mini-vdom/README.md)
+-   [x] VNode 基于虚拟dom： [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom)
 -   [x] 数据监听
     -   [x] `data`、`computed` 变动监听
     -   [x] 数组方法监听 `push` | `pop` | `shift` | `unshift` | `splice` | `sort` | `reverse`
