@@ -6,10 +6,11 @@
     "i": "npm i --registry=https://registry.npm.taobao.org",
     "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
     "test:mini-mvvm": "lerna exec npm run test --scope=mini-mvvm",
-    "test": "lerna exec npm run test",
+    "test": "npm run bootstrap && lerna exec npm run test",
     "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm --stream",
     "dev:mini-vdom": "lerna run dev --scope=mini-vdom --stream",
-    "build": "lerna run build",
+    "build:lp": "lerna run build",
+    "build": "sh scripts/build.sh",
     "lp": "lerna publish"
   },
   "devDependencies": {

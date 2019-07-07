@@ -24,7 +24,7 @@ body {
     .input-row {
         display: flex;
 
-        input {
+        input[type=text] {
             flex: 1;
             transition: 0.3s;
             padding: 0 6px;

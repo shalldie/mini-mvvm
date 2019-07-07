@@ -28,7 +28,12 @@ export default class Compile {
 var ${spFn} = function(args){
     var r = [];
     args.forEach(function(item){
+        if(!item) return;
+        
         if(Object.prototype.toString.call(item) === '[object Array]'){
+            item=item.filter(function(n){
+                return !!n;
+            });
             [].push.apply(r,item);
         }
         else{
@@ -60,20 +65,34 @@ with(this) {
 
     private eleAst2Render(ast: AST): string {
 
-        const attrs = JSON.stringify(ast.attrsMap)
+        const attrs = JSON.stringify(ast.attrs)
             .replace(/"\(|\)"/g, ''); // 处理  attr:"((value))"
+
+        const props = JSON.stringify(ast.props)
+            .replace(/"\(|\)"/g, ''); // 处理  prop:"((value))"
 
         const children = ast.children
             .map(n => this.ast2Render(n))
             .filter(n => n)
             .join(',\n'); // 这里用\n是为了调试时候美观 =。=
 
+        const events = Object.keys(ast.events).map(key => {
+            return '' +
+                `${key}:(function($event){
+                    ${ast.events[key].join(';')}
+                }).bind(this)`;
+        }).join(',');
+
         const keyStr = ast.key ? `key:${ast.key},` : '';
 
         const childTpl = () => {
-            return `h('${ast.tag}',{
+            const ifContent = ast.if ? `!${ast.if}?null:` : '';
+            return ifContent +
+                `h('${ast.tag}',{
                     ${keyStr}
-                    attrs: ${attrs}
+                    attrs: ${attrs},
+                    props:${props},
+                    on:{${events}}
                 },
                 ${spFn}([
                     ${children}
