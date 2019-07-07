@@ -1,41 +1,19 @@
 {
-  "name": "mvvm",
-  "version": "1.0.0",
-  "description": "A lib to achieve  mvvm.",
-  "main": "index.js",
-  "devDependencies": {
-    "@types/node": "^10.12.18",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "cross-env": "^5.2.0",
-    "css-loader": "^2.1.0",
-    "node-sass": "^4.11.0",
-    "open": "0.0.5",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "ts-loader": "^5.3.2",
-    "typescript": "^3.2.2",
-    "webpack": "^4.28.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.14"
-  },
+  "name": "root",
+  "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development node ./build/server.js",
-    "build": "cross-env NODE_ENV=production node ./build/build.js"
+    "clean": "lerna clean",
+    "i": "npm i --registry=https://registry.npm.taobao.org",
+    "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
+    "test:mini-mvvm": "lerna exec npm run test --scope=mini-mvvm",
+    "test": "npm run bootstrap && lerna exec npm run test",
+    "dev:mini-mvvm": "lerna run dev --scope=mini-mvvm --stream",
+    "dev:mini-vdom": "lerna run dev --scope=mini-vdom --stream",
+    "build:lp": "lerna run build",
+    "build": "sh scripts/build.sh",
+    "lp": "lerna publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shalldie/mvvm.git"
-  },
-  "keywords": [
-    "mvvm"
-  ],
-  "author": "shalldie",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shalldie/mvvm/issues"
-  },
-  "homepage": "https://github.com/shalldie/mvvm#readme"
+  "devDependencies": {
+    "lerna": "^3.15.0"
+  }
 }

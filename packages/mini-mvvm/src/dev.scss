@@ -1,0 +1,97 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#app {
+    width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.todo-list {
+    .title {
+        text-align: center;
+    }
+
+    .input-row {
+        display: flex;
+
+        input[type=text] {
+            flex: 1;
+            transition: 0.3s;
+            padding: 0 6px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+            height: 32px;
+            outline: none;
+            font-size: 15px;
+
+            &:focus {
+                border-color: transparent;
+                box-shadow: 0 0 6px 1px #4cae4c;
+                box-shadow: 0 0 6px 1px #2ad;
+            }
+        }
+    }
+
+    .tab-list {
+        margin-top: 20px;
+        display: flex;
+        border-bottom: 1px dashed #ddd;
+
+        .tab-item {
+            flex: 1;
+            cursor: pointer;
+            padding: 10px;
+            text-align: center;
+
+            &.active {
+                color: #2ad;
+            }
+
+            & + .tab-item {
+                border-left: 1px dashed #ddd;
+            }
+        }
+    }
+
+    .list-wrap {
+        margin: 0;
+        padding: 0;
+        li {
+            list-style-type: none;
+            display: flex;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px dashed #ddd;
+            cursor: pointer;
+
+            .content {
+                flex: 1;
+                padding-left: 20px;
+            }
+
+            &.done {
+                .content {
+                    text-decoration: line-through;
+                    color: #f00;
+                }
+            }
+
+            .del {
+                color: #2ad;
+                border-left: 1px dashed #ddd;
+                width: 60px;
+                text-align: center;
+            }
+        }
+    }
+}
