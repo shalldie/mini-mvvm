@@ -3,7 +3,7 @@
  * 导出 MVVM 的基类，把 fields 和 static methods 拆出来
  */
 
-import { h, VNode } from "mini-vdom";
+import { h, VNode, patch } from "mini-vdom";
 import EventEmitter from "../common/EventEmitter";
 import { nextTick } from "../common/utils";
 import Watcher, { TWatchDefine } from "../lib/Watcher";
@@ -148,5 +148,11 @@ export default abstract class BaseMVVM extends EventEmitter {
     public static nextTick = nextTick;
 
     public $nextTick = nextTick;
+
+    public static h = h;
+
+    public static VNode = VNode;
+
+    public static patch = patch;
 
 }

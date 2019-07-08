@@ -29,7 +29,7 @@ var ${spFn} = function(args){
     var r = [];
     args.forEach(function(item){
         if(!item) return;
-        
+
         if(Object.prototype.toString.call(item) === '[object Array]'){
             item=item.filter(function(n){
                 return !!n;
@@ -47,7 +47,9 @@ with(this) {
 }
         `;
 
-        console.log(renderStr);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(renderStr);
+        }
         return new Function('h', renderStr);
     }
 

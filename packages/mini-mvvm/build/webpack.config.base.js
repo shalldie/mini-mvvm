@@ -7,7 +7,7 @@ module.exports = {
         'mini-mvvm': path.join(
             __dirname,
             ifProduction() ?
-                '../src/index.ts' :
+                '../src/core/MVVM.ts' :
                 '../src/dev.ts'
         )
     },
