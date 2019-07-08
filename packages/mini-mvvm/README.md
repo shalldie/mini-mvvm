@@ -40,7 +40,7 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
 
 ## Demo
 
-[MVVM - 功能演示](https://shalldie.github.io/demos/mvvm/)
+[MVVM - 功能演示](https://shalldie.github.io/demos/mini-mvvm/)
 
 ## Development && Production
 
