@@ -88,7 +88,7 @@ with(this) {
         const keyStr = ast.key ? `key:${ast.key},` : '';
 
         const childTpl = () => {
-            const ifContent = ast.if ? `!${ast.if}?null:` : '';
+            const ifContent = ast.if ? `!(${ast.if})?null:` : '';
             return ifContent +
                 `h('${ast.tag}',{
                     ${keyStr}
