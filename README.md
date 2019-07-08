@@ -6,7 +6,7 @@ A lib to achieve mvvm.
 
 ## Demo
 
-[MVVM - 功能演示](https://shalldie.github.io/demos/mvvm/)
+[MVVM - 功能演示](https://shalldie.github.io/demos/mvvm-no-vm/)
 
 ## 开发&&生产
 
