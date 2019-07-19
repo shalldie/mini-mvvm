@@ -79,6 +79,14 @@ export default abstract class BaseMVVM extends EventEmitter {
     protected _data = {};
 
     /**
+     * 对 _data 的一个代理，当前的 data
+     * 唯一目的是对齐 vue 的 api 吧...
+     *
+     * @memberof BaseMVVM
+     */
+    public $data = {};
+
+    /**
      * 当前组件的 computed watchers
      *
      * @protected

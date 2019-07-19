@@ -76,6 +76,7 @@ export default class MVVM extends BaseMVVM {
             this._data = this.$options.data.call(this);
             new Observer(this._data);
             proxy(this._data, this);
+            proxy(this._data, this.$data);
         }
     }
 

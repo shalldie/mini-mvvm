@@ -6,11 +6,23 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
 
 基于 [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom) 的轻量级mvvm库 >\_<#@!
 
+适用于ui组件的构建依赖或小型项目，如果项目比较复杂，也许一个更加成熟的mvvm框架及其生态更适合你 🤠🤠
+
 ## Installation
 
     npm install mini-mvvm --save
 
 包含了 `.d.ts` 文件，用起来毫无阻塞 >\_<#@!
+
+## Live Example
+
+[MVVM - 功能演示](https://shalldie.github.io/demos/mini-mvvm/)
+
+## Development && Production
+
+    npm run dev:mini-mvvm 开发调试
+
+    npm run build 生产构建
 
 ## Ability
 
@@ -37,16 +49,6 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
     -   [x] `mounted` 组件被添加到dom，可以使用 `this.el` 获取根节点dom
     -   [x] `beforeUpdate` 组件将要更新
     -   [x] `updated` 组件更新完毕
-
-## Demo
-
-[MVVM - 功能演示](https://shalldie.github.io/demos/mini-mvvm/)
-
-## Development && Production
-
-    npm run dev:mini-mvvm 开发调试
-
-    npm run build 生产构建
 
 ## Example
 
