@@ -23,7 +23,7 @@ export default class Dep {
      * @returns
      * @memberof Dep
      */
-    public add(watcher: Watcher) {
+    public add(watcher: Watcher): void {
         if (~this.subs.indexOf(watcher)) {
             return;
         }
@@ -36,14 +36,14 @@ export default class Dep {
      * @param {Watcher} watcher
      * @memberof Dep
      */
-    public remove(watcher: Watcher) {
+    public remove(watcher: Watcher): void {
         const index = this.subs.indexOf(watcher);
         if (~index) {
             this.subs.splice(index, 1);
         }
     }
 
-    public clear() {
+    public clear(): void {
         this.subs = [];
     }
 
@@ -52,7 +52,7 @@ export default class Dep {
      *
      * @memberof Dep
      */
-    public depend() {
+    public depend(): void {
         const target = Dep.target;
         if (!target) {
             return;
@@ -66,7 +66,7 @@ export default class Dep {
      *
      * @memberof Dep
      */
-    public notify() {
+    public notify(): void {
         this.subs.forEach(n => n.update());
     }
 }

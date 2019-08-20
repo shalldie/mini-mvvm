@@ -32,8 +32,8 @@ export function getType(sender: any): string {
  * @param {Object} [data={}]
  * @param {(value: any, key: string) => void} fn
  */
-export function each(data: Object = {}, fn: (value: any, key: string) => void) {
-    for (let key in data) {
+export function each(data: Record<string, any> = {}, fn: (value: any, key: string) => void): void {
+    for (const key in data) {
         fn(data[key], key);
     }
 };
@@ -44,9 +44,10 @@ export function each(data: Object = {}, fn: (value: any, key: string) => void) {
  * @export
  * @returns {number}
  */
+// eslint-disable-next-line
 export const nextIndex = (function () {
     let baseIndex = 0x5942b;
-    return () => baseIndex++;
+    return (): number => baseIndex++;
 })();
 
 /**
@@ -69,10 +70,10 @@ export function toArray<T>(arrayLike: any): T[] {
  * @param {string} path
  * @returns
  */
-export function getValByPath(vm: MVVM, path: string) {
+export function getValByPath(vm: MVVM, path: string): any {
     const pathArr = path.split('.');
     let val: any = vm;
-    for (let key of pathArr) {
+    for (const key of pathArr) {
         val = val[key];
     }
     return val;

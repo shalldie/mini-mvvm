@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { h, patch, VNode } from './index';
 import './dev.scss';
 
@@ -49,8 +50,8 @@ const render = (() => {
                     on: {
                         keyup(ev) {
                             if (ev.keyCode === 13) {
-                                let target = ev.target as HTMLInputElement;
-                                let val = target.value.trim();
+                                const target = ev.target as HTMLInputElement;
+                                const val = target.value.trim();
                                 if (val.length) {
                                     todoList.push({
                                         content: val,
@@ -104,7 +105,7 @@ const render = (() => {
                     h('span.del', {
                         on: {
                             click() {
-                                let index = todoList.findIndex(n => n === item);
+                                const index = todoList.findIndex(n => n === item);
                                 todoList.splice(index, 1);
                                 renderView();
                             }

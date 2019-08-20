@@ -16,7 +16,7 @@ export interface IProps {
 export function updateProp(oldVnode: VNode, vnode: VNode): void {
     let oldProps = oldVnode.data.props;
     let props = vnode.data.props;
-    let elm = vnode.elm;
+    const elm = vnode.elm;
 
     // 两个vnode都不存在props
     if (!oldProps && !props) return;
@@ -27,14 +27,14 @@ export function updateProp(oldVnode: VNode, vnode: VNode): void {
     props = props || {};
 
     // 如果old有，cur没有
-    for (let key in oldProps) {
+    for (const key in oldProps) {
         if (!props[key]) {
             delete elm[key];
         }
     }
 
     // 检查更新
-    for (let key in props) {
+    for (const key in props) {
         if (props[key] !== oldProps[key]) {
             elm[key] = props[key];
         }

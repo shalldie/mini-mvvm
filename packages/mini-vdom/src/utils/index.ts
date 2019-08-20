@@ -19,11 +19,11 @@ export function getType(sender: any): string {
  * @export
  * @param {string} content
  * @param {RegExp} reg
- * @returns
+ * @returns {string[][]}
  */
-export function getMatchList(content: string, reg: RegExp) {
+export function getMatchList(content: string, reg: RegExp): string[][] {
     let m: RegExpExecArray;
-    let list: string[][] = [];
+    const list: string[][] = [];
     while (m = reg.exec(content)) {
         list.push([].slice.call(m));
     }

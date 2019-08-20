@@ -80,7 +80,7 @@ export default ELifeCycle;
  * @export
  * @param {MVVM} vm
  */
-export function defineLifeCycle(vm: MVVM) {
+export function defineLifeCycle(vm: MVVM): void {
     Object.keys(ELifeCycle).forEach(key => {
         const lifeMethod = vm.$options[key];
         if (!lifeMethod) return;

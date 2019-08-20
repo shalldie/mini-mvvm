@@ -1,4 +1,4 @@
-import { VNode, patch, h } from "mini-vdom";
+import { patch, h } from "mini-vdom";
 import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
 import Compile from "../lib/Compile";
 import Observer, { proxy } from "../lib/Observer";
@@ -22,7 +22,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _init() {
+    private _init(): void {
 
         // 注册生命周期钩子
         defineLifeCycle(this);
@@ -55,7 +55,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _compile() {
+    private _compile(): void {
         const { el, template } = this.$options;
         if (!this.$options.render && (template || el)) {
             this.$options.render = Compile.render(
@@ -71,7 +71,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _initData() {
+    private _initData(): void {
         if (this.$options.data) {
             this._data = this.$options.data.call(this);
             new Observer(this._data);
@@ -86,7 +86,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _initComputed() {
+    private _initComputed(): void {
         this._computedWatchers = defineComputed(this, this.$options.computed);
     }
 
@@ -96,7 +96,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _initMethods() {
+    private _initMethods(): void {
         Object.keys(this.$options.methods || {}).forEach(key => {
             this[key] = this.$options.methods[key].bind(this);
         });
@@ -108,7 +108,7 @@ export default class MVVM extends BaseMVVM {
      * @private
      * @memberof MVVM
      */
-    private _initWatch() {
+    private _initWatch(): void {
         defineWatch(this, this.$options.watch);
     }
 
@@ -117,8 +117,10 @@ export default class MVVM extends BaseMVVM {
      *
      * @memberof MVVM
      */
+    // eslint-disable-next-line
     public _update = (() => {
         let needUpdate = false;
+        // eslint-disable-next-line
         return () => {
             needUpdate = true;
             if (process.env.NODE_ENV !== 'production') {
@@ -186,7 +188,7 @@ export default class MVVM extends BaseMVVM {
      * @returns
      * @memberof MVVM
      */
-    public $mount(selector: string) {
+    public $mount(selector: string): this {
         this.$options.el = selector;
         this._update();
         return this;

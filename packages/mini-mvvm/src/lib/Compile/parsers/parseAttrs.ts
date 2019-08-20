@@ -9,13 +9,13 @@ import AST from "../AST";
  * @param {AST} ast
  * @returns
  */
-export default function parseAttrs(ast: AST) {
+export default function parseAttrs(ast: AST): void {
 
     // 要添加的属性，在 for in 之后再添加
     // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for...in#%E6%8F%8F%E8%BF%B0
     const dynamicAttrs: Record<string, string> = {};
 
-    for (let name in ast.attrs) {
+    for (const name in ast.attrs) {
         const val = ast.attrs[name];
 
         // 如果是 :attr="value" 这种动态 attribute

@@ -1,6 +1,6 @@
 import AST from '../AST';
 
-export default function parseIf(ast: AST) {
+export default function parseIf(ast: AST): void {
     const ifKey = 'm-if';
     const ifValue = ast.attrs[ifKey];
 

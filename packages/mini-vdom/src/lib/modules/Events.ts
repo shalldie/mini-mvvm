@@ -9,10 +9,10 @@ import VNode from "../VNode";
 export type IListener = {
     [key in keyof HTMLElementEventMap]?: (event: HTMLElementEventMap[key]) => void;
 } & {
-    [key: string]: EventListener
+    [key: string]: EventListener;
 };
 
-function updateEventListener(oldVnode: VNode, vnode: VNode) {
+function updateEventListener(oldVnode: VNode, vnode: VNode): void {
     // 旧的监听、元素
     const oldOn = oldVnode.data.on;
     const oldElm = oldVnode.elm;
@@ -28,13 +28,13 @@ function updateEventListener(oldVnode: VNode, vnode: VNode) {
 
     // 改变之后，就直接把旧的监听全部删掉
     if (oldOn) {
-        for (let event in oldOn) {
+        for (const event in oldOn) {
             oldElm.removeEventListener(event, oldOn[event]);
         }
     }
 
     if (on) {
-        for (let event in on) {
+        for (const event in on) {
             elm.addEventListener(event, on[event]);
         }
     }

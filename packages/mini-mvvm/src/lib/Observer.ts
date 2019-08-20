@@ -18,26 +18,26 @@ const hookArrayMethods: string[] = [
  * 把 source 上的所有key，代理到 target 上
  *
  * @export
- * @param {Object} source 要代理到数据源
- * @param {Object} target 代理的目标对象
+ * @param {Record<string, any>} source 要代理到数据源
+ * @param {Record<string, any>} target 代理的目标对象
  */
-export function proxy(source: Object, target: Object): void;
+export function proxy(source: Record<string, any>, target: Record<string, any>): void;
 
 /**
  * 对 Object.defineProperty 的简单封装
  *
  * @export
- * @param {Object} data 要观察的数据
+ * @param {Record<string, any>} data 要观察的数据
  * @param {string} key 要观察的key
  * @param {PropertyDescriptor} descriptor
  */
-export function proxy(data: Object, key: string, descriptor: PropertyDescriptor): void;
+export function proxy(data: Record<string, any>, key: string, descriptor: PropertyDescriptor): void;
 
-export function proxy(data: Object, targetOrkey: Object | string, descriptor?: PropertyDescriptor) {
+export function proxy(data: Record<string, any>, targetOrkey: Record<string, any> | string, descriptor?: PropertyDescriptor): void {
 
     if (getType(targetOrkey) === 'object') {
-        for (let key in data) {
-            proxy(targetOrkey as Object, key, {
+        for (const key in data) {
+            proxy(targetOrkey as Record<string, any>, key, {
                 get: () => data[key],
                 set: newVal => data[key] = newVal
             });
@@ -54,14 +54,14 @@ export function proxy(data: Object, targetOrkey: Object | string, descriptor?: P
 
 export default class Observer {
 
-    private data: Object;
+    private data: Record<string, any>;
 
-    constructor(data: Object) {
+    constructor(data: Record<string, any>) {
         this.data = data;
         this.observe();
     }
 
-    private observe() {
+    private observe(): void {
         Object.keys(this.data).forEach(key => {
             // 监听这个属性的变更
             this.defineReactive(key);
@@ -109,16 +109,17 @@ export default class Observer {
         this.appendArrayHooks(key);
     }
 
-    private appendArrayHooks(key: string) {
+    private appendArrayHooks(key: string): void {
         const item = this.data[key];
         if (getType(item) !== 'array') {
             return;
         }
 
-        for (let method of hookArrayMethods) {
+        for (const method of hookArrayMethods) {
             proxy(item, method, {
                 enumerable: false,
                 get: () => {
+                    // eslint-disable-next-line
                     return (...args: any[]) => {
                         // 得到结果，缓存下来在最后返回
                         const list = this.data[key].slice();

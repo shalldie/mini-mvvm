@@ -6,7 +6,7 @@ import { hooks, IModuleHook, TModuleHookFunc } from './hooks';
 
 const emptyVnode = new VNode('');
 
-function patchFactory(modules: IModuleHook[] = []) {
+function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode) => VNode {
 
     // modules 的所有的钩子
     const cbs: Record<keyof IModuleHook, TModuleHookFunc[]> = {
@@ -14,11 +14,11 @@ function patchFactory(modules: IModuleHook[] = []) {
     };
 
     // 把各个module的钩子注入进去
-    for (let item of modules) {
+    for (const item of modules) {
         hooks.forEach(hookKey => item[hookKey] && cbs[hookKey].push(item[hookKey]));
     }
 
-    function createElm(vnode: VNode) {
+    function createElm(vnode: VNode): Element {
         // 注释节点
         if (vnode.type === '!') {
             vnode.elm = document.createComment(vnode.text) as any as Element;
@@ -53,9 +53,9 @@ function patchFactory(modules: IModuleHook[] = []) {
         parentElm: Node,
         before: Node,
         vnodes: VNode[],
-        startIndex: number = 0,
-        endIndex: number = vnodes.length - 1
-    ) {
+        startIndex = 0,
+        endIndex = vnodes.length - 1
+    ): void {
         for (; startIndex <= endIndex; startIndex++) {
             const vnode = vnodes[startIndex];
             parentElm.insertBefore(
@@ -70,9 +70,9 @@ function patchFactory(modules: IModuleHook[] = []) {
     function removeVnodes(
         parentElm: Node,
         vnodes: VNode[],
-        startIndex: number = 0,
-        endIndex: number = vnodes.length - 1
-    ) {
+        startIndex = 0,
+        endIndex = vnodes.length - 1
+    ): void {
         for (; startIndex <= endIndex; startIndex++) {
             const vnode = vnodes[startIndex];
             parentElm && parentElm.removeChild(vnode.elm);
@@ -81,7 +81,7 @@ function patchFactory(modules: IModuleHook[] = []) {
         }
     }
 
-    function updateChildren(parentElm: Element, oldChildren: VNode[], children: VNode[]) {
+    function updateChildren(parentElm: Element, oldChildren: VNode[], children: VNode[]): void {
 
         // 方式一：
         // 如果想无脑点可以直接这样，不复用dom，直接把所有children都更新
@@ -100,7 +100,7 @@ function patchFactory(modules: IModuleHook[] = []) {
             // 当前vnode
             const vnode = children[i];
             // 可以被复用的vnode的索引
-            let oldVnodeIndex = oldMirror.findIndex(node => {
+            const oldVnodeIndex = oldMirror.findIndex(node => {
                 return node && VNode.isSameVNode(node, vnode);
             });
             // 如果有vnode可以复用
@@ -115,6 +115,7 @@ function patchFactory(modules: IModuleHook[] = []) {
                     parentElm.insertBefore(oldVnode.elm, parentElm.children[i + 1]);
                 }
                 // 比较数据,进行更新
+                // eslint-disable-next-line
                 patchVNode(oldVnode, vnode);
             }
             // 不能复用就创建新的
@@ -144,7 +145,7 @@ function patchFactory(modules: IModuleHook[] = []) {
      * @param {VNode} oldVnode 旧的vnode
      * @param {VNode} vnode 新的vnode
      */
-    function patchVNode(oldVnode: VNode, vnode: VNode) {
+    function patchVNode(oldVnode: VNode, vnode: VNode): void {
         // console.log('patch vnode');
         const elm = vnode.elm = oldVnode.elm;
         const oldChildren = oldVnode.children;

@@ -85,7 +85,7 @@ export default function h(type: string, b?: any, c?: any): VNode {
         data = data || {};
 
         // 1. 处理 id
-        let m = type.match(/#([^#\.\[\]]+)/);
+        const m = type.match(/#([^#\.\[\]]+)/);
         if (m) {
             data.props = data.props || {};
             data.props.id = m[1];

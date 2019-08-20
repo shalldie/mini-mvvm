@@ -2,7 +2,7 @@
  * 存放回调的字典
  */
 type Subscription = {
-    [key: string]: Array<{ type: ESubscribeType, listener: Function }>
+    [key: string]: Array<{ type: ESubscribeType; listener: Function }>;
 };
 
 /**
@@ -85,7 +85,7 @@ export default class EventEmitter {
 
         // 不缓存length是因为length会更改
         for (let i = 0; i < subscriptions.length; i++) {
-            let item = subscriptions[i];
+            const item = subscriptions[i];
             item.listener(...args);
 
             // 常规回调
@@ -100,6 +100,7 @@ export default class EventEmitter {
         }
     }
 
+    // eslint-disable-next-line
     public $listeners(event: string) {
         return this.subscription[event] || [];
     }

@@ -7,7 +7,7 @@ import AST from "../AST";
  * @param {AST} ast
  * @returns
  */
-export default function parseFor(ast: AST) {
+export default function parseFor(ast: AST): void {
 
     const forKey = 'm-for';
     const forValue = ast.attrs[forKey];

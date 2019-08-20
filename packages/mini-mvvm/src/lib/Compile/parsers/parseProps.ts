@@ -13,10 +13,10 @@ const PROP_KEYS = [
  * @export
  * @param {AST} ast
  */
-export default function parseProps(ast: AST) {
+export default function parseProps(ast: AST): void {
     ast.props = ast.props || {};
 
-    for (let key in ast.attrs) {
+    for (const key in ast.attrs) {
         if (!~PROP_KEYS.indexOf(key)) {
             continue;
         }

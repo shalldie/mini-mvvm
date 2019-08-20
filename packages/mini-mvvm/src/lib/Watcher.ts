@@ -12,9 +12,10 @@ import { getValByPath, nextTick } from "../common/utils";
  * @param {Record<string, Function>} [computed={}]
  * @returns
  */
-export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}) {
+export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}): Record<string, Watcher> {
     const computedWatchers: Record<string, Watcher> = {};
-    for (let key in computed) {
+    for (const key in computed) {
+        // eslint-disable-next-line
         const watcher = new Watcher(vm, computed[key], null, { lazy: true });
         proxy(vm, key, {
             get() {
@@ -58,13 +59,13 @@ export type TWatchDefine = TWatchFn | {
      *
      * @type {boolean}
      */
-    immediate?: boolean,
+    immediate?: boolean;
     /**
      * watch 处理函数
      *
      * @type {TWatchFn}
      */
-    handler: TWatchFn
+    handler: TWatchFn;
 };
 
 
@@ -75,8 +76,8 @@ export type TWatchDefine = TWatchFn | {
  * @param {MVVM} vm
  * @param {Record<string, TWatchDefine>} watch
  */
-export function defineWatch(vm: MVVM, watch: Record<string, TWatchDefine>) {
-
+export function defineWatch(vm: MVVM, watch: Record<string, TWatchDefine>): void {
+    /*eslint-disable*/
     vm.$watch = function (exp, callback, { immediate } = { immediate: false }) {
         vm._watchers.push(new Watcher(
             vm,
@@ -88,8 +89,9 @@ export function defineWatch(vm: MVVM, watch: Record<string, TWatchDefine>) {
             { immediate }
         ));
     };
+    /*eslint-enable*/
 
-    for (let exp in watch) {
+    for (const exp in watch) {
         const watchDef = watch[exp];
         if (typeof watchDef === 'function') {
             vm.$watch(
@@ -136,7 +138,7 @@ interface IWatcherOpotions {
 
 export default class Watcher implements IWatcherOpotions {
 
-    private invoked: boolean = false;
+    private invoked = false;
 
     public vm: MVVM;
 
@@ -171,13 +173,13 @@ export default class Watcher implements IWatcherOpotions {
         }
     }
 
-    public addDep(dep: Dep) {
+    public addDep(dep: Dep): void {
         if (!~this.deps.indexOf(dep)) {
             this.deps.push(dep);
         }
     }
 
-    public update() {
+    public update(): void {
         // lazy 表示是 computed，只有在用到的时候才去更新
         if (this.lazy) {
             this.dirty = true;
@@ -210,7 +212,7 @@ export default class Watcher implements IWatcherOpotions {
      *
      * @memberof Watcher
      */
-    public clear() {
+    public clear(): void {
         this.deps.forEach(dep => dep.remove(this));
         this.deps = [];
     }
@@ -220,7 +222,7 @@ export default class Watcher implements IWatcherOpotions {
      *
      * @memberof Watcher
      */
-    public get() {
+    public get(): void {
 
         this.clear();
         const oldVal = this.value;

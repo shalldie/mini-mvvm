@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import './dev.scss';
 import MVVM from './core/MVVM';
 import { h } from 'mini-vdom';
@@ -187,10 +188,10 @@ const vm = new MVVM({
         // 99 乘法表初始化
         init99() {
             // 构建99乘法表
-            var result = [];
-            for (var y = 1; y <= 9; y++) {
-                var list = [];
-                for (var x = 1; x <= 9; x++) {
+            const result = [];
+            for (let y = 1; y <= 9; y++) {
+                const list = [];
+                for (let x = 1; x <= 9; x++) {
                     if (x > y) list.push('');
                     else list.push(x + ' * ' + y + ' = ' + x * y);
                 }
@@ -222,7 +223,7 @@ const vm = new MVVM({
 
         // 删除一项
         deleteItem(item) {
-            var index = this.infos.indexOf(item);
+            const index = this.infos.indexOf(item);
             this.infos.splice(index, 1);
         },
 
@@ -235,11 +236,11 @@ const vm = new MVVM({
         // 从localstorage更新数据
         restore() {
             try {
-                var content = localStorage[CACHE_KEY];
+                const content = localStorage[CACHE_KEY];
                 if (!content.length) {
                     return;
                 }
-                var infos = JSON.parse(content);
+                const infos = JSON.parse(content);
                 this.infos = infos;
             } catch (ex) {
                 this.reset();
@@ -249,7 +250,7 @@ const vm = new MVVM({
     watch: {
         // 监听infos改变，存入localstorage
         infos() {
-            var content = JSON.stringify(this.infos);
+            const content = JSON.stringify(this.infos);
             localStorage[CACHE_KEY] = content;
         }
     }

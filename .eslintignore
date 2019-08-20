@@ -1,0 +1,6 @@
+node_modules
+dist
+build
+__tests__
+/scripts
+*.d.ts

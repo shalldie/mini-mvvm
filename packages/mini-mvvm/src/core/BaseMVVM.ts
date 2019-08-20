@@ -42,7 +42,7 @@ export interface IMvvmOptions extends ILifeCycle {
      *
      * @memberof IMvvmOptions
      */
-    data?: () => Object;
+    data?: () => Record<string, any>;
 
     /**
      * 计算属性

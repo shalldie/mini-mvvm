@@ -1,5 +1,3 @@
-import { h, VNode } from "mini-vdom";
-import { IMvvmOptions } from "../../core/BaseMVVM";
 import { ENodeType } from "../../common/enums";
 import AST, { parseElement2AST } from "./AST";
 
@@ -13,11 +11,11 @@ const spFn = '__spVnode__';
  */
 export default class Compile {
 
-    public static render(template: string) {
+    public static render(template: string): Function {
         return new Compile().render(template);
     }
 
-    public render(template: string) {
+    public render(template: string): Function {
         const wrap = document.createElement('div');
         wrap.innerHTML = template.trim();
 
@@ -87,7 +85,7 @@ with(this) {
 
         const keyStr = ast.key ? `key:${ast.key},` : '';
 
-        const childTpl = () => {
+        const childTpl = (): string => {
             const ifContent = ast.if ? `!(${ast.if})?null:` : '';
             return ifContent +
                 `h('${ast.tag}',{
@@ -115,7 +113,7 @@ with(this) {
         }
     }
 
-    private textAst2Render(ast: AST) {
+    private textAst2Render(ast: AST): string {
         // console.log(ast);
         const content = `'` + ast.text
             .replace(      // 先把文本中的 换行/多个连续空格 替换掉

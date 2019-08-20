@@ -17,7 +17,7 @@ export interface IAttrs {
 export function updateAttrs(oldVnode: VNode, vnode: VNode): void {
     let oldAttrs = oldVnode.data.attrs;
     let attrs = vnode.data.attrs;
-    let elm = vnode.elm;
+    const elm = vnode.elm;
 
     // 两个vnode都不存在 attrs
     if (!oldAttrs && !attrs) return;
@@ -28,9 +28,9 @@ export function updateAttrs(oldVnode: VNode, vnode: VNode): void {
     attrs = attrs || {};
 
     // 更新 attrs
-    for (let key in attrs) {
-        let cur = attrs[key];
-        let old = oldAttrs[key];
+    for (const key in attrs) {
+        const cur = attrs[key];
+        const old = oldAttrs[key];
         // 相同就跳过
         if (cur === old) continue;
         // 不同就更新
@@ -47,7 +47,7 @@ export function updateAttrs(oldVnode: VNode, vnode: VNode): void {
     }
 
     // 对于 oldAttrs 中有，而 attrs 没有的项，去掉
-    for (let key in oldAttrs) {
+    for (const key in oldAttrs) {
         if (!(key in attrs)) {
             elm.removeAttribute(key);
         }

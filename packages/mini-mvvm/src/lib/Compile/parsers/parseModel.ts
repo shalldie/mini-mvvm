@@ -7,7 +7,7 @@ import AST from "../AST";
  * @param {AST} ast
  * @returns
  */
-export default function parseModel(ast: AST) {
+export default function parseModel(ast: AST): void {
 
     const modelKey = 'm-model';
     const modelValue = ast.attrs[modelKey];
