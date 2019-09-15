@@ -62,7 +62,7 @@ typings/
 
 .DS_Store
 
-package-lock.json
+# package-lock.json
 
 # 只保留顶部的 dist
 /*/**/dist/
