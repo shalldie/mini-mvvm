@@ -1,4 +1,4 @@
-import AST from "../AST";
+import AST from '../AST';
 
 export default function parseEvents(ast: AST): void {
 

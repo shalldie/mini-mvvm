@@ -1,4 +1,4 @@
-import MVVM from "../core/MVVM";
+import MVVM from '../core/MVVM';
 
 export interface ILifeCycle {
 

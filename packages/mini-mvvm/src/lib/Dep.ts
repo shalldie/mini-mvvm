@@ -2,7 +2,7 @@
  * 搜集所有依赖
  */
 
-import Watcher from "./Watcher";
+import Watcher from './Watcher';
 
 let depId = 1;
 

@@ -1,4 +1,4 @@
-import AST from "../AST";
+import AST from '../AST';
 
 /**
  * 可以用 prop 来表示的 attribue

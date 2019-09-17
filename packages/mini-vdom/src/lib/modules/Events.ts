@@ -3,8 +3,8 @@
  * 处理绑定的所有事件
  */
 
-import { IModuleHook } from "../hooks";
-import VNode from "../VNode";
+import { IModuleHook } from '../hooks';
+import VNode from '../VNode';
 
 export type IListener = {
     [key in keyof HTMLElementEventMap]?: (event: HTMLElementEventMap[key]) => void;

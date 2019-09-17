@@ -1,4 +1,4 @@
-import AST from "../AST";
+import AST from '../AST';
 
 /**
  * 处理 m-model

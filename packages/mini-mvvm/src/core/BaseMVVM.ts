@@ -3,11 +3,11 @@
  * 导出 MVVM 的基类，把 fields 和 static methods 拆出来
  */
 
-import { h, VNode, patch } from "mini-vdom";
-import EventEmitter from "../common/EventEmitter";
-import { nextTick } from "../common/utils";
-import Watcher, { TWatchDefine } from "../lib/Watcher";
-import { ILifeCycle } from "../lib/ELifeCycle";
+import { h, VNode, patch } from 'mini-vdom';
+import EventEmitter from '../common/EventEmitter';
+import { nextTick } from '../common/utils';
+import Watcher, { TWatchDefine } from '../lib/Watcher';
+import { ILifeCycle } from '../lib/ELifeCycle';
 
 export interface IMvvmOptions extends ILifeCycle {
 

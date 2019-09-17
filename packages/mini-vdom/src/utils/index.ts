@@ -24,7 +24,7 @@ export function getType(sender: any): string {
 export function getMatchList(content: string, reg: RegExp): string[][] {
     let m: RegExpExecArray;
     const list: string[][] = [];
-    while (m = reg.exec(content)) {
+    while ((m = reg.exec(content))) {
         list.push([].slice.call(m));
     }
     return list;

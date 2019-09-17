@@ -1,7 +1,7 @@
-import Dep from "./Dep";
-import MVVM from "../core/MVVM";
-import { proxy } from "./Observer";
-import { getValByPath, nextTick } from "../common/utils";
+import Dep from './Dep';
+import MVVM from '../core/MVVM';
+import { proxy } from './Observer';
+import { getValByPath, nextTick } from '../common/utils';
 
 
 /**

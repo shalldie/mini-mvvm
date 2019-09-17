@@ -2,7 +2,7 @@
  * 用于生成 vnode 的工厂函数
  */
 
-import VNode, { IVNodeData } from "./VNode";
+import VNode, { IVNodeData } from './VNode';
 import { getType, getMatchList } from '../utils';
 
 
@@ -85,6 +85,7 @@ export default function h(type: string, b?: any, c?: any): VNode {
         data = data || {};
 
         // 1. 处理 id
+        // eslint-disable-next-line
         const m = type.match(/#([^#\.\[\]]+)/);
         if (m) {
             data.props = data.props || {};
@@ -92,6 +93,7 @@ export default function h(type: string, b?: any, c?: any): VNode {
         }
 
         // 2. 处理 class
+        // eslint-disable-next-line
         const classList = getMatchList(type, /\.([^#\.\[\]]+)/g).map(n => n[1]);
         if (classList.length) {
             data.attrs = data.attrs || {};

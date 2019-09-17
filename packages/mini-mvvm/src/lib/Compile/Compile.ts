@@ -1,5 +1,5 @@
-import { ENodeType } from "../../common/enums";
-import AST, { parseElement2AST } from "./AST";
+import { ENodeType } from '../../common/enums';
+import AST, { parseElement2AST } from './AST';
 
 const spFn = '__spVnode__';
 
@@ -79,8 +79,8 @@ with(this) {
         const events = Object.keys(ast.events).map(key => {
             return '' +
                 `${key}:(function($event){
-                    ${ast.events[key].join(';')}
-                }).bind(this)`;
+                        ${ast.events[key].join(';')}
+                    }).bind(this)`;
         }).join(',');
 
         const keyStr = ast.key ? `key:${ast.key},` : '';

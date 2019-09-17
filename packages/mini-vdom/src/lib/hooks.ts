@@ -1,4 +1,4 @@
-import VNode from "./VNode";
+import VNode from './VNode';
 
 export const hooks = [
     'create', 'insert', 'update', 'destroy', 'remove'

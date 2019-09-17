@@ -3,8 +3,8 @@
  * 用于处理 id、class、style、dataset、自定义属性等
  */
 
-import VNode from "../VNode";
-import { IModuleHook } from "../hooks";
+import VNode from '../VNode';
+import { IModuleHook } from '../hooks';
 
 /**
  * attribute 包装

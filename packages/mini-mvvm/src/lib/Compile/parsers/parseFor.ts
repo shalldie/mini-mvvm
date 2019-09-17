@@ -1,4 +1,4 @@
-import AST from "../AST";
+import AST from '../AST';
 
 /**
  * 处理 ast 上的 m-for

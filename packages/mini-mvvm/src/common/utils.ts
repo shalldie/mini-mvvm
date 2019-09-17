@@ -1,4 +1,4 @@
-import MVVM from "../core/MVVM";
+import MVVM from '../core/MVVM';
 
 /**
  * 工具库
@@ -36,7 +36,7 @@ export function each(data: Record<string, any> = {}, fn: (value: any, key: strin
     for (const key in data) {
         fn(data[key], key);
     }
-};
+}
 
 /**
  * 获取唯一 number key

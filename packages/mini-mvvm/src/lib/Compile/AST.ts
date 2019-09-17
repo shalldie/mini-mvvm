@@ -1,11 +1,11 @@
-import { ENodeType } from "../../common/enums";
-import { toArray } from "../../common/utils";
-import parseAttrs from "./parsers/parseAttrs";
-import parseFor from "./parsers/parseFor";
-import parseEvents from "./parsers/parseEvents";
-import parseModel from "./parsers/parseModel";
-import parseProps from "./parsers/parseProps";
-import parseIf from "./parsers/parseIf";
+import { ENodeType } from '../../common/enums';
+import { toArray } from '../../common/utils';
+import parseAttrs from './parsers/parseAttrs';
+import parseFor from './parsers/parseFor';
+import parseEvents from './parsers/parseEvents';
+import parseModel from './parsers/parseModel';
+import parseProps from './parsers/parseProps';
+import parseIf from './parsers/parseIf';
 
 /**
  * 抽象语法树，用来表述模板结构

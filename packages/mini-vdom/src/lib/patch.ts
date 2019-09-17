@@ -1,4 +1,4 @@
-import VNode from "./VNode";
+import VNode from './VNode';
 import attrsModule from './modules/Attrs';
 import propsModule from './modules/Props';
 import eventModule from './modules/Events';

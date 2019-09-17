@@ -1,11 +1,11 @@
-import { patch, h } from "mini-vdom";
+import { patch, h } from 'mini-vdom';
 import BaseMVVM, { IMvvmOptions } from './BaseMVVM';
-import Compile from "../lib/Compile";
-import Observer, { proxy } from "../lib/Observer";
-import Dep from "../lib/Dep";
-import Watcher, { defineComputed, defineWatch } from "../lib/Watcher";
-import { nextTick } from "../common/utils";
-import ELifeCycle, { defineLifeCycle } from "../lib/ELifeCycle";
+import Compile from '../lib/Compile';
+import Observer, { proxy } from '../lib/Observer';
+import Dep from '../lib/Dep';
+import Watcher, { defineComputed, defineWatch } from '../lib/Watcher';
+import { nextTick } from '../common/utils';
+import ELifeCycle, { defineLifeCycle } from '../lib/ELifeCycle';
 
 export default class MVVM extends BaseMVVM {
 

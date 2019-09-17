@@ -6,8 +6,8 @@
  * input.checked .disabled
  */
 
-import VNode from "../VNode";
-import { IModuleHook } from "../hooks";
+import VNode from '../VNode';
+import { IModuleHook } from '../hooks';
 
 export interface IProps {
     [key: string]: any;
