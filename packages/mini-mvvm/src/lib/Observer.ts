@@ -56,8 +56,12 @@ export default class Observer {
 
     private data: Record<string, any>;
 
-    constructor(data: Record<string, any>) {
-        this.data = data;
+    constructor(data: Record<string, any> | any[]) {
+        const dataType = getType(data);
+        if (!~['object', 'array'].indexOf(dataType)) {
+            return;
+        }
+        this.data = dataType === 'array' ? { a: data } : data;
         this.observe();
     }
 
@@ -115,6 +119,7 @@ export default class Observer {
             return;
         }
 
+        // 给数组的一些方法添加hook
         for (const method of hookArrayMethods) {
             proxy(item, method, {
                 enumerable: false,
@@ -132,6 +137,11 @@ export default class Observer {
                     };
                 }
             });
+        }
+
+        // 给数组中的每一项添加hook
+        for (const child of item) {
+            new Observer(child);
         }
     }
 
