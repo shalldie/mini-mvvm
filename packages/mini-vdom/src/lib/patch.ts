@@ -1,7 +1,7 @@
 import VNode from './VNode';
-import attrsModule from './modules/Attrs';
-import propsModule from './modules/Props';
-import eventModule from './modules/Events';
+import attrsModule from './modules/attrs';
+import propsModule from './modules/props';
+import eventModule from './modules/events';
 import { hooks, IModuleHook, TModuleHookFunc } from './hooks';
 
 const emptyVnode = new VNode('');
@@ -25,7 +25,9 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         }
         // 普通节点
         else if (vnode.type) {
-            vnode.elm = document.createElement(vnode.type);
+            vnode.elm = vnode.data.ns ?
+                document.createElementNS(vnode.data.ns, vnode.type)
+                : document.createElement(vnode.type);
 
             // 如果有children，递归
             vnode.children && vnode.children.forEach(child => {

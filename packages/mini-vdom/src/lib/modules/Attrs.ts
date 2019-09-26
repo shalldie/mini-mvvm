@@ -35,15 +35,7 @@ export function updateAttrs(oldVnode: VNode, vnode: VNode): void {
         if (cur === old) continue;
         // 不同就更新
         elm.setAttribute(key, cur + '');
-        // if (cur === true) {
-        //     elm.setAttribute(key, '');
-        // }
-        // else if (cur === false) {
-        //     elm.removeAttribute(key);
-        // }
-        // else {
-        //     elm.setAttribute(key, cur + '');
-        // }
+
     }
 
     // 对于 oldAttrs 中有，而 attrs 没有的项，去掉

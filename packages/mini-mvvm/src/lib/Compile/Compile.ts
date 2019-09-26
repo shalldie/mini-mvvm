@@ -66,10 +66,12 @@ with(this) {
     private eleAst2Render(ast: AST): string {
 
         const attrs = JSON.stringify(ast.attrs)
-            .replace(/"\(|\)"/g, ''); // 处理  attr:"((value))"
+            .replace(/"\(\(/g, '(')
+            .replace(/\)\)"/g, ')'); // 处理  attr:"((value))"
 
         const props = JSON.stringify(ast.props)
-            .replace(/"\(|\)"/g, ''); // 处理  prop:"((value))"
+            .replace(/"\(\(/g, '(')
+            .replace(/\)\)"/g, ')'); // 处理  prop:"((value))"
 
         const children = ast.children
             .map(n => this.ast2Render(n))

@@ -7,6 +7,22 @@ import { getType, getMatchList } from '../utils';
 
 
 /**
+ * 设置元素及其children为svg元素
+ *
+ * @param {VNode} vnode
+ * @returns {void}
+ */
+function setNS(vnode: VNode): void {
+    if (!vnode.type) {
+        return;
+    }
+    vnode.data.ns = 'http://www.w3.org/2000/svg';
+    if (vnode.children && vnode.children.length) {
+        vnode.children.forEach(n => setNS(n));
+    }
+}
+
+/**
  * 生成 VNode
  *
  * @export
@@ -122,5 +138,10 @@ export default function h(type: string, b?: any, c?: any): VNode {
 
     }
 
-    return new VNode(type, data, children, text);
+    const vnode = new VNode(type, data, children, text);
+    // 如果是svg元素，处理该元素及其子元素
+    if (vnode.type === 'svg') {
+        setNS(vnode);
+    }
+    return vnode;
 }

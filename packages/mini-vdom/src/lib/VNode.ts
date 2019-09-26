@@ -2,9 +2,9 @@
  * VNode 实现，虚拟dom节点
  */
 
-import { IProps } from './modules/Props';
-import { IAttrs } from './modules/Attrs';
-import { IListener } from './modules/Events';
+import { IProps } from './modules/props';
+import { IAttrs } from './modules/attrs';
+import { IListener } from './modules/events';
 
 interface IVnodeHook {
     create?: () => void;
@@ -24,6 +24,8 @@ export interface IVNodeData {
     on?: IListener;
 
     hook?: IVnodeHook;
+
+    ns?: string;
 }
 
 export default class VNode {
