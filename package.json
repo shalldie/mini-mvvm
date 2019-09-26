@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "clean": "lerna clean",
-    "i": "npm i --registry=https://registry.npm.taobao.org",
     "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
     "test:mini-vdom": "lerna exec npm run test --scope=mini-vdom",
     "test:mini-mvvm": "lerna exec npm run test --scope=mini-mvvm",
@@ -17,9 +16,10 @@
     "fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^2.0.0",
-    "eslint": "^6.2.0",
-    "lerna": "^3.15.0"
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
+    "eslint": "^6.4.0",
+    "lerna": "^3.15.0",
+    "typescript": "^3.6.3"
   }
 }

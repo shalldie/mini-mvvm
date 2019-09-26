@@ -5,7 +5,6 @@
   "version": "independent",
   "command": {
     "bootstrap": {
-      "hoist": true,
       "registry": "https://registry.npm.taobao.org"
     }
   }
