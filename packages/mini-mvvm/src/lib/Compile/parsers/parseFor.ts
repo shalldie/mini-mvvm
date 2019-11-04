@@ -19,7 +19,7 @@ export default function parseFor(ast: AST): void {
     // 这个正则支持两种匹配
     // 1. (item,index) in list
     // 2. item in list
-    const reg = /^(\(\s*(\S+?)\s*,\s*(\S+?)\s*\)|(\S+?))\s*in\s*(.+)$/;
+    const reg = /^(\(\s*(\S+?)\s*,\s*(\S+?)\s*\)|(\S+?))\s+in\s+(.+)$/;
     const match = forValue.match(reg);
 
     // for表达式有问题
