@@ -1,6 +1,6 @@
 {
   "name": "mini-vdom",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A mini virtual dom lib. 一个轻量级的虚拟dom库。",
   "keywords": [
     "virtual",
