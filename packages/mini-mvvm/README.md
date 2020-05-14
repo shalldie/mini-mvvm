@@ -46,7 +46,7 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
 -   [x] 生命周期
     -   [x] `created` 组件创建成功，可以使用 `this` 得到MVVM的实例
     -   [x] `beforeMount` 将要被插入dom
-    -   [x] `mounted` 组件被添加到dom，可以使用 `this.el` 获取根节点dom
+    -   [x] `mounted` 组件被添加到dom，可以使用 `this.$el` 获取根节点dom
     -   [x] `beforeUpdate` 组件将要更新
     -   [x] `updated` 组件更新完毕
 
@@ -77,7 +77,7 @@ new MVVM({
         // 使用api方式去watch
         this.$watch('key', (val, oldVal) => { }, { immediate: true });
     },
-    mounted() { }, // ...hook，可以使用 this.el
+    mounted() { }, // ...hook，可以使用 this.$el
     methods: {},  // ...方法
     watch: { // ...数据监听
         // 声明方式1：

@@ -8,7 +8,6 @@ import AST from '../AST';
  * @returns
  */
 export default function parseFor(ast: AST): void {
-
     const forKey = 'm-for';
     const forValue = ast.attrs[forKey];
 

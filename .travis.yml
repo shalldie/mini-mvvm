@@ -1,3 +1,9 @@
 language: node_js
 node_js:
  - '10.16.0'
+install:
+  - npm install
+  - npm run bootstrap
+script:
+  - npm run lint
+  - npm test

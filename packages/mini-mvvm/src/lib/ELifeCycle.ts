@@ -1,7 +1,6 @@
 import MVVM from '../core/MVVM';
 
 export interface ILifeCycle {
-
     /**
      * 组件创建成功
      *
@@ -36,7 +35,6 @@ export interface ILifeCycle {
      * @memberof ILifeCycle
      */
     updated?: () => void;
-
 }
 
 /**
@@ -45,7 +43,6 @@ export interface ILifeCycle {
  * @enum {number}
  */
 enum ELifeCycle {
-
     /**
      * 创建成功
      */

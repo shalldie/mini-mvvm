@@ -8,7 +8,6 @@ import { nextTick } from '../common/utils';
 import ELifeCycle, { defineLifeCycle } from '../lib/ELifeCycle';
 
 export default class MVVM extends BaseMVVM {
-
     constructor(options: IMvvmOptions = {}) {
         super();
         this.$options = options;
@@ -23,7 +22,6 @@ export default class MVVM extends BaseMVVM {
      * @memberof MVVM
      */
     private _init(): void {
-
         // 注册生命周期钩子
         defineLifeCycle(this);
 
@@ -56,12 +54,9 @@ export default class MVVM extends BaseMVVM {
      * @memberof MVVM
      */
     private _compile(): void {
-        const { el, template } = this.$options;
-        if (!this.$options.render && (template || el)) {
-            this.$options.render = Compile.render(
-                template
-                || document.querySelector(el).outerHTML
-            ) as any;
+        const { $el, template } = this.$options;
+        if (!this.$options.render && (template || $el)) {
+            this.$options.render = Compile.render(template || document.querySelector($el).outerHTML) as any;
         }
     }
 
@@ -131,20 +126,20 @@ export default class MVVM extends BaseMVVM {
                     return;
                 }
 
-                if (!this.$options.el) {
+                if (!this.$options.$el) {
                     return;
                 }
                 if (process.env.NODE_ENV !== 'production') {
                     console.log('执行更新');
                 }
                 let firstPatch = false;
-                if (!this.el) {
-                    this.el = document.querySelector(this.$options.el);
+                if (!this.$el) {
+                    this.$el = document.querySelector(this.$options.$el);
                     firstPatch = true;
                 }
 
                 // nextTickQueue(() => {
-                this.lastVnode = this.vnode || this.el;
+                this.lastVnode = this.vnode || this.$el;
 
                 this._watcher && this._watcher.clear();
                 Dep.target = this._watcher = new Watcher(this);
@@ -155,17 +150,13 @@ export default class MVVM extends BaseMVVM {
                 // 触发 beforeMount
                 if (firstPatch) {
                     this.$emit(ELifeCycle.beforeMount);
-                }
-                else {
+                } else {
                     this.$emit(ELifeCycle.beforeUpdate);
                 }
 
-                patch(
-                    this.lastVnode,
-                    this.vnode
-                );
+                patch(this.lastVnode, this.vnode);
 
-                this.el = this.vnode.elm as HTMLElement;
+                this.$el = this.vnode.elm as HTMLElement;
 
                 needUpdate = false;
 
@@ -173,8 +164,7 @@ export default class MVVM extends BaseMVVM {
                 // 触发 mounted
                 if (firstPatch) {
                     this.$emit(ELifeCycle.mounted);
-                }
-                else {
+                } else {
                     this.$emit(ELifeCycle.updated);
                 }
             });
@@ -189,7 +179,7 @@ export default class MVVM extends BaseMVVM {
      * @memberof MVVM
      */
     public $mount(selector: string): this {
-        this.$options.el = selector;
+        this.$options.$el = selector;
         this._update();
         return this;
     }

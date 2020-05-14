@@ -5,5 +5,7 @@ import VNode from './lib/VNode';
 export { h, patch, VNode };
 
 export default {
-    patch, h, VNode
+    patch,
+    h,
+    VNode
 };

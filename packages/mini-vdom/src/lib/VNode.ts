@@ -14,7 +14,6 @@ interface IVnodeHook {
 }
 
 export interface IVNodeData {
-
     key?: string;
 
     props?: IProps;
@@ -29,7 +28,6 @@ export interface IVNodeData {
 }
 
 export default class VNode {
-
     public key: string;
 
     public type: string;
@@ -42,13 +40,7 @@ export default class VNode {
 
     public elm?: Element;
 
-    constructor(
-        type: string,
-        data: IVNodeData = {},
-        children?: VNode[],
-        text?: string,
-        elm?: Element
-    ) {
+    constructor(type: string, data: IVNodeData = {}, children?: VNode[], text?: string, elm?: Element) {
         data.hook = data.hook || {}; // 初始化一下可以避免很多判断
 
         this.type = type;
@@ -83,7 +75,6 @@ export default class VNode {
      * @memberof VNode
      */
     public static isSameVNode(oldVnode: VNode, vnode: VNode): boolean {
-        return oldVnode.key === vnode.key
-            && oldVnode.type === vnode.type;
+        return oldVnode.key === vnode.key && oldVnode.type === vnode.type;
     }
 }

@@ -3,7 +3,6 @@ import MVVM from '../core/MVVM';
 import { proxy } from './Observer';
 import { getValByPath, nextTick } from '../common/utils';
 
-
 /**
  * 给 vm 添加 computed
  *
@@ -19,19 +18,16 @@ export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}
         const watcher = new Watcher(vm, computed[key], null, { lazy: true });
         proxy(vm, key, {
             get() {
-
                 // 如果是在 watcher 中引用 watcher，被引用的 watcher 会更改和清空 Dep.target
                 // 所以缓存一下，并且在之后更新
                 const wrapWatcher = Dep.target; // 外面的那层 watcher
 
-                const val = watcher.dirty ?
-                    // 如果需要更新，就重新计算并获取依赖
-                    watcher.get()
-                    :
-                    // 否则就从缓存拿
-                    watcher.value;
+                // 如果需要更新，就重新计算并获取依赖
+                // 否则就从缓存拿
+                const val = watcher.dirty ? watcher.get() : watcher.value;
 
-                if (wrapWatcher) { // 把 watcher 中的引用，传递给外部的 watcher
+                if (wrapWatcher) {
+                    // 把 watcher 中的引用，传递给外部的 watcher
                     Dep.target = wrapWatcher;
                     watcher.deps.forEach(dep => dep.depend());
                 }
@@ -53,21 +49,24 @@ export function defineComputed(vm: MVVM, computed: Record<string, Function> = {}
  */
 type TWatchFn = (val: any, oldVal: any) => void;
 
-export type TWatchDefine = TWatchFn | {
-    /**
-     * 是否立即执行
-     *
-     * @type {boolean}
-     */
-    immediate?: boolean;
-    /**
-     * watch 处理函数
-     *
-     * @type {TWatchFn}
-     */
-    handler: TWatchFn;
-};
-
+/* eslint-disable */
+export type TWatchDefine =
+    | TWatchFn
+    | {
+          /**
+           * 是否立即执行
+           *
+           * @type {boolean}
+           */
+          immediate?: boolean;
+          /**
+           * watch 处理函数
+           *
+           * @type {TWatchFn}
+           */
+          handler: TWatchFn;
+      };
+/* eslint-enable */
 
 /**
  * 给 vm 添加 $watch，并处理 $options.watch
@@ -79,38 +78,31 @@ export type TWatchDefine = TWatchFn | {
 export function defineWatch(vm: MVVM, watch: Record<string, TWatchDefine>): void {
     /*eslint-disable*/
     vm.$watch = function (exp, callback, { immediate } = { immediate: false }) {
-        vm._watchers.push(new Watcher(
-            vm,
-            // 这个是用来借助computed来搜集依赖用
-            () => getValByPath(vm, exp),
-            // 在依赖进行改变的时候，执行回掉
-            callback,
-            // 是否立即执行
-            { immediate }
-        ));
+        vm._watchers.push(
+            new Watcher(
+                vm,
+                // 这个是用来借助computed来搜集依赖用
+                () => getValByPath(vm, exp),
+                // 在依赖进行改变的时候，执行回掉
+                callback,
+                // 是否立即执行
+                { immediate }
+            )
+        );
     };
     /*eslint-enable*/
 
     for (const exp in watch) {
         const watchDef = watch[exp];
         if (typeof watchDef === 'function') {
-            vm.$watch(
-                exp,
-                watchDef as TWatchFn
-            );
-        }
-        else if (typeof watchDef === 'object') {
-            vm.$watch(
-                exp,
-                watchDef.handler,
-                { immediate: watchDef.immediate }
-            );
+            vm.$watch(exp, watchDef as TWatchFn);
+        } else if (typeof watchDef === 'object') {
+            vm.$watch(exp, watchDef.handler, { immediate: watchDef.immediate });
         }
     }
 }
 
 interface IWatcherOpotions {
-
     /**
      * 延迟计算，只有在用到的时候才去计算
      *
@@ -137,7 +129,6 @@ interface IWatcherOpotions {
 }
 
 export default class Watcher implements IWatcherOpotions {
-
     private invoked = false;
 
     public vm: MVVM;
@@ -223,7 +214,6 @@ export default class Watcher implements IWatcherOpotions {
      * @memberof Watcher
      */
     public get(): void {
-
         this.clear();
         const oldVal = this.value;
         Dep.target = this;
@@ -235,12 +225,10 @@ export default class Watcher implements IWatcherOpotions {
             if (this.cb && this.value !== oldVal && (this.immediate || this.invoked)) {
                 this.cb.call(this.vm, this.value, oldVal);
             }
-        }
-        catch (ex) {
+        } catch (ex) {
             console.log('watcher get error');
             throw ex;
-        }
-        finally {
+        } finally {
             Dep.target = null;
             this.dirty = false;
             this.invoked = true;

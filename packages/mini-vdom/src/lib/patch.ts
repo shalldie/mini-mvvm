@@ -7,10 +7,13 @@ import { hooks, IModuleHook, TModuleHookFunc } from './hooks';
 const emptyVnode = new VNode('');
 
 function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode) => VNode {
-
     // modules 的所有的钩子
     const cbs: Record<keyof IModuleHook, TModuleHookFunc[]> = {
-        create: [], insert: [], update: [], destroy: [], remove: []
+        create: [],
+        insert: [],
+        update: [],
+        destroy: [],
+        remove: []
     };
 
     // 把各个module的钩子注入进去
@@ -21,18 +24,19 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
     function createElm(vnode: VNode): Element {
         // 注释节点
         if (vnode.type === '!') {
-            vnode.elm = document.createComment(vnode.text) as any as Element;
+            vnode.elm = (document.createComment(vnode.text) as any) as Element;
         }
         // 普通节点
         else if (vnode.type) {
-            vnode.elm = vnode.data.ns ?
-                document.createElementNS(vnode.data.ns, vnode.type)
+            vnode.elm = vnode.data.ns
+                ? document.createElementNS(vnode.data.ns, vnode.type)
                 : document.createElement(vnode.type);
 
             // 如果有children，递归
-            vnode.children && vnode.children.forEach(child => {
-                vnode.elm.appendChild(createElm(child));
-            });
+            vnode.children &&
+                vnode.children.forEach(child => {
+                    vnode.elm.appendChild(createElm(child));
+                });
 
             // 如果只有innertext，这是个hook，可以让 h 在创建的时候更方便
             // 这个时候不应该有 children
@@ -42,7 +46,7 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         }
         // textNode
         else {
-            vnode.elm = document.createTextNode(vnode.text) as any as Element;
+            vnode.elm = (document.createTextNode(vnode.text) as any) as Element;
         }
 
         // create 钩子
@@ -60,21 +64,13 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
     ): void {
         for (; startIndex <= endIndex; startIndex++) {
             const vnode = vnodes[startIndex];
-            parentElm.insertBefore(
-                createElm(vnode),
-                before
-            );
+            parentElm.insertBefore(createElm(vnode), before);
             cbs.insert.forEach(hook => hook(emptyVnode, vnode));
             vnode.data.hook.insert && vnode.data.hook.insert();
         }
     }
 
-    function removeVnodes(
-        parentElm: Node,
-        vnodes: VNode[],
-        startIndex = 0,
-        endIndex = vnodes.length - 1
-    ): void {
+    function removeVnodes(parentElm: Node, vnodes: VNode[], startIndex = 0, endIndex = vnodes.length - 1): void {
         for (; startIndex <= endIndex; startIndex++) {
             const vnode = vnodes[startIndex];
             parentElm && parentElm.removeChild(vnode.elm);
@@ -84,7 +80,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
     }
 
     function updateChildren(parentElm: Element, oldChildren: VNode[], children: VNode[]): void {
-
         // 方式一：
         // 如果想无脑点可以直接这样，不复用dom，直接把所有children都更新
         // removeVnodes(parentElm, oldChildren);
@@ -97,7 +92,7 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // 有时候多次操作后的结果是元素没有移动，但还是会按照操作步骤来一遍
         // 如果先在内存中把所有的位置，移动等都计算好，然后再进行操作，效率会更高。
 
-        const oldMirror = oldChildren.slice();  // 用来表示哪些oldchildren被用过，位置信息等
+        const oldMirror = oldChildren.slice(); // 用来表示哪些oldchildren被用过，位置信息等
         for (let i = 0; i < children.length; i++) {
             // 当前vnode
             const vnode = children[i];
@@ -122,23 +117,14 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
             }
             // 不能复用就创建新的
             else {
-                addVnodes(
-                    parentElm,
-                    parentElm.children[i + 1],
-                    [vnode]
-                );
+                addVnodes(parentElm, parentElm.children[i + 1], [vnode]);
             }
-
         }
 
         // 删除oldchildren中未被复用的部分
         const rmVnodes = oldMirror.filter(n => !!n);
 
-        rmVnodes.length && removeVnodes(
-            parentElm,
-            rmVnodes
-        );
-
+        rmVnodes.length && removeVnodes(parentElm, rmVnodes);
     }
 
     /**
@@ -149,7 +135,7 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
      */
     function patchVNode(oldVnode: VNode, vnode: VNode): void {
         // console.log('patch vnode');
-        const elm = vnode.elm = oldVnode.elm;
+        const elm = (vnode.elm = oldVnode.elm);
         const oldChildren = oldVnode.children;
         const children = vnode.children;
 
@@ -183,7 +169,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         }
         // 只有旧的有children，则现在的是text节点
         else if (oldChildren) {
-
             // console.log('only old children');
             removeVnodes(elm, oldChildren);
             vnode.text && (elm.textContent = vnode.text);
@@ -206,7 +191,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
      * @returns {VNode}
      */
     function patch(oldVnode: any, vnode: VNode): VNode {
-
         // 如果是dom对象，即初始化的时候
         if (!VNode.isVNode(oldVnode)) {
             oldVnode = new VNode(
@@ -227,11 +211,7 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // 如果不是同一个vnode，把旧的删了创建新的
         else {
             const elm = oldVnode.elm as Element;
-            addVnodes(
-                elm.parentNode,
-                elm,
-                [vnode]
-            );
+            addVnodes(elm.parentNode, elm, [vnode]);
 
             removeVnodes(elm.parentNode, [oldVnode]);
 
@@ -245,6 +225,4 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
     return patch;
 }
 
-export default patchFactory([
-    attrsModule, propsModule, eventModule
-]);
+export default patchFactory([attrsModule, propsModule, eventModule]);

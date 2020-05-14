@@ -7,7 +7,6 @@ import Watcher from './Watcher';
 let depId = 1;
 
 export default class Dep {
-
     private subs: Watcher[] = [];
 
     public id: number = depId++;

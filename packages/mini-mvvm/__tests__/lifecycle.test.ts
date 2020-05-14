@@ -5,15 +5,13 @@
 import MVVM from '../src/core/MVVM';
 
 describe('life cycle', () => {
-
     beforeEach(() => {
         document.body.innerHTML = '<div id="app"></div>';
     });
 
     test('created、mounted、beforeUpdate、updated', () => {
-
         const vm = new MVVM({
-            el: '#app',
+            $el: '#app',
             template: `
             <div id="app">
                 {{ name }}
@@ -24,18 +22,18 @@ describe('life cycle', () => {
                 };
             },
             created() {
-                expect(this.el).toBeUndefined();
+                expect(this.$el).toBeUndefined();
             },
             mounted() {
-                expect(!!this.el).toBeTruthy();
-                // console.log(this.el);
-                expect(this.el.parentNode).toBe(document.body);
+                expect(!!this.$el).toBeTruthy();
+                // console.log(this.$el);
+                expect(this.$el.parentNode).toBe(document.body);
             },
             beforeUpdate() {
-                expect(this.el.textContent.trim()).toBe('tom');
+                expect(this.$el.textContent.trim()).toBe('tom');
             },
             updated() {
-                expect(this.el.textContent.trim()).toBe('lily');
+                expect(this.$el.textContent.trim()).toBe('lily');
             }
         });
 
@@ -46,7 +44,5 @@ describe('life cycle', () => {
                 MVVM.nextTick(resolve);
             });
         });
-
     });
-
 });

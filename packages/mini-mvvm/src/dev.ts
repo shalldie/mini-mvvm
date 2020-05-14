@@ -1,12 +1,12 @@
 /*eslint-disable*/
 import './dev.scss';
 import MVVM from './core/MVVM';
-import { h } from 'mini-vdom';
+// import { h } from 'mini-vdom';
 
 const CACHE_KEY = '__mini-mvvm_cache_key__';
 
 const vm = new MVVM({
-    el: '#app',
+    $el: '#app',
     template: `
     <div id="root">
         <h2>

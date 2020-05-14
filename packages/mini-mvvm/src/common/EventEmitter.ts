@@ -28,7 +28,6 @@ enum ESubscribeType {
  * @class EventEmitter
  */
 export default class EventEmitter {
-
     private subscription: Subscription = {};
 
     /**
@@ -115,5 +114,4 @@ export default class EventEmitter {
     public get $events(): string[] {
         return Object.keys(this.subscription);
     }
-
 }

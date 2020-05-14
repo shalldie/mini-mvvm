@@ -5,7 +5,6 @@
  * @enum {number}
  */
 export enum ENodeType {
-
     /**
      * 元素节点
      */

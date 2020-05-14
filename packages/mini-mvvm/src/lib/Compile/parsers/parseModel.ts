@@ -8,7 +8,6 @@ import AST from '../AST';
  * @returns
  */
 export default function parseModel(ast: AST): void {
-
     const modelKey = 'm-model';
     const modelValue = ast.attrs[modelKey];
 

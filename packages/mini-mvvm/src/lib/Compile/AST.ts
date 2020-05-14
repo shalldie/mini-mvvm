@@ -14,7 +14,6 @@ import parseIf from './parsers/parseIf';
  * @class AST
  */
 export default class AST {
-
     //#region 基础字段
 
     /**
@@ -94,7 +93,6 @@ export default class AST {
     if?: string;
 
     //#endregion
-
 }
 
 /**
@@ -120,7 +118,9 @@ export function parseElement2AST(el: Element): AST {
             map[cur.name] = cur.value;
             return map;
         }, {});
-        const children = toArray<Element>(el.childNodes).map(parseElement2AST).filter(n => n);
+        const children = toArray<Element>(el.childNodes)
+            .map(parseElement2AST)
+            .filter(n => n);
 
         const ast: AST = {
             tag: el.tagName.toLowerCase(),

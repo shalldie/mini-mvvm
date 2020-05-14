@@ -4,15 +4,7 @@ import Dep from './Dep';
 /**
  * 需要重写的方法，用于观察数组
  */
-const hookArrayMethods: string[] = [
-    'push',
-    'pop',
-    'shift',
-    'unshift',
-    'splice',
-    'sort',
-    'reverse'
-];
+const hookArrayMethods: string[] = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'];
 
 /**
  * 把 source 上的所有key，代理到 target 上
@@ -33,13 +25,16 @@ export function proxy(source: Record<string, any>, target: Record<string, any>):
  */
 export function proxy(data: Record<string, any>, key: string, descriptor: PropertyDescriptor): void;
 
-export function proxy(data: Record<string, any>, targetOrkey: Record<string, any> | string, descriptor?: PropertyDescriptor): void {
-
+export function proxy(
+    data: Record<string, any>,
+    targetOrkey: Record<string, any> | string,
+    descriptor?: PropertyDescriptor
+): void {
     if (getType(targetOrkey) === 'object') {
         for (const key in data) {
             proxy(targetOrkey as Record<string, any>, key, {
                 get: () => data[key],
-                set: newVal => data[key] = newVal
+                set: newVal => (data[key] = newVal)
             });
         }
         return;
@@ -53,7 +48,6 @@ export function proxy(data: Record<string, any>, targetOrkey: Record<string, any
 }
 
 export default class Observer {
-
     private data: Record<string, any>;
 
     constructor(data: Record<string, any> | any[]) {
@@ -72,12 +66,10 @@ export default class Observer {
 
             // 递归
             getType(this.data[key]) === 'object' && new Observer(this.data[key]);
-
         });
     }
 
     private defineReactive(key: string): void {
-
         const dep = new Dep();
         dep.key = key;
         let val = this.data[key];
@@ -144,5 +136,4 @@ export default class Observer {
             new Observer(child);
         }
     }
-
 }

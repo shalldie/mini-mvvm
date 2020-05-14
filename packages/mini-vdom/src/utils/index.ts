@@ -10,7 +10,10 @@
  * @returns {string}
  */
 export function getType(sender: any): string {
-    return Object.prototype.toString.call(sender).toLowerCase().match(/\s(\S+?)\]/)[1];
+    return Object.prototype.toString
+        .call(sender)
+        .toLowerCase()
+        .match(/\s(\S+?)\]/)[1];
 }
 
 /**

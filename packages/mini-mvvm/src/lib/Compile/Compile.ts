@@ -10,7 +10,6 @@ const spFn = '__spVnode__';
  * @class Compile
  */
 export default class Compile {
-
     public static render(template: string): Function {
         return new Compile().render(template);
     }
@@ -64,32 +63,32 @@ with(this) {
     }
 
     private eleAst2Render(ast: AST): string {
+        const attrs = JSON.stringify(ast.attrs).replace(/"\(\(/g, '(').replace(/\)\)"/g, ')'); // 处理  attr:"((value))"
 
-        const attrs = JSON.stringify(ast.attrs)
-            .replace(/"\(\(/g, '(')
-            .replace(/\)\)"/g, ')'); // 处理  attr:"((value))"
-
-        const props = JSON.stringify(ast.props)
-            .replace(/"\(\(/g, '(')
-            .replace(/\)\)"/g, ')'); // 处理  prop:"((value))"
+        const props = JSON.stringify(ast.props).replace(/"\(\(/g, '(').replace(/\)\)"/g, ')'); // 处理  prop:"((value))"
 
         const children = ast.children
             .map(n => this.ast2Render(n))
             .filter(n => n)
             .join(',\n'); // 这里用\n是为了调试时候美观 =。=
 
-        const events = Object.keys(ast.events).map(key => {
-            return '' +
-                `${key}:(function($event){
+        const events = Object.keys(ast.events)
+            .map(key => {
+                return (
+                    '' +
+                    `${key}:(function($event){
                         ${ast.events[key].join(';')}
-                    }).bind(this)`;
-        }).join(',');
+                    }).bind(this)`
+                );
+            })
+            .join(',');
 
         const keyStr = ast.key ? `key:${ast.key},` : '';
 
         const childTpl = (): string => {
             const ifContent = ast.if ? `!(${ast.if})?null:` : '';
-            return ifContent +
+            return (
+                ifContent +
                 `h('${ast.tag}',{
                     ${keyStr}
                     attrs: ${attrs},
@@ -99,38 +98,42 @@ with(this) {
                 ${spFn}([
                     ${children}
                 ])
-            )`;
+            )`
+            );
         };
 
         if (!ast.for) {
             return childTpl();
-        }
-        else {
+        } else {
             const forIndex = ast.forIndex ? `,${ast.forIndex}` : '';
-            return '' +
+            return (
+                '' +
                 `${ast.for}.map(function (${ast.forItem}${forIndex}) {
                     return ${childTpl()}
                 })
-            `;
+            `
+            );
         }
     }
 
     private textAst2Render(ast: AST): string {
         // console.log(ast);
-        const content = `'` + ast.text
-            .replace(      // 先把文本中的 换行/多个连续空格 替换掉
-                /[\r\n\s]+/g,
-                ' '
-            )
-            .replace(
-                /'/g, `\\'`
-            )
-            .replace(      // 再处理依赖 {{ field }}
-                /\{\{(.*?)\}\}/g,
-                `' + ($1) + '`
-            ) + `'`;
+        const content =
+            `'` +
+            ast.text
+                .replace(
+                    // 先把文本中的 换行/多个连续空格 替换掉
+                    /[\r\n\s]+/g,
+                    ' '
+                )
+                .replace(/'/g, `\\'`)
+                .replace(
+                    // 再处理依赖 {{ field }}
+                    /\{\{(.*?)\}\}/g,
+                    `' + ($1) + '`
+                ) +
+            `'`;
 
         return `h('', ${content})`;
     }
-
 }

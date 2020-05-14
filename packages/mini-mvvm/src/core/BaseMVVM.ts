@@ -10,7 +10,6 @@ import Watcher, { TWatchDefine } from '../lib/Watcher';
 import { ILifeCycle } from '../lib/ELifeCycle';
 
 export interface IMvvmOptions extends ILifeCycle {
-
     /**
      * 模板的选择器
      * el 用来从dom获取template，vm实例会挂载到这里
@@ -18,7 +17,7 @@ export interface IMvvmOptions extends ILifeCycle {
      * @type {string}
      * @memberof IMvvmOptions
      */
-    el?: string;
+    $el?: string;
 
     /**
      * 模板
@@ -69,7 +68,6 @@ export interface IMvvmOptions extends ILifeCycle {
 }
 
 export default abstract class BaseMVVM extends EventEmitter {
-
     /**
      * 当前 data
      *
@@ -151,7 +149,7 @@ export default abstract class BaseMVVM extends EventEmitter {
      * @type {HTMLElement}
      * @memberof BaseMVVM
      */
-    public el: HTMLElement;
+    public $el: HTMLElement;
 
     public static nextTick = nextTick;
 
@@ -162,5 +160,4 @@ export default abstract class BaseMVVM extends EventEmitter {
     public static VNode = VNode;
 
     public static patch = patch;
-
 }

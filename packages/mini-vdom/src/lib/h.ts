@@ -5,7 +5,6 @@
 import VNode, { IVNodeData } from './VNode';
 import { getType, getMatchList } from '../utils';
 
-
 /**
  * 设置元素及其children为svg元素
  *
@@ -77,15 +76,12 @@ export default function h(type: string, b?: any, c?: any): VNode {
         data = b;
         if (cType === 'array') {
             children = c;
-        }
-        else if (cType === 'string') {
+        } else if (cType === 'string') {
             text = c;
         }
-    }
-    else if (bType === 'array') {
+    } else if (bType === 'array') {
         children = b;
-    }
-    else if (bType === 'string') {
+    } else if (bType === 'string') {
         text = b;
     }
 
@@ -97,7 +93,6 @@ export default function h(type: string, b?: any, c?: any): VNode {
 
     // 对于 div#id.class[attr='xxx'] 的形式
     if (type.length) {
-
         data = data || {};
 
         // 1. 处理 id
@@ -114,15 +109,10 @@ export default function h(type: string, b?: any, c?: any): VNode {
         if (classList.length) {
             data.attrs = data.attrs || {};
             if (data.attrs['class']) {
-                classList.push(
-                    ...(data.attrs['class'] as string)
-                        .split(' ')
-                        .filter(n => n && n.length)
-                );
+                classList.push(...(data.attrs['class'] as string).split(' ').filter(n => n && n.length));
             }
             data.attrs.class = classList.join(' ');
         }
-
 
         // 3. 处理 attrs
         const attrsList = getMatchList(type, /\[(\S+?)=(\S+?)\]/g);
@@ -134,8 +124,10 @@ export default function h(type: string, b?: any, c?: any): VNode {
             });
         }
 
-        type = type.replace(/(#|\.|\[)\S*/g, '').toLowerCase().trim();
-
+        type = type
+            .replace(/(#|\.|\[)\S*/g, '')
+            .toLowerCase()
+            .trim();
     }
 
     const vnode = new VNode(type, data, children, text);
