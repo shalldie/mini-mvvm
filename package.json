@@ -2,8 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "clean": "lerna clean",
-    "bootstrap": "lerna add mini-vdom --scope=mini-mvvm && lerna bootstrap",
+    "clean": "lerna clean --yes",
+    "bootstrap": "lerna bootstrap",
     "test:mini-vdom": "lerna exec npm run test --scope=mini-vdom",
     "test:mini-mvvm": "lerna exec npm run test --scope=mini-mvvm",
     "test": "lerna exec npm run test",
@@ -16,14 +16,10 @@
     "fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-prettier": "^3.1.3",
+    "@nosaid/eslint-config-for-typescript": "0.0.6",
+    "@nosaid/jest": "0.0.3",
     "husky": "^4.2.5",
     "lerna": "^3.21.0",
-    "prettier": "^2.0.5",
     "typescript": "^3.9.2"
   }
 }
