@@ -87,44 +87,187 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // return;
 
         // 方式二：
-        // 当前算法是，顺序依次找到可复用的元素
+        // 顺序依次找到可复用的元素
         // 对于大批量列表，从 上、中 部进行 添加、删除 操作效率上稍微不太友好，并不是最佳方式
         // 有时候多次操作后的结果是元素没有移动，但还是会按照操作步骤来一遍
         // 如果先在内存中把所有的位置，移动等都计算好，然后再进行操作，效率会更高。
 
-        const oldMirror = oldChildren.slice(); // 用来表示哪些oldchildren被用过，位置信息等
-        for (let i = 0; i < children.length; i++) {
-            // 当前vnode
-            const vnode = children[i];
-            // 可以被复用的vnode的索引
-            const oldVnodeIndex = oldMirror.findIndex(node => {
-                return node && VNode.isSameVNode(node, vnode);
-            });
-            // 如果有vnode可以复用
-            if (~oldVnodeIndex) {
-                // console.log(oldVnodeIndex);
-                const oldVnode = oldMirror[oldVnodeIndex];
+        // const oldMirror = oldChildren.slice(); // 用来表示哪些oldchildren被用过，位置信息等
+        // for (let i = 0; i < children.length; i++) {
+        //     // 当前vnode
+        //     const vnode = children[i];
+        //     // 可以被复用的vnode的索引
+        //     const oldVnodeIndex = oldMirror.findIndex(node => {
+        //         return node && VNode.isSameVNode(node, vnode);
+        //     });
+        //     // 如果有vnode可以复用
+        //     if (~oldVnodeIndex) {
+        //         // console.log(oldVnodeIndex);
+        //         const oldVnode = oldMirror[oldVnodeIndex];
 
-                // 把之前的置空，表示已经用过。之后仍然存留的要被删除
-                oldMirror[oldVnodeIndex] = undefined;
-                // 调整顺序（如果旧的索引对不上新索引）
-                if (oldVnodeIndex !== i) {
-                    parentElm.insertBefore(oldVnode.elm, parentElm.children[i + 1]);
-                }
-                // 比较数据,进行更新
-                // eslint-disable-next-line
-                patchVNode(oldVnode, vnode);
-            }
-            // 不能复用就创建新的
-            else {
-                addVnodes(parentElm, parentElm.children[i + 1], [vnode]);
+        //         // 把之前的置空，表示已经用过。之后仍然存留的要被删除
+        //         oldMirror[oldVnodeIndex] = undefined;
+        //         // 调整顺序（如果旧的索引对不上新索引）
+        //         if (oldVnodeIndex !== i) {
+        //             parentElm.insertBefore(oldVnode.elm, parentElm.childNodes[i + 1]);
+        //         }
+        //         // 比较数据,进行更新
+        //         // eslint-disable-next-line
+        //         patchVNode(oldVnode, vnode);
+        //     }
+        //     // 不能复用就创建新的
+        //     else {
+        //         addVnodes(parentElm, parentElm.childNodes[i + 1], [vnode]);
+        //     }
+        // }
+
+        // // 删除oldchildren中未被复用的部分
+        // const rmVnodes = oldMirror.filter(n => !!n);
+
+        // rmVnodes.length && removeVnodes(parentElm, rmVnodes);
+
+        // 方式三：
+        // 类 snabbdom 的 diff 算法
+
+        // debugger;
+
+        let oldStartIndex = 0;
+        let oldStartVNode = oldChildren[oldStartIndex];
+        let oldEndIndex = oldChildren.length - 1;
+        let oldEndVNode = oldChildren[oldEndIndex];
+
+        let newStartIndex = 0;
+        let newStartVNode = children[newStartIndex];
+        let newEndIndex = children.length - 1;
+        let newEndVNode = children[newEndIndex];
+
+        // if (parentElm.classList.contains('page-item')) {
+        //     debugger;
+        // }
+
+        while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+            // console.log(oldStartVNode, newStartVNode);
+            switch (true) {
+                // 1. 先校验2个 old start/end vnode 是否为空，当为`undefined`的时候，表示被其它地方复用了
+                // 对 new start/end vnode 也做处理，是因为可能移动后根本没子节点
+                case !oldStartVNode:
+                    oldStartVNode = oldChildren[++oldStartIndex];
+                    break;
+                case !oldEndVNode:
+                    oldEndVNode = oldChildren[--oldEndIndex];
+                    break;
+                case !newStartVNode:
+                    newStartVNode = children[++newStartIndex];
+                    break;
+                case !newEndVNode:
+                    newEndVNode = oldChildren[--newEndIndex];
+                    break;
+
+                // 2. 首首、尾尾 对比， 适用于 普通的 插入、删除 节点
+                // 首首比较
+                case VNode.isSameVNode(oldStartVNode, newStartVNode):
+                    patchVNode(oldStartVNode, newStartVNode);
+                    oldStartVNode = oldChildren[++oldStartIndex];
+                    newStartVNode = children[++newStartIndex];
+                    break;
+
+                // 尾尾比较
+                case VNode.isSameVNode(oldEndVNode, newEndVNode):
+                    patchVNode(oldEndVNode, newEndVNode);
+                    oldEndVNode = oldChildren[--oldEndIndex];
+                    newEndVNode = children[--newEndIndex];
+                    break;
+
+                // 3. 旧尾=》新头，旧头=》新尾， 适用于移动了某个节点的情况
+                // 旧尾=》新头，把节点左移
+                //    [1, 2, 3]
+                // [3, 1, 2]
+                case VNode.isSameVNode(oldEndVNode, newStartVNode):
+                    parentElm.insertBefore(oldEndVNode.elm, parentElm.childNodes[newStartIndex]);
+                    patchVNode(oldEndVNode, newStartVNode);
+                    oldEndVNode = oldChildren[--oldEndIndex];
+                    newStartVNode = children[++newStartIndex];
+                    break;
+
+                // 旧头=》新尾，把节点右移
+                // [1, 2, 3]
+                //    [2, 3, 1]
+                case VNode.isSameVNode(oldStartVNode, newEndVNode):
+                    parentElm.insertBefore(oldEndVNode.elm, oldEndVNode.elm.nextSibling);
+                    patchVNode(oldStartVNode, newEndVNode);
+                    oldStartVNode = oldChildren[++oldStartIndex];
+                    newEndVNode = children[--newEndIndex];
+                    break;
+
+                // 4. 交叉比较
+                // 不属于数组常规操作，比如这种情况：
+                // old: [1,    2, 3,    4]
+                // new: [1, 5, 2, 3, 6, 4]
+                // 当然理想的状态下，是 5跟6 重新生成，其它的直接复用
+                // 这个时候 5 会复用 2，2 会复用 3，6 会重新生成。
+                // 只处理 newStartVNode
+                default:
+                    // 可以被复用的vnode的索引
+                    const oldVnodeIndex = oldChildren.findIndex((node, index) => {
+                        return (
+                            // 索引在 oldStartIndex ~ oldEndIndex
+                            // 之前没有被复用过
+                            //  并且可以被复用
+                            index >= oldStartIndex &&
+                            index <= oldEndIndex &&
+                            node &&
+                            VNode.isSameVNode(node, newStartVNode)
+                        );
+                    });
+                    // 如果有vnode可以复用
+                    if (~oldVnodeIndex) {
+                        const oldVnode = oldChildren[oldVnodeIndex];
+
+                        // 把之前的置空，表示已经用过。之后仍然存留的要被删除
+                        oldChildren[oldVnodeIndex] = undefined;
+                        // 调整顺序（如果旧的索引对不上新索引）
+                        if (oldVnodeIndex !== newStartIndex) {
+                            parentElm.insertBefore(oldVnode.elm, parentElm.childNodes[newStartIndex]);
+                        }
+                        // 比较数据,进行更新
+                        patchVNode(oldVnode, newStartVNode);
+                    }
+                    // 不能复用就创建新的
+                    // old: [1,    2, 3,    4]
+                    // new: [1, 5, 2, 3, 6, 4]
+                    else {
+                        // if (parentElm.classList.contains('page-item')) {
+                        //     debugger;
+                        // }
+                        addVnodes(parentElm, parentElm.childNodes[newStartIndex], [newStartVNode]);
+                    }
+
+                    // 新头 向右移动一位
+                    newStartVNode = children[++newStartIndex];
+                    break;
             }
         }
 
-        // 删除oldchildren中未被复用的部分
-        const rmVnodes = oldMirror.filter(n => !!n);
+        // 如果循环完毕，还有 oldStartIndex ～ oldEndIndex || newStartIndex ～ newEndIndex 之间还有空余，
+        // 表示有旧节点未被删除干净，或者新节点没有完全添加完毕
 
-        rmVnodes.length && removeVnodes(parentElm, rmVnodes);
+        // 旧的 vnodes 遍历完，新的没有
+        // 表示有新的没有添加完毕
+        if (oldStartIndex > oldEndIndex && newStartIndex <= newEndIndex) {
+            // addVnodes(parentElm, newEndVNode.elm.nextSibling, children.slice(newStartIndex, newEndIndex));
+
+            addVnodes(parentElm, children[newEndIndex + 1]?.elm, children.slice(newStartIndex, newEndIndex + 1));
+            // addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
+        }
+        // 新的 vnodes 遍历完，旧的没有
+        // 表示有旧的没有删除干净
+        else if (oldStartIndex <= oldEndIndex && newStartIndex > newEndIndex) {
+            // debugger;
+            removeVnodes(
+                parentElm,
+                oldChildren.slice(oldStartIndex, oldEndIndex + 1).filter(n => !!n)
+            );
+        }
     }
 
     /**

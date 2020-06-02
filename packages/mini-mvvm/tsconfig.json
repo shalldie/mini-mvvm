@@ -10,6 +10,11 @@
         "declaration": true,
         "watch": false //在监视模式下运行编译器。会监视输出文件，在它们改变时重新编译。
     },
-    "include": ["./src/**/*"],
-    "exclude": ["views", "static"]
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "views",
+        "static"
+    ]
 }

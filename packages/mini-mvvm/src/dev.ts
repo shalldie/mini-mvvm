@@ -87,6 +87,7 @@ const vm = new MVVM({
                 <p>watch了list，任何操作都会保存在localstorage</p>
                 <div class="input-box">
                     <input
+                        @keyup="handleKeyup"
                         m-model="content"
                         type="text"
                         placeholder="Enter plan to save."
@@ -106,6 +107,8 @@ const vm = new MVVM({
                     <li
                         m-for="(item,index) in list"
                         :class="item.done?'done':'' "
+                        :data-content="item.content"
+                        :key="item.content"
                     >
                         <div @click="toggleDone(item)" class="text">
                             {{ item.content }}
@@ -120,13 +123,7 @@ const vm = new MVVM({
     data() {
         return {
             activeIndex: 0,
-            tabList: [
-                '双向绑定',
-                '计算属性',
-                '条件渲染',
-                '循环/事件',
-                'Todo List'
-            ],
+            tabList: ['双向绑定', '计算属性', '条件渲染', '循环/事件', 'Todo List'],
             // 双绑
             person: {
                 name: '花泽香菜',
@@ -213,6 +210,12 @@ const vm = new MVVM({
                 done: false
             });
             this.content = '';
+        },
+
+        handleKeyup(ev: KeyboardEvent) {
+            if (ev.keyCode === 13) {
+                this.addItem();
+            }
         },
 
         // 切换完成状态

@@ -17,6 +17,13 @@ export default function parseAttrs(ast: AST): void {
     for (const name in ast.attrs) {
         const val = ast.attrs[name];
 
+        // 处理 key
+        if (/^:?key$/.test(name)) {
+            ast.key = name[0] === ':' ? val : `'${val}'`;
+            delete ast.attrs[name];
+            continue;
+        }
+
         // 如果是 :attr="value" 这种动态 attribute
         if (/^:/.test(name)) {
             const newName = name.slice(1);
