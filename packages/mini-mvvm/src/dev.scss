@@ -190,6 +190,9 @@ body {
 #root {
     .tab-page {
         .page-item {
+            label {
+                cursor: pointer;
+            }
             &.todo-list {
                 width: 400px;
                 margin: 20px auto 0;

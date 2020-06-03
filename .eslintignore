@@ -2,5 +2,5 @@ node_modules
 dist
 build
 __tests__
-/scripts
+scripts
 *.d.ts

@@ -44,9 +44,9 @@ with(this) {
 }
         `;
 
-        if (process.env.NODE_ENV !== 'production') {
-            console.log(renderStr);
-        }
+        // if (process.env.NODE_ENV !== 'production') {
+        //     console.log(renderStr);
+        // }
         return new Function('h', renderStr);
     }
 

@@ -9,12 +9,11 @@ interface ITodoItem {
 
 let todoList: ITodoItem[] = [];
 let showList: ITodoItem[] = [];
-let currentFilter = 0;  // 0-全部 1-已完成 2-未完成
+let currentFilter = 0; // 0-全部 1-已完成 2-未完成
 
 try {
     todoList = JSON.parse(localStorage['todoList']);
-}
-catch{
+} catch {
     todoList = [
         { content: '买彩票', done: true },
         { content: '中大奖', done: false },
@@ -26,11 +25,9 @@ function renderView(filter: number = currentFilter) {
     currentFilter = filter;
     if (filter === 1) {
         showList = todoList.filter(n => n.done);
-    }
-    else if (filter === 2) {
+    } else if (filter === 2) {
         showList = todoList.filter(n => !n.done);
-    }
-    else {
+    } else {
         showList = todoList;
     }
     render();
@@ -66,57 +63,77 @@ const render = (() => {
                 })
             ]),
             h('div.tab-list', [
-                h('div.tab-item',
+                h(
+                    'div.tab-item',
                     {
                         attrs: { class: currentFilter === 0 ? 'active' : '' },
                         on: { click: () => renderView(0) }
                     },
-                    '全部'),
-                h('div.tab-item',
+                    '全部'
+                ),
+                h(
+                    'div.tab-item',
                     {
                         attrs: { class: currentFilter === 1 ? 'active' : '' },
                         on: { click: () => renderView(1) }
                     },
-                    '已完成'),
-                h('div.tab-item',
+                    '已完成'
+                ),
+                h(
+                    'div.tab-item',
                     {
                         attrs: { class: currentFilter === 2 ? 'active' : '' },
                         on: { click: () => renderView(2) }
                     },
-                    '未完成')
+                    '未完成'
+                )
             ]),
-            h('ul.list-wrap', showList.map(item => h(
-                'li',
-                {
-                    key: item.content,
-                    attrs: {
-                        class: item.done ? 'done' : ''
-                    }
-                },
-                [
-                    h('span.content', {
-                        on: {
-                            click: () => {
-                                item.done = !item.done;
-                                renderView();
+            h(
+                'ul.list-wrap',
+                showList.map(item =>
+                    h(
+                        'li',
+                        {
+                            key: item.content,
+                            attrs: {
+                                'data-content': item.content,
+                                class: item.done ? 'done' : ''
                             }
-                        }
-                    }, item.content),
-                    h('span.del', {
-                        on: {
-                            click() {
-                                const index = todoList.findIndex(n => n === item);
-                                todoList.splice(index, 1);
-                                renderView();
-                            }
-                        }
-                    }, '删除')
-                ]
-            )))
+                        },
+                        [
+                            h(
+                                'span.content',
+                                {
+                                    on: {
+                                        click: () => {
+                                            item.done = !item.done;
+                                            renderView();
+                                        }
+                                    }
+                                },
+                                item.content
+                            ),
+                            h(
+                                'span.del',
+                                {
+                                    on: {
+                                        click() {
+                                            const index = todoList.findIndex(n => n === item);
+                                            todoList.splice(index, 1);
+                                            renderView();
+                                        }
+                                    }
+                                },
+                                '删除'
+                            )
+                        ]
+                    )
+                )
+            )
         ]);
 
         patch(oldNode, newNode);
-    }
+    };
 })();
 
 renderView();

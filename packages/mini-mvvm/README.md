@@ -4,9 +4,9 @@
 
 A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom).
 
-基于 [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom) 的轻量级mvvm库 >\_<#@!
+基于 [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom) 的轻量级 mvvm 库 >\_<#@!
 
-适用于ui组件的构建依赖或小型项目，如果项目比较复杂，也许一个更加成熟的mvvm框架及其生态更适合你 🤠🤠
+适用于 ui 组件的构建依赖或小型项目，如果项目比较复杂，也许一个更加成熟的 mvvm 框架及其生态更适合你 🤠🤠
 
 ## Installation
 
@@ -26,7 +26,7 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
 
 ## Ability
 
--   [x] VNode 基于虚拟dom： [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom)
+-   [x] VNode 基于虚拟 dom： [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom)
 -   [x] 数据监听
     -   [x] `data`、`computed` 变动监听
     -   [x] 数组方法监听 `push` | `pop` | `shift` | `unshift` | `splice` | `sort` | `reverse`
@@ -42,11 +42,11 @@ A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-
     -   [x] `@click` | `@mousedown` | `...` 。可以使用 `$event` 占位原生事件
 -   [x] `watch` 数据监听，详见下方示例
     -   [x] 声明方式
-    -   [x] api方式
+    -   [x] api 方式
 -   [x] 生命周期
-    -   [x] `created` 组件创建成功，可以使用 `this` 得到MVVM的实例
-    -   [x] `beforeMount` 将要被插入dom
-    -   [x] `mounted` 组件被添加到dom，可以使用 `this.$el` 获取根节点dom
+    -   [x] `created` 组件创建成功，可以使用 `this` 得到 MVVM 的实例
+    -   [x] `beforeMount` 将要被插入 dom
+    -   [x] `mounted` 组件被添加到 dom，可以使用 `this.$el` 获取根节点 dom
     -   [x] `beforeUpdate` 组件将要更新
     -   [x] `updated` 组件更新完毕
 
@@ -73,19 +73,21 @@ new MVVM({
         };
     },
     computed: {}, // ...计算属性
-    created() {   // ...hook，可以使用 this
+    // ...hook，可以使用 this
+    created() {
         // 使用api方式去watch
-        this.$watch('key', (val, oldVal) => { }, { immediate: true });
+        this.$watch('key', (val, oldVal) => {}, { immediate: true });
     },
-    mounted() { }, // ...hook，可以使用 this.$el
-    methods: {},  // ...方法
-    watch: { // ...数据监听
+    mounted() {}, // ...hook，可以使用 this.$el
+    methods: {}, // ...方法
+    // ...数据监听
+    watch: {
         // 声明方式1：
-        watch1(val, oldVal) { },
+        watch1(val, oldVal) {},
         // 声明方式2：
         watch2: {
             immediate: true, // 立即执行
-            handler(val, oldVal) { }
+            handler(val, oldVal) {}
         }
     }
 });

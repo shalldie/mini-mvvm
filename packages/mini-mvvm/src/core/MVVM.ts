@@ -118,9 +118,7 @@ export default class MVVM extends BaseMVVM {
         // eslint-disable-next-line
         return () => {
             needUpdate = true;
-            if (process.env.NODE_ENV !== 'production') {
-                console.log('数据改变');
-            }
+
             nextTick(() => {
                 if (!needUpdate) {
                     return;
@@ -129,9 +127,7 @@ export default class MVVM extends BaseMVVM {
                 if (!this.$options.$el) {
                     return;
                 }
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log('执行更新');
-                }
+
                 let firstPatch = false;
                 if (!this.$el) {
                     this.$el = document.querySelector(this.$options.$el);
