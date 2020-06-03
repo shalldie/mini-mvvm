@@ -129,8 +129,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // 方式三：
         // 类 snabbdom 的 diff 算法
 
-        // debugger;
-
         let oldStartIndex = 0;
         let oldStartVNode = oldChildren[oldStartIndex];
         let oldEndIndex = oldChildren.length - 1;
@@ -141,12 +139,7 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         let newEndIndex = children.length - 1;
         let newEndVNode = children[newEndIndex];
 
-        // if (parentElm.classList.contains('page-item')) {
-        //     debugger;
-        // }
-
         while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
-            // console.log(oldStartVNode, newStartVNode);
             switch (true) {
                 // 1. 先校验2个 old start/end vnode 是否为空，当为`undefined`的时候，表示被其它地方复用了
                 // 对 new start/end vnode 也做处理，是因为可能移动后根本没子节点
@@ -236,9 +229,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
                     // old: [1,    2, 3,    4]
                     // new: [1, 5, 2, 3, 6, 4]
                     else {
-                        // if (parentElm.classList.contains('page-item')) {
-                        //     debugger;
-                        // }
                         addVnodes(parentElm, parentElm.childNodes[newStartIndex], [newStartVNode]);
                     }
 
@@ -254,15 +244,12 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // 旧的 vnodes 遍历完，新的没有
         // 表示有新的没有添加完毕
         if (oldStartIndex > oldEndIndex && newStartIndex <= newEndIndex) {
-            // addVnodes(parentElm, newEndVNode.elm.nextSibling, children.slice(newStartIndex, newEndIndex));
-
+            console.log('123456');
             addVnodes(parentElm, children[newEndIndex + 1]?.elm, children.slice(newStartIndex, newEndIndex + 1));
-            // addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx, insertedVnodeQueue);
         }
         // 新的 vnodes 遍历完，旧的没有
         // 表示有旧的没有删除干净
         else if (oldStartIndex <= oldEndIndex && newStartIndex > newEndIndex) {
-            // debugger;
             removeVnodes(
                 parentElm,
                 oldChildren.slice(oldStartIndex, oldEndIndex + 1).filter(n => !!n)
@@ -277,7 +264,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
      * @param {VNode} vnode 新的vnode
      */
     function patchVNode(oldVnode: VNode, vnode: VNode): void {
-        // console.log('patch vnode');
         const elm = (vnode.elm = oldVnode.elm);
         const oldChildren = oldVnode.children;
         const children = vnode.children;

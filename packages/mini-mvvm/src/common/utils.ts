@@ -8,10 +8,12 @@ import MVVM from '../core/MVVM';
  * microTask 要做的事情
  *
  * @export
- * @param {() => void} fn callback
+ * @param {() => void} [fn=() => {}]
+ * @returns {Promise<void>}
  */
-export function nextTick(fn: () => void): void {
-    Promise.resolve().then(fn);
+// eslint-disable-next-line
+export function nextTick(fn: () => void = () => {}): Promise<void> {
+    return Promise.resolve().then(fn);
 }
 
 /**

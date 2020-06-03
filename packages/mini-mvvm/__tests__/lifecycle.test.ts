@@ -9,7 +9,9 @@ describe('life cycle', () => {
         document.body.innerHTML = '<div id="app"></div>';
     });
 
-    test('created、mounted、beforeUpdate、updated', () => {
+    test('执行顺序 与 执行时机： created、mounted、beforeUpdate、updated', async () => {
+        const mockFn = jest.fn();
+
         const vm = new MVVM({
             $el: '#app',
             template: `
@@ -34,15 +36,57 @@ describe('life cycle', () => {
             },
             updated() {
                 expect(this.$el.textContent.trim()).toBe('lily');
+                mockFn();
             }
         });
 
-        return new Promise(resolve => {
-            // 第一个 nexttick 是为了在mounted之后再修改
-            MVVM.nextTick(() => {
-                vm['name'] = 'lily';
-                MVVM.nextTick(resolve);
-            });
+        // 等待 mounted
+        await MVVM.nextTick();
+        expect(mockFn).toBeCalledTimes(0);
+
+        vm['name'] = 'lily';
+
+        await MVVM.nextTick();
+        expect(mockFn).toBeCalledTimes(1);
+    });
+
+    test('多次改变数据，只会触发一次 rerender', async () => {
+        const mockFn = jest.fn();
+
+        const vm = new MVVM({
+            $el: '#app',
+            template: `
+            <div id="app">
+                {{ name }}
+            </div>`,
+            data() {
+                return {
+                    name: 'tom'
+                };
+            },
+            updated() {
+                mockFn();
+            }
         });
+
+        // 先等待 mounted
+        await MVVM.nextTick();
+
+        // 只有 updated 的时候才会 rerender
+        expect(mockFn).toBeCalledTimes(0);
+
+        for (let i = 0; i < 10; i++) {
+            vm['name'] = i;
+        }
+
+        // 只有 nextTick 才会更新
+        expect(mockFn).toBeCalledTimes(0);
+        await MVVM.nextTick();
+        // 同一个 tick 改变多次数据，只会更新一次
+        expect(mockFn).toBeCalledTimes(1);
+
+        vm['name'] = 'tom';
+        await MVVM.nextTick();
+        expect(mockFn).toBeCalledTimes(2);
     });
 });
