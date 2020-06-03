@@ -244,7 +244,6 @@ function patchFactory(modules: IModuleHook[] = []): (oldVnode: any, vnode: VNode
         // 旧的 vnodes 遍历完，新的没有
         // 表示有新的没有添加完毕
         if (oldStartIndex > oldEndIndex && newStartIndex <= newEndIndex) {
-            console.log('123456');
             addVnodes(parentElm, children[newEndIndex + 1]?.elm, children.slice(newStartIndex, newEndIndex + 1));
         }
         // 新的 vnodes 遍历完，旧的没有
