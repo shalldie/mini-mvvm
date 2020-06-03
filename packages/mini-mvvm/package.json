@@ -1,6 +1,6 @@
 {
   "name": "mini-mvvm",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A mini lib to achieve mvvm. 一个轻量级的mvvm库。",
   "keywords": [
     "mvvm",
@@ -53,6 +53,6 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
-    "mini-vdom": "^0.0.10"
+    "mini-vdom": "^0.0.11"
   }
 }
