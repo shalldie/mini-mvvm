@@ -4,3 +4,4 @@ build
 __tests__
 scripts
 *.d.ts
+*.html

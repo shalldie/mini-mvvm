@@ -4,8 +4,8 @@
         "module": "esnext", // 指定生成哪个模块系统代码
         "noImplicitAny": false, // 在表达式和声明上有隐含的'any'类型时报错。
         "sourceMap": false, // 用于debug
-        "rootDir": "./src", // 仅用来控制输出的目录结构--outDir。
-        "outDir": "./dist", // 重定向输出目录。
+        // "rootDir": "./src", // 仅用来控制输出的目录结构--outDir。
+        // "outDir": "./dist", // 重定向输出目录。
         "esModuleInterop": true,
         "declaration": true,
         "moduleResolution": "node",
