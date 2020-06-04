@@ -1,6 +1,6 @@
 {
   "name": "mini-mvvm",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A mini lib to achieve mvvm. 一个轻量级的mvvm库。",
   "keywords": [
     "mvvm",
@@ -35,6 +35,6 @@
     "url": "https://github.com/shalldie/mvvm/issues"
   },
   "dependencies": {
-    "mini-vdom": "^0.0.12"
+    "mini-vdom": "^0.0.13"
   }
 }
