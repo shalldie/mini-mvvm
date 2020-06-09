@@ -5,6 +5,6 @@ install:
   - npm install
   - npm run bootstrap
 script:
+  - npm run build:lp
   - npm run lint
   - npm test
-  - npm run build:lp
