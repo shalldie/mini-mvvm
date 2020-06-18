@@ -18,7 +18,7 @@
   "devDependencies": {
     "@nosaid/eslint-config-for-typescript": "0.0.7",
     "@nosaid/jest": "0.0.4",
-    "@nosaid/rollup": "0.0.10",
+    "@nosaid/rollup": "0.0.17",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
     "lerna": "^3.21.0",
