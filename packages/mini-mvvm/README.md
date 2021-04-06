@@ -1,6 +1,6 @@
 # mini-mvvm
 
-[![npm](https://img.shields.io/npm/v/mini-mvvm)](https://www.npmjs.com/package/mini-mvvm) [![file size](https://img.shields.io/github/size/shalldie/mini-mvvm/dist/mini-mvvm.js)](https://www.npmjs.com/package/mini-mvvm) [![Build Status](https://travis-ci.org/shalldie/mini-mvvm.svg?branch=master)](https://travis-ci.org/shalldie/mini-mvvm)
+[![npm](https://img.shields.io/npm/v/mini-mvvm)](https://www.npmjs.com/package/mini-mvvm) [![file size](https://img.shields.io/github/size/shalldie/mini-mvvm/dist/mini-mvvm.js)](https://www.npmjs.com/package/mini-mvvm) [![Build Status](https://github.com/shalldie/mini-mvvm/actions/workflows/node.js.yml/badge.svg)](https://github.com/shalldie/mini-mvvm/actions)
 
 A mini mvvm lib with [virtual dom - mini-vdom](https://github.com/shalldie/mini-mvvm/tree/master/packages/mini-vdom).
 
