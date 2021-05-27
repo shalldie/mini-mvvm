@@ -1,11 +1,9 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "version": "independent",
-  "command": {
-    "bootstrap": {
-      "registry": "https://registry.npm.taobao.org"
+    "packages": ["packages/*"],
+    "version": "independent",
+    "command": {
+        "bootstrap": {
+            "registry": "https://registry.npm.taobao.org"
+        }
     }
-  }
 }
