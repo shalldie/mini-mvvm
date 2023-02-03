@@ -21,7 +21,7 @@
     "@nosaid/rollup": "0.0.17",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
-    "lerna": "^3.21.0",
+    "lerna": "^6.4.1",
     "typescript": "^3.9.2"
   }
 }
